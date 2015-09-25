@@ -15,5 +15,8 @@ class Utilisateur {
 
 
     static constraints = {
+        email email:true
+        dateDerniereConnexion nullable: true
+        telephone size: 10..10
     }
 }
