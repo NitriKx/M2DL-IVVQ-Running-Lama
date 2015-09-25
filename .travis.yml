@@ -4,6 +4,7 @@ jdk:
 branches:
   only:
   - pre-prod
+  - /^dev-.*$/
 script: ./grailsw refresh-dependencies && ./grailsw "test-app unit:" && ./grailsw
   refresh-dependencies && ./grailsw "test-app functional:"
 deploy:
