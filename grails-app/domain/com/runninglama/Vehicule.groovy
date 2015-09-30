@@ -16,6 +16,10 @@ class Vehicule {
     int kilometrage
     TypeVehicule type
 
+    // Variables gérées par GORM
+    Date dateCreated
+    Date lastUpdated
+
     static constraints = {
         nb_place blank: false, nullable: false, min: 1
         marque blank: false, nullable: false
