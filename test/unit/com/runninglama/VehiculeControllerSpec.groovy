@@ -9,9 +9,13 @@ import spock.lang.*
 class VehiculeControllerSpec extends Specification {
 
     def populateValidParams(params) {
+        params["nb_place"] = 3
+        params["annee"] = new Date(10, 9, 2015)
+        params["kilometrage"] = 5000
+        params["marque"] = 'Mitsubishi'
+        params["modele"] = 'IMiev'
+        params["type"] = TypeVehicule.VOITURE
         assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
     }
 
     void "Test the index action returns the correct model"() {
