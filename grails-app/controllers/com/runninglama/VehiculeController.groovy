@@ -9,6 +9,8 @@ class VehiculeController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    VehiculeService vehiculeService
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Vehicule.list(params), model: [vehiculeInstanceCount: Vehicule.count()]
@@ -34,7 +36,7 @@ class VehiculeController {
             return
         }
 
-        vehiculeInstance.save flush: true
+        vehiculeService.creeOuModifierVehicule(vehiculeInstance: vehiculeInstance)
 
         request.withFormat {
             form multipartForm {
@@ -61,7 +63,7 @@ class VehiculeController {
             return
         }
 
-        vehiculeInstance.save flush: true
+        vehiculeService.creeOuModifierVehicule(vehiculeInstance: vehiculeInstance)
 
         request.withFormat {
             form multipartForm {
@@ -80,7 +82,7 @@ class VehiculeController {
             return
         }
 
-        vehiculeInstance.delete flush: true
+        vehiculeService.supprimerVehicule(vehiculeInstance: vehiculeInstance)
 
         request.withFormat {
             form multipartForm {
