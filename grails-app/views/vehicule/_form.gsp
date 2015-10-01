@@ -1,24 +1,26 @@
 <%@ page import="com.runninglama.Vehicule" %>
 
-
-
-<div class="fieldcontain ${hasErrors(bean: vehiculeInstance, field: 'nb_place', 'error')} required">
+<div class="form-group fieldcontain ${hasErrors(bean: vehiculeInstance, field: 'nb_place', 'error')} required">
 	<label for="nb_place">
-		<g:message code="vehicule.nb_place.label" default="Nbplace" />
+		<g:message code="vehicule.nb_place.label" default="Seating Capacity" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:field name="nb_place" type="number" min="1" value="${vehiculeInstance.nb_place}" required=""/>
-
+	<g:field class="form-control" name="nb_place" type="number" min="1" value="${vehiculeInstance.nb_place}" required="" placeholder="1" />
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: vehiculeInstance, field: 'marque', 'error')} required">
+
+
+<div class="form-group fieldcontain ${hasErrors(bean: vehiculeInstance, field: 'marque', 'error')} required">
 	<label for="marque">
 		<g:message code="vehicule.marque.label" default="Marque" />
 		<span class="required-indicator">*</span>
 	</label>
 	<g:textField name="marque" required="" value="${vehiculeInstance?.marque}"/>
-
 </div>
+
+<!--
+
+CES CHAMPS DOIVENT ÊTRE MIS À JOUR AVEC LE THÈME BOOTSTRAP
 
 <div class="fieldcontain ${hasErrors(bean: vehiculeInstance, field: 'modele', 'error')} required">
 	<label for="modele">
@@ -48,11 +50,9 @@
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: vehiculeInstance, field: 'type', 'error')} required">
-	<label for="type">
-		<g:message code="vehicule.type.label" default="Type" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select name="type" from="${com.runninglama.TypeVehicule?.values()}" keys="${com.runninglama.TypeVehicule.values()*.name()}" required="" value="${vehiculeInstance?.type?.name()}" />
-
-</div>
-
+<label for="type">
+	<g:message code="vehicule.type.label" default="Type" />
+	<span class="required-indicator">*</span>
+</label>
+<g:select name="type" from="${com.runninglama.TypeVehicule?.values()}" keys="${com.runninglama.TypeVehicule.values()*.name()}" required="" value="${vehiculeInstance?.type?.name()}" />
+-->
