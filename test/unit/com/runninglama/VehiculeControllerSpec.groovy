@@ -18,6 +18,12 @@ class VehiculeControllerSpec extends Specification {
         assert params != null
     }
 
+    def setup() {
+        controller.vehiculeService = Mock(VehiculeService)
+    }
+
+
+
     void "Test the index action returns the correct model"() {
 
         when: "The index action is executed"
@@ -45,6 +51,7 @@ class VehiculeControllerSpec extends Specification {
         controller.save(vehicule)
 
         then: "The create view is rendered again with the correct model"
+        0 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v -> v }
         model.vehiculeInstance != null
         view == 'create'
 
@@ -56,6 +63,9 @@ class VehiculeControllerSpec extends Specification {
         controller.save(vehicule)
 
         then: "A redirect is issued to the show action"
+        1 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v ->
+            v.save(flush: true)
+        }
         response.redirectedUrl == '/vehicule/show/1'
         controller.flash.message != null
         Vehicule.count() == 1
@@ -110,6 +120,7 @@ class VehiculeControllerSpec extends Specification {
         controller.update(vehicule)
 
         then: "The edit view is rendered again with the invalid instance"
+        0 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v -> v }
         view == 'edit'
         model.vehiculeInstance == vehicule
 
@@ -120,6 +131,7 @@ class VehiculeControllerSpec extends Specification {
         controller.update(vehicule)
 
         then: "A redirect is issues to the show action"
+        1 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v -> v }
         response.redirectedUrl == "/vehicule/show/$vehicule.id"
         flash.message != null
     }
@@ -127,6 +139,7 @@ class VehiculeControllerSpec extends Specification {
     void "Test that the delete action deletes an instance if it exists"() {
         when: "The delete action is called for a null instance"
         request.contentType = FORM_CONTENT_TYPE
+        controller.vehiculeService = Mock(VehiculeService)
         controller.delete(null)
 
         then: "A 404 is returned"
@@ -145,6 +158,10 @@ class VehiculeControllerSpec extends Specification {
         controller.delete(vehicule)
 
         then: "The instance is deleted"
+        1 * controller.vehiculeService.supprimerVehicule(_ as Vehicule) >> { Vehicule v ->
+            v.delete(flush: true)
+        }
+
         Vehicule.count() == 0
         response.redirectedUrl == '/vehicule/index'
         flash.message != null

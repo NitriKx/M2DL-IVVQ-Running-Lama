@@ -36,7 +36,7 @@ class VehiculeController {
             return
         }
 
-        vehiculeService.creeOuModifierVehicule(vehiculeInstance: vehiculeInstance)
+        vehiculeInstance = vehiculeService.creeOuModifierVehicule(vehiculeInstance)
 
         request.withFormat {
             form multipartForm {
@@ -63,7 +63,7 @@ class VehiculeController {
             return
         }
 
-        vehiculeService.creeOuModifierVehicule(vehiculeInstance: vehiculeInstance)
+        vehiculeService.creeOuModifierVehicule(vehiculeInstance)
 
         request.withFormat {
             form multipartForm {
@@ -82,7 +82,7 @@ class VehiculeController {
             return
         }
 
-        vehiculeService.supprimerVehicule(vehiculeInstance: vehiculeInstance)
+        vehiculeService.supprimerVehicule(vehiculeInstance)
 
         request.withFormat {
             form multipartForm {
