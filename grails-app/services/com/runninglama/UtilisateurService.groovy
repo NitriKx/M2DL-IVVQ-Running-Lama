@@ -1,10 +1,11 @@
 package com.runninglama
 
 import grails.transaction.Transactional
+
 import java.security.MessageDigest
 
 @Transactional
-class ServiceUtilisateurService {
+class UtilisateurService {
 
     def serviceMethod() {
 
@@ -20,5 +21,11 @@ class ServiceUtilisateurService {
             utilisateur.passwordHash.equals(mdpBase)
         }
         utilisateur
+    }
+
+    def generator = { String alphabet, int n ->
+        new Random().with {
+            (1..n).collect { alphabet[ nextInt( alphabet.length() ) ] }.join()
+        }
     }
 }

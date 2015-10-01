@@ -9,6 +9,27 @@ import grails.transaction.Transactional
 class UtilisateurController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def utilisateurService
+
+    def inscription() {
+        render view:'inscription'
+    }
+
+    def inscriptionPost(params) {
+        Utilisateur utilisateur = new Utilisateur(params)
+        if(!utilisateur.hasErrors()) {
+            utilisateur.dateInscription = new Date()
+            String salt = utilisateurService.generator((('A'..'Z')+('0'..'9')).join(), 9)
+            utilisateur.passwordSalt = salt
+            utilisateur.passwordHash = (salt+params.motDepasse).encodeAsSHA1()
+            utilisateur.save()
+            println "pas d'erreur"
+        } else {
+            println "erreurs"
+            println utilisateur.getErrors()
+            render view:'inscription', model: [utilisateur: utilisateur]
+        }
+    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)

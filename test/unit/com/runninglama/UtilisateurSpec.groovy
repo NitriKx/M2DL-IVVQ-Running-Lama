@@ -11,9 +11,11 @@ import spock.lang.Unroll
 class UtilisateurSpec extends Specification {
 
     def setup() {
+
     }
 
     def cleanup() {
+
     }
 
     @Unroll
@@ -22,7 +24,7 @@ class UtilisateurSpec extends Specification {
         given: "Un utilisateur avec des données correctes "
         def util = new Utilisateur(dateDerniereConnexion: aDateDerniereConnexion, telephone: aTelephone,
                 pseudo: aPseudo, dateInscription: aDateInscription, dateNaissance: aDateNaissance,
-                email: aEmail, nom: aNom, prenon: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt)
+                email: aEmail, nom: aNom, prenom: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt)
 
         when: "on essaye de valider un utilisateur"
         def validation = util.validate()
@@ -43,7 +45,7 @@ class UtilisateurSpec extends Specification {
         given: "Un utilisateur avec des données incorrectes "
         def util = new Utilisateur(dateDerniereConnexion: aDateDerniereConnexion, telephone: aTelephone,
                 pseudo: aPseudo, dateInscription: aDateInscription, dateNaissance: aDateNaissance,
-                email: aEmail, nom: aNom, prenon: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt)
+                email: aEmail, nom: aNom, prenom: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt)
 
         when: "on essaye de valider un utilisateur"
         def validation = util.validate()

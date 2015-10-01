@@ -12,7 +12,7 @@ class UtilisateurControllerSpec extends Specification {
         assert params != null
         params["email"] = 'email@test.fr'
         params["nom"] = 'Custoja'
-        params["prenon"] = 'Julien'
+        params["prenom"] = 'Julien'
         params["pseudo"] = 'TheRunningLama'
         params["passwordHash"] = 'jhdfqsfgqsdufhqsduhfqsuidfqsdf'
         params["passwordSalt"] = 'qsdqfqsdfsdfqgfgtryurdx'
