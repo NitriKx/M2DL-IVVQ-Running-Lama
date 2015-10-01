@@ -125,3 +125,6 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+# Cobertura
+cobertura.ser
