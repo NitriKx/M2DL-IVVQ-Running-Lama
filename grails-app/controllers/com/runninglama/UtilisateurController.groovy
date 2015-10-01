@@ -17,16 +17,20 @@ class UtilisateurController {
 
     def inscriptionPost(params) {
         Utilisateur utilisateur = new Utilisateur(params)
-        if(!utilisateur.hasErrors()) {
-            utilisateur.dateInscription = new Date()
-            String salt = utilisateurService.generator((('A'..'Z')+('0'..'9')).join(), 9)
-            utilisateur.passwordSalt = salt
-            utilisateur.passwordHash = (salt+params.motDepasse).encodeAsSHA1()
-            utilisateur.save()
-            println "pas d'erreur"
+        utilisateur.validate()
+        if(utilisateur.motDePasse == utilisateur.motDePasseConfirmation) {
+            if(!utilisateur.hasErrors()) {
+                utilisateur.dateInscription = new Date()
+                String salt = utilisateurService.generator((('A'..'Z')+('0'..'9')).join(), 9)
+                utilisateur.passwordSalt = salt
+                utilisateur.passwordHash = (salt+params.motDepasse).encodeAsSHA1()
+                utilisateur.save()
+                render view:'inscription', model: [utilisateur: utilisateur]
+            } else {
+                render view:'inscription', model: [utilisateur: utilisateur]
+            }
         } else {
-            println "erreurs"
-            println utilisateur.getErrors()
+            utilisateur.errors.rejectValue('motDePasse', 'nullable')
             render view:'inscription', model: [utilisateur: utilisateur]
         }
     }

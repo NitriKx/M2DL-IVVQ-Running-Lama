@@ -31,18 +31,6 @@ class Utilisateur {
         email email:true
         dateDerniereConnexion nullable: true
         telephone size: 10..10
-        motDePasse validator: {value, object ->
-
-            if(motDePasse == null) {
-                return true
-            }
-
-            if(value == motDePasseConfirmation) {
-                return true
-            } else {
-                return "Les mots de passe doivent être identiques."
-            }
-        }
     }
 
 
