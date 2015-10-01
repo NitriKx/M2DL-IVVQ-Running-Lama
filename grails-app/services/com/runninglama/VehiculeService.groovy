@@ -5,13 +5,14 @@ import grails.transaction.Transactional
 @Transactional
 class VehiculeService {
 
+    VehiculeDAOService vehiculeDAOService
+
     def creeOuModifierVehicule(Vehicule vehiculeInstance) {
-        vehiculeInstance.save();
+        vehiculeDAOService.save(vehiculeInstance);
     }
 
     def supprimerVehicule(Vehicule vehiculeInstance) {
-        vehiculeInstance.delete(flush: true);
+        vehiculeDAOService.delete(vehiculeInstance);
     }
-
 
 }
