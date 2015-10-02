@@ -41,7 +41,7 @@ class VehiculeController {
     }
 
     def edit(Vehicule vehiculeInstance) {
-        render (view: 'edit' , model:[vehiculeInstance: vehiculeInstance])
+        respond vehiculeInstance
     }
 
     def update(Vehicule vehiculeInstance) {

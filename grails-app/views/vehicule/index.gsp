@@ -5,16 +5,21 @@
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'vehicule.label', default: 'Vehicule')}" />
-		<title><g:message code="default.list.label" args="[entityName]" /></title>
+		<title><g:message cals ="btn btn-default" code="default.list.label" args="[entityName]" /></title>
 	</head>
 	<body>
-		<a href="#list-vehicule" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+		<!--<a href="#list-vehicule" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
+		-->
+		<g:form name="formCreate" method="PUT">
+			<g:actionSubmit class="btn btn-default" action="create" value="Ajouter un véhicule"></g:actionSubmit>
+		</g:form>
+
 		<div id="list-vehicule" class="content scaffold-list" role="main">
 			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
 			<g:if test="${flash.message}">
@@ -53,7 +58,7 @@
 
 							<td>${fieldValue(bean: vehiculeInstance, field: "modele")}</td>
 
-							<td><g:formatDate date="${vehiculeInstance.annee}" /></td>
+							<td><g:formatDate date="${vehiculeInstance.annee}" format="yyyy"/></td>
 
 							<td>${fieldValue(bean: vehiculeInstance, field: "kilometrage")}</td>
 
@@ -62,7 +67,7 @@
 							<td>
 
 								<g:form url="[resource:vehiculeInstance]" name="formUpdate" methode="POST">
-										<g:actionSubmit id="${vehiculeInstance.getId()}" class="btn btn-default" action="edit" value="Modifier"></g:actionSubmit>
+										<g:actionSubmit class="btn btn-default" action="edit" value="Modifier"></g:actionSubmit>
 								</g:form>
 
 							</td>
@@ -70,7 +75,7 @@
 							<td>
 
 								<g:form url="[resource:vehiculeInstance]" name="formDelete" method="DELETE">
-										<g:actionSubmit id="${vehiculeInstance.getId()}" class="btn btn-default" action="delete" value="Supprimer"></g:actionSubmit>
+										<g:actionSubmit class="btn btn-default" action="delete" value="Supprimer"></g:actionSubmit>
 								</g:form>
 
 							</td>

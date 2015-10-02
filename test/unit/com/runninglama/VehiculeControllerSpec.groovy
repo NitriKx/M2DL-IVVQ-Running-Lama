@@ -41,7 +41,7 @@ class VehiculeControllerSpec extends Specification {
         controller.create()
 
         then: "The model is correctly created"
-        1 * controller.vehiculeService.creeVehicule() >> new Vehicule()
+        1 * controller.vehiculeService.creeVehicule(_) >> new Vehicule()
         model.vehiculeInstance != null
     }
 
@@ -65,12 +65,12 @@ class VehiculeControllerSpec extends Specification {
 
         controller.save(vehicule)
 
-        then: "A redirect is issued to the show action"
+        then: "A redirect is issued to the index"
         1 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v ->
             v.save(flush: true)
         }
-        response.redirectedUrl == '/vehicule/show/1'
-        controller.flash.message != null
+        response.redirectedUrl == '/vehicule/index'
+        controller.flash.message == null
         Vehicule.count() == 1
     }
 
@@ -133,9 +133,9 @@ class VehiculeControllerSpec extends Specification {
         vehicule = new Vehicule(params).save(flush: true)
         controller.update(vehicule)
 
-        then: "A redirect is issues to the show action"
+        then: "A redirect is issues to the index"
         1 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v -> v }
-        response.redirectedUrl == "/vehicule/show/$vehicule.id"
+        response.redirectedUrl == "/vehicule/index"
         flash.message != null
     }
 
