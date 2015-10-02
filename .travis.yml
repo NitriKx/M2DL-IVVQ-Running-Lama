@@ -28,7 +28,9 @@ script:
 
 after_script:
   - ./grailsw codenarc
-  - docker run -v $(pwd):/data -v "$(pwd)/sonar-runner.properties":/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner -Dsonar.projectName=RunningLama-${TRAVIS_BRANCH}
+  - echo ${TRAVIS_BRANCH}
+  - sed -i "s/sonar.projectName=RunningLama/sonar.projectName=RunningLama-${TRAVIS_BRANCH}/g" ./sonar-project.properties
+  - docker run -v $(pwd):/data -v "$(pwd)/sonar-runner.properties":/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner
 
 deploy:
   provider: heroku
