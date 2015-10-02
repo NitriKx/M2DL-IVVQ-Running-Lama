@@ -9,96 +9,44 @@ import grails.transaction.Transactional
 class UtilisateurController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def utilisateurService
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Utilisateur.list(params), model:[utilisateurInstanceCount: Utilisateur.count()]
+    def inscription() {
+        render view:'inscription'
     }
 
-    def show(Utilisateur utilisateurInstance) {
-        respond utilisateurInstance
+    def inscriptionPost(params) {
+        Utilisateur utilisateur = new Utilisateur(params)
+        println utilisateur
+        utilisateur = utilisateurService.inscrireUtilisateur(utilisateur)
+        render view:'inscription', model: [utilisateur: utilisateur]
     }
 
-    def create() {
-        respond new Utilisateur(params)
+    def connexion() {
+        render view: 'connexion'
     }
 
-    @Transactional
-    def save(Utilisateur utilisateurInstance) {
-        if (utilisateurInstance == null) {
-            notFound()
-            return
-        }
-
-        if (utilisateurInstance.hasErrors()) {
-            respond utilisateurInstance.errors, view:'create'
-            return
-        }
-
-        utilisateurInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'utilisateur.label', default: 'Utilisateur'), utilisateurInstance.id])
-                redirect utilisateurInstance
-            }
-            '*' { respond utilisateurInstance, [status: CREATED] }
+    def connexionPost(params) {
+        Utilisateur utilisateur = new Utilisateur(params)
+        if(!utilisateurService.verifierIdentifiants(utilisateur)) {
+            render(view: 'connexion', model: [message:"Identifiants Incorrects"])
+        } else {
+            this.getSession().setAttribute('utilisateur',utilisateur)
+            redirect(controller: 'accueil', action: 'index')
         }
     }
 
-    def edit(Utilisateur utilisateurInstance) {
-        respond utilisateurInstance
-    }
-
-    @Transactional
-    def update(Utilisateur utilisateurInstance) {
-        if (utilisateurInstance == null) {
-            notFound()
-            return
-        }
-
-        if (utilisateurInstance.hasErrors()) {
-            respond utilisateurInstance.errors, view:'edit'
-            return
-        }
-
-        utilisateurInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Utilisateur.label', default: 'Utilisateur'), utilisateurInstance.id])
-                redirect utilisateurInstance
-            }
-            '*'{ respond utilisateurInstance, [status: OK] }
+    def index() {
+        Utilisateur utilisateur = this.getSession().getAttribute('utilisateur')
+        if(utilisateur) {
+            // Redirection vers la gestion des voitures
+        } else {
+            connexion()
         }
     }
 
-    @Transactional
-    def delete(Utilisateur utilisateurInstance) {
-
-        if (utilisateurInstance == null) {
-            notFound()
-            return
-        }
-
-        utilisateurInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Utilisateur.label', default: 'Utilisateur'), utilisateurInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'utilisateur.label', default: 'Utilisateur'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
+    def deconnexion() {
+        this.getSession().invalidate()
+        redirect(controller: 'accueil', action: 'index')
     }
 }
