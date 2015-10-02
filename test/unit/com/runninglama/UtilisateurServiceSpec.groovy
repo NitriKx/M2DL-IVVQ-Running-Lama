@@ -46,13 +46,14 @@ class UtilisateurServiceSpec extends Specification {
     def "test qu'un utilisateur veut se connecter avec un pseudo incorrect" () {
         given: "un visiteur qui veut se connecter avec son pseudo et son mot de passe et qui est membre "
         String pseudo = "toti"
-        String mdp = "toto"
+        String motDePasse = "toto"
+        Utilisateur utilisateur = new Utilisateur(pseudo: pseudo,motDePasse: motDePasse)
 
         when: "le visiteur veut se connecter"
         service.utilisateurDAOService.findByPseudo(pseudo) >> null
-        Utilisateur membre = service.verifierIdentifiants(pseudo,mdp)
+        Utilisateur membre = service.verifierIdentifiants(utilisateur)
 
-        then: "le visiteur est connecte"
+        then: "le visiteur n'est pas connecté"
         !membre
 
     }
@@ -62,11 +63,12 @@ class UtilisateurServiceSpec extends Specification {
     def "test qu'un utilisateur veut se connecter avec un mot de passe incorrect" () {
         given: "un visiteur qui veut se connecter avec son pseudo et son mot de passe et qui est membre "
         String pseudo = "toto"
-        String mdp = "toti"
+        String motDePasse = "toti"
+        Utilisateur utilisateur = new Utilisateur(pseudo: pseudo,motDePasse: motDePasse)
 
         when: "le visiteur veut se connecter"
         service.utilisateurDAOService.findByPseudo(pseudo) >> new Utilisateur(pseudo: "toto",passwordHash: "630547c1fada14c61e876be55ac877e13f5c03d7",passwordSalt: "toto")
-        Utilisateur membre = service.verifierIdentifiants(pseudo,mdp)
+        Utilisateur membre = service.verifierIdentifiants(utilisateur)
 
         then: "le visiteur est connecte"
         !membre
@@ -114,7 +116,7 @@ class UtilisateurServiceSpec extends Specification {
 
         then: "le visiteur est inscrit"
         utilisateur.hasErrors()
-        utilisateur.errors.getFieldError('motDePasse') == 'nullable'
+        utilisateur.errors.getFieldError('motDePasse')
 
     }
 
