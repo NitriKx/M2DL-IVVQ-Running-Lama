@@ -18,13 +18,17 @@ jdk:
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_4bff5548dd92_key -iv $encrypted_4bff5548dd92_iv -in sonar-credentials.txt.enc -out sonar-credentials.txt -d
-  - grails test-app -coverage -xml
-  - grails codenarc
+
+before_script:
   - docker pull pierrevincent/sonar-runner
-  - docker run -v $(pwd):/data -v "$(pwd)/sonar-runner.properties":/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner
 
 script:
-  - ./grailsw refresh-dependencies && ./grailsw "test-app unit:" && ./grailsw refresh-dependencies && ./grailsw "test-app functional:"
+  - ./grailsw refresh-dependencies
+  - ./grailsw test-app -coverage -xml
+  - ./grailsw codenarc
+
+after_script:
+  - docker run -v $(pwd):/data -v "$(pwd)/sonar-runner.properties":/usr/local/sonar-runner-2.4/conf/sonar-runner.properties -Dsonar.projectName=RunningLama-${TRAVIS_BRANCH} pierrevincent/sonar-runner
 
 deploy:
   provider: heroku
