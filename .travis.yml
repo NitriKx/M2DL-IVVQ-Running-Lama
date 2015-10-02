@@ -25,10 +25,10 @@ before_script:
 script:
   - ./grailsw refresh-dependencies
   - ./grailsw test-app -coverage -xml
-  - ./grailsw codenarc
 
 after_script:
-  - docker run -v $(pwd):/data -v "$(pwd)/sonar-runner.properties":/usr/local/sonar-runner-2.4/conf/sonar-runner.properties -Dsonar.projectName=RunningLama-${TRAVIS_BRANCH} pierrevincent/sonar-runner
+  - ./grailsw codenarc
+  - docker run -v $(pwd):/data -v "$(pwd)/sonar-runner.properties":/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner -Dsonar.projectName=RunningLama-${TRAVIS_BRANCH}
 
 deploy:
   provider: heroku
