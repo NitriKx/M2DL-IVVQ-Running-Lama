@@ -11,10 +11,10 @@ class UtilisateurService {
 
     }
 
-    def verifierIdentifiants(params) {
-        Utilisateur utilisateur = Utilisateur.findByPseudo(params.pseudo)
+    def verifierIdentifiants(String pseudo,String mdp) {
+        Utilisateur utilisateur = Utilisateur.findByPseudo(pseudo)
         if(utilisateur) {
-            String mdp = utilisateur.passwordSalt + params.mdp
+            mdp = utilisateur.passwordSalt + mdp
             MessageDigest md = MessageDigest.getInstance("SHA-1", "BC");
             byte[] mdpToByte = mdp.bytes
             String mdpBase = Hex.encodeToString(mdpToByte);
