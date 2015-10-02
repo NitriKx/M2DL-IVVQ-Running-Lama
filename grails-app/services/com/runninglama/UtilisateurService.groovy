@@ -28,4 +28,17 @@ class UtilisateurService {
             (1..n).collect { alphabet[ nextInt( alphabet.length() ) ] }.join()
         }
     }
+
+    def inscrireUtilisateur(Utilisateur utilisateur) {
+        if(utilisateur.motDePasse == utilisateur.motDePasseConfirmation) {
+                utilisateur.dateInscription = new Date()
+                String salt = generator((('A'..'Z')+('0'..'9')).join(), 9)
+                utilisateur.passwordSalt = salt
+                utilisateur.passwordHash = (salt+utilisateur.motDePasse).encodeAsSHA1()
+                utilisateur.save()
+        } else {
+            utilisateur.errors.rejectValue('motDePasse', 'nullable')
+        }
+        utilisateur
+    }
 }
