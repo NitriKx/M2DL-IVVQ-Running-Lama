@@ -30,7 +30,9 @@ class VehiculeControllerSpec extends Specification {
         controller.index()
 
         then: "The model is correct"
+        1 * controller.vehiculeService.recupererListVehicule(_) >> []
         !model.vehiculeInstanceList
+        1 * controller.vehiculeService.getNombreVehicules() >> 0
         model.vehiculeInstanceCount == 0
     }
 
@@ -39,6 +41,7 @@ class VehiculeControllerSpec extends Specification {
         controller.create()
 
         then: "The model is correctly created"
+        1 * controller.vehiculeService.creeVehicule() >> new Vehicule()
         model.vehiculeInstance != null
     }
 

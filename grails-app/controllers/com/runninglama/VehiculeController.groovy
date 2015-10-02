@@ -13,7 +13,7 @@ class VehiculeController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Vehicule.list(params), model: [vehiculeInstanceCount: Vehicule.count()]
+        respond vehiculeService.recupererListVehicule(params), model: [vehiculeInstanceCount: vehiculeService.getNombreVehicules()]
     }
 
     def show(Vehicule vehiculeInstance) {
@@ -21,10 +21,9 @@ class VehiculeController {
     }
 
     def create() {
-        respond new Vehicule(params)
+        respond vehiculeService.creeVehicule(params)
     }
 
-    @Transactional
     def save(Vehicule vehiculeInstance) {
         if (vehiculeInstance == null) {
             notFound()
@@ -51,7 +50,6 @@ class VehiculeController {
         respond vehiculeInstance
     }
 
-    @Transactional
     def update(Vehicule vehiculeInstance) {
         if (vehiculeInstance == null) {
             notFound()
@@ -74,7 +72,6 @@ class VehiculeController {
         }
     }
 
-    @Transactional
     def delete(Vehicule vehiculeInstance) {
 
         if (vehiculeInstance == null) {

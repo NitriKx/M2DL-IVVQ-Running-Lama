@@ -12,4 +12,12 @@ class VehiculeDAOService {
     def delete(Vehicule vehiculeInstance) {
         vehiculeInstance.delete(flush: true);
     }
+
+    def list(params) {
+        Vehicule.list(params)
+    }
+
+    def count(params) {
+        Vehicule.count()
+    }
 }
