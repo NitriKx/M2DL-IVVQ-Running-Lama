@@ -13,16 +13,21 @@ class UtilisateurService {
 
     }
 
-    def verifierIdentifiants(String pseudo,String mdp) {
-        Utilisateur utilisateur = utilisateurDAOService.findByPseudo(pseudo)
-        if(utilisateur) {
-            mdp = utilisateur.passwordSalt + mdp
+    def verifierIdentifiants(Utilisateur utilisateur) {
+        Utilisateur utilisateurATrouve = utilisateurDAOService.findByPseudo(utilisateur.pseudo)
+        if(utilisateurATrouve) {
+            def mdp = utilisateur.passwordSalt + utilisateur.motDePasse
             mdp = mdp.encodeAsSHA1()
             println(mdp)
-            if(!utilisateur.passwordHash.equals(mdp))
-                return null
+            if(!utilisateur.passwordHash.equals(mdp)) {
+                return false
+            }
+
+        }else {
+            return false
         }
-        utilisateur
+        utilisateur = utilisateurATrouve
+        return true
     }
 
     def generator = { String alphabet, int n ->

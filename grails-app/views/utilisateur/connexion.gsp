@@ -97,16 +97,14 @@
                 <div class="account-wall">
                     <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
                          alt="">
-                    <g:hasErrors bean="${utilisateurInstance}">
-                        <ul class="errors" role="alert">
-                            <g:eachError bean="${utilisateurInstance}" var="error">
-                                <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-                            </g:eachError>
-                        </ul>
-                    </g:hasErrors>
-                    <g:form class="form-signin" url="[resource:utilisateurInstance,action:'connecter']">
-                        <input name="pseudo" type="text" class="form-control" placeholder="Pseudo" required autofocus>
-                        <input name="mdp" type="password" class="form-control" placeholder="Mot de Passe" required>
+                    <g:if test="${message}">
+                        <div class="alert alert-danger">
+                            <p>${message}</p>
+                        </div>
+                    </g:if>
+                    <g:form class="form-signin" url="[controller:'utilisateur',action:'connexionPost']">
+                        <input name="pseudo" type="text" class="form-control" value="${fieldValue(bean:utilisateur,field:'pseudo')}" placeholder="Pseudo" required autofocus>
+                        <input name="mdp" type="password" class="form-control" value="${fieldValue(bean:utilisateur,field:'motDePasse')}" placeholder="Mot de Passe" required>
                         <button class="btn btn-lg btn-primary btn-block" type="submit">
                             Se Connecter</button>
                         <label class="checkbox pull-left">

@@ -15,9 +15,6 @@ class Utilisateur {
     String email
     String telephone
 
-    Date dateCreated
-    Date lastUpdated
-
     @Transient
     String motDePasse
 
@@ -48,8 +45,6 @@ class Utilisateur {
                 ", dateNaissance=" + dateNaissance +
                 ", email='" + email + '\'' +
                 ", telephone='" + telephone + '\'' +
-                ", dateCreated=" + dateCreated +
-                ", lastUpdated=" + lastUpdated +
                 ", version=" + version +
                 '}';
     }

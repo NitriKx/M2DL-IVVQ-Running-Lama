@@ -26,14 +26,13 @@ class UtilisateurController {
         render view: 'connexion'
     }
 
-    def connecter(Utilisateur utilisateurInstance) {
-        if(utilisateurInstance.hasErrors())
-            respond utilisateurInstance.errors, view: 'connexion'
-        Utilisateur membre = utilisateurService.verifierIdentifiants(params.pseudo,params.mdp)
-        if(membre) {
-            render(view: 'index', model: [utilisateurInstance:membre])
+    def connexionPost(params) {
+        Utilisateur utilisateur = new Utilisateur(params)
+        if(!utilisateurService.verifierIdentifiants(utilisateur)) {
+            render(view: 'connexion', model: [message:"Identifiants Incorrects"])
         } else {
-            render(view: 'connexion', model: [])
+            this.getSession().setAttribute('utilisateur',utilisateur)
+            render view: 'index'
         }
     }
 }
