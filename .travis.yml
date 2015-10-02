@@ -1,12 +1,35 @@
 language: groovy
-jdk:
-- oraclejdk7
+
 branches:
   only:
   - pre-prod
   - /^dev-.*$/
-script: ./grailsw refresh-dependencies && ./grailsw "test-app unit:" && ./grailsw
-  refresh-dependencies && ./grailsw "test-app functional:"
+
+
+sudo: required
+
+services:
+  - docker
+
+jdk:
+  - oraclejdk7
+
+
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_4bff5548dd92_key -iv $encrypted_4bff5548dd92_iv -in sonar-credentials.txt.enc -out sonar-credentials.txt -d
+
+before_script:
+  - docker pull pierrevincent/sonar-runner
+
+script:
+  - ./grailsw refresh-dependencies
+  - ./grailsw test-app -coverage -xml
+
+after_script:
+  - ./grailsw codenarc
+  - docker run -v $(pwd):/data -v "$(pwd)/sonar-runner.properties":/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner -Dsonar.projectName=RunningLama-${TRAVIS_BRANCH}
+
 deploy:
   provider: heroku
   api_key:

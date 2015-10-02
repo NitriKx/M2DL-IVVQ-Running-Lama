@@ -60,6 +60,7 @@ grails.project.dependency.resolution = {
         // plugins for the compile step
         compile ":scaffolding:2.0.3"
         compile ':cache:1.1.7'
+        compile ":codenarc:0.24.1"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.16" // or ":hibernate4:4.3.5.4"
@@ -67,19 +68,19 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.11.1"
         runtime ":resources:1.2.8"
 
-        test ":code-coverage:2.0.3-3"
-        // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0.1"
-        //runtime ":cached-resources:1.1"
-        //runtime ":yui-minify-resources:0.1.5"
+        test ":code-coverage:latest"
+    }
+}
 
-        // An alternative to the default resources plugin is the asset-pipeline plugin
-        //compile ":asset-pipeline:1.6.1"
 
-        // Uncomment these to enable additional asset-pipeline capabilities
-        //compile ":sass-asset-pipeline:1.5.5"
-        //compile ":less-asset-pipeline:1.5.3"
-        //compile ":coffee-asset-pipeline:1.5.0"
-        //compile ":handlebars-asset-pipeline:1.3.0.1"
+codenarc.reports = {
+
+    MyXmlReport('xml') {                       // The report name "MyXmlReport" is user-defined; Report type is 'xml'
+        outputFile = 'target/test-reports/codenarc/CodeNarcReport.xml'      // Set the 'outputFile' property of the (XML) Report
+        title = 'RunningLama CodeNarc report'  // Set the 'title' property of the (XML) Report
+    }
+    MyHtmlReport('html') {                     // Report type is 'html'
+        outputFile = 'target/test-reports/codenarc/CodeNarcReport.html'
+        title = 'RunningLama CodeNarc report'
     }
 }
