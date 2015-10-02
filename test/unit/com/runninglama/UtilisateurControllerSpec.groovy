@@ -23,6 +23,7 @@ class UtilisateurControllerSpec extends Specification {
         params["telephone"] = '0987675434'
     }
 
+    /*
     void "Test the index action returns the correct model"() {
 
         when: "The index action is executed"
@@ -154,4 +155,6 @@ class UtilisateurControllerSpec extends Specification {
         response.redirectedUrl == '/utilisateur/index'
         flash.message != null
     }
+
+   */
 }

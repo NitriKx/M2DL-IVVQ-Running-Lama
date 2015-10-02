@@ -19,25 +19,29 @@
             <hr class="colorgraph">
             <div class="row">
                 <g:hasErrors bean="${utilisateur}">
+                    <div class="alert alert-danger">
                     <ul>
                         <g:eachError var="err" bean="${utilisateur}">
                             <li>${err}</li>
                         </g:eachError>
                     </ul>
+                    </div>
                 </g:hasErrors>
                 <g:if test="${utilisateur?.hasErrors() == false}">
-                    Inscription OK !
+                    <div class="alert alert-success">
+                        <p>Votre inscription a bien été enregistrée.</p>
+                    </div>
                 </g:if>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-md-6">
                     <div class="form-group">
-                        <input type="text" name="nom" id="nom" class="form-control input-lg" placeholder="Nom" tabindex="1">
+                        <input type="text" name="nom" id="nom" class="form-control input-lg" value="${fieldValue(bean:utilisateur,field:'nom')}" placeholder="Nom" tabindex="1">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6">
                     <div class="form-group">
-                        <input type="text" name="prenom" id="prenom" class="form-control input-lg" placeholder="Prénom" tabindex="2">
+                        <input type="text" name="prenom" id="prenom" class="form-control input-lg" value="${fieldValue(bean:utilisateur,field:'prenom')}" placeholder="Prénom" tabindex="2">
                     </div>
                 </div>
             </div>

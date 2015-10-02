@@ -53,6 +53,7 @@ class UtilisateurServiceSpec extends Specification {
 
     }
 
+
     @Unroll
     def "test qu'un utilisateur veut se connecter avec un mot de passe incorrect" () {
         given: "un visiteur qui veut se connecter avec son pseudo et son mot de passe et qui est membre "

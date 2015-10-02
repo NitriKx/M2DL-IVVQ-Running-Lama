@@ -27,16 +27,17 @@ class UtilisateurSpec extends Specification {
                 email: aEmail, nom: aNom, prenom: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt)
 
         when: "on essaye de valider un utilisateur"
-        def validation = util.validate()
+        util.validate()
 
         then: "le déplacement est correctement effectué"
         util.hasErrors() == false
+        println util.getErrors()
 
 
         where:
-        aPseudo            | aPrenom  | aNom      | aEmail               | aTelephone   | aDateDerniereConnexion | aDateInscription | aDateNaissance | aPasswordHash        | aPasswordSalt
-        "ARunningLama"     | "Julien" | "Custoja" | "julien.c@gmail.com" | "0567543456" | new Date()             | new Date()       | new Date()     | "gfhthqsdfjgjqfjgfg" | "ssdfdsfdsfsd"
-        "ARunningTortoise" | "Loic"   | "Leger"   | "loic.l@gmail.com"   | "0590674531" | null                   | new Date()       | new Date()     | "gfhthqsdfjgjqfjgfg" | "ssdfdsfdsfsd"
+        aPseudo            | aPrenom  | aNom      | aEmail               | aTelephone   | aDateDerniereConnexion | aDateInscription | aDateNaissance | aPasswordHash        | aPasswordSalt | motDePasse | motDePasseConfirmation
+        "ARunningLama"     | "Julien" | "Custoja" | "julien.c@gmail.com" | "0567543456" | new Date()             | new Date()       | new Date()     | "gfhthqsdfjgjqfjgfg" | "ssdfdsfdsfsd" | "azerty"  | "azerty"
+        "ARunningTortoise" | "Loic"   | "Leger"   | "loic.l@gmail.com"   | "0590674531" | null                   | new Date()       | new Date()     | "gfhthqsdfjgjqfjgfg" | "ssdfdsfdsfsd"| "azerty"  | "azerty"
     }
 
     @Unroll

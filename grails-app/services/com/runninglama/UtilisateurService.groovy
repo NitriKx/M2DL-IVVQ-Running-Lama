@@ -37,7 +37,8 @@ class UtilisateurService {
                 String salt = generator((('A'..'Z')+('0'..'9')).join(), 9)
                 utilisateur.passwordSalt = salt
                 utilisateur.passwordHash = (salt+utilisateur.motDePasse).encodeAsSHA1()
-                utilisateur.save()
+                utilisateur.dateInscription = new Date()
+                utilisateurDAOService.save(utilisateur)
         } else {
             utilisateur.errors.rejectValue('motDePasse', 'nullable')
         }
