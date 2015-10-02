@@ -20,44 +20,66 @@
 			<g:if test="${flash.message}">
 				<div class="message" role="status">${flash.message}</div>
 			</g:if>
-			<table>
-			<thead>
-					<tr>
-					
-						<g:sortableColumn property="nb_place" title="${message(code: 'vehicule.nb_place.label', default: 'Nbplace')}" />
-					
-						<g:sortableColumn property="marque" title="${message(code: 'vehicule.marque.label', default: 'Marque')}" />
-					
-						<g:sortableColumn property="modele" title="${message(code: 'vehicule.modele.label', default: 'Modele')}" />
-					
-						<g:sortableColumn property="annee" title="${message(code: 'vehicule.annee.label', default: 'Annee')}" />
-					
-						<g:sortableColumn property="kilometrage" title="${message(code: 'vehicule.kilometrage.label', default: 'Kilometrage')}" />
-					
-						<g:sortableColumn property="type" title="${message(code: 'vehicule.type.label', default: 'Type')}" />
-					
-					</tr>
-				</thead>
-				<tbody>
-				<g:each in="${vehiculeInstanceList}" status="i" var="vehiculeInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${vehiculeInstance.id}">${fieldValue(bean: vehiculeInstance, field: "nb_place")}</g:link></td>
-					
-						<td>${fieldValue(bean: vehiculeInstance, field: "marque")}</td>
-					
-						<td>${fieldValue(bean: vehiculeInstance, field: "modele")}</td>
-					
-						<td><g:formatDate date="${vehiculeInstance.annee}" /></td>
-					
-						<td>${fieldValue(bean: vehiculeInstance, field: "kilometrage")}</td>
-					
-						<td>${fieldValue(bean: vehiculeInstance, field: "type")}</td>
-					
-					</tr>
-				</g:each>
-				</tbody>
-			</table>
+			<div class="table-responsive">
+				<table class="table">
+				<thead>
+						<tr>
+
+							<g:sortableColumn property="nb_place" title="${message(code: 'vehicule.nb_place.label', default: 'Nbplace')}" />
+
+							<g:sortableColumn property="marque" title="${message(code: 'vehicule.marque.label', default: 'Marque')}" />
+
+							<g:sortableColumn property="modele" title="${message(code: 'vehicule.modele.label', default: 'Modele')}" />
+
+							<g:sortableColumn property="annee" title="${message(code: 'vehicule.annee.label', default: 'Annee')}" />
+
+							<g:sortableColumn property="kilometrage" title="${message(code: 'vehicule.kilometrage.label', default: 'Kilometrage')}" />
+
+							<g:sortableColumn property="type" title="${message(code: 'vehicule.type.label', default: 'Type')}" />
+
+							<th></th>
+
+							<th></th>
+
+						</tr>
+					</thead>
+					<tbody>
+					<g:each in="${vehiculeInstanceList}" status="i" var="vehiculeInstance">
+						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+
+							<td><g:link action="show" id="${vehiculeInstance.id}">${fieldValue(bean: vehiculeInstance, field: "nb_place")}</g:link></td>
+
+							<td>${fieldValue(bean: vehiculeInstance, field: "marque")}</td>
+
+							<td>${fieldValue(bean: vehiculeInstance, field: "modele")}</td>
+
+							<td><g:formatDate date="${vehiculeInstance.annee}" /></td>
+
+							<td>${fieldValue(bean: vehiculeInstance, field: "kilometrage")}</td>
+
+							<td>${fieldValue(bean: vehiculeInstance, field: "type")}</td>
+
+							<td>
+
+								<g:form url="[resource:vehiculeInstance]" name="formUpdate" methode="POST">
+										<g:actionSubmit id="${vehiculeInstance.getId()}" class="btn btn-default" action="edit" value="Modifier"></g:actionSubmit>
+								</g:form>
+
+							</td>
+
+							<td>
+
+								<g:form url="[resource:vehiculeInstance]" name="formDelete" method="DELETE">
+										<g:actionSubmit id="${vehiculeInstance.getId()}" class="btn btn-default" action="delete" value="Supprimer"></g:actionSubmit>
+								</g:form>
+
+							</td>
+
+						</tr>
+					</g:each>
+					</tbody>
+				</table>
+			</div>
 			<div class="pagination">
 				<g:paginate total="${vehiculeInstanceCount ?: 0}" />
 			</div>

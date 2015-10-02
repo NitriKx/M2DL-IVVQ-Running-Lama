@@ -37,17 +37,11 @@ class VehiculeController {
 
         vehiculeInstance = vehiculeService.creeOuModifierVehicule(vehiculeInstance)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'vehicule.label', default: 'Vehicule'), vehiculeInstance.id])
-                redirect vehiculeInstance
-            }
-            '*' { respond vehiculeInstance, [status: CREATED] }
-        }
+        redirect(action: 'index')
     }
 
     def edit(Vehicule vehiculeInstance) {
-        respond vehiculeInstance
+        render (view: 'edit' , model:[vehiculeInstance: vehiculeInstance])
     }
 
     def update(Vehicule vehiculeInstance) {
@@ -63,13 +57,7 @@ class VehiculeController {
 
         vehiculeService.creeOuModifierVehicule(vehiculeInstance)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Vehicule.label', default: 'Vehicule'), vehiculeInstance.id])
-                redirect vehiculeInstance
-            }
-            '*' { respond vehiculeInstance, [status: OK] }
-        }
+        redirect(action: 'index')
     }
 
     def delete(Vehicule vehiculeInstance) {
@@ -81,13 +69,7 @@ class VehiculeController {
 
         vehiculeService.supprimerVehicule(vehiculeInstance)
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Vehicule.label', default: 'Vehicule'), vehiculeInstance.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
-        }
+        redirect(action: 'index')
     }
 
     protected void notFound() {
