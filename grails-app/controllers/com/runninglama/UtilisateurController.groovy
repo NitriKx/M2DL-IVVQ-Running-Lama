@@ -21,4 +21,19 @@ class UtilisateurController {
         utilisateur = utilisateurService.inscrireUtilisateur(utilisateur)
         render view:'inscription', model: [utilisateur: utilisateur]
     }
+
+    def connexion() {
+        render view: 'connexion'
+    }
+
+    def connecter(Utilisateur utilisateurInstance) {
+        if(utilisateurInstance.hasErrors())
+            respond utilisateurInstance.errors, view: 'connexion'
+        Utilisateur membre = utilisateurService.verifierIdentifiants(params.pseudo,params.mdp)
+        if(membre) {
+            render(view: 'index', model: [utilisateurInstance:membre])
+        } else {
+            render(view: 'connexion', model: [])
+        }
+    }
 }

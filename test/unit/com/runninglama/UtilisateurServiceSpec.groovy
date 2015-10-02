@@ -1,7 +1,70 @@
 package com.runninglama
 
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
+import spock.lang.Specification
+import spock.lang.Unroll
+import org.codehaus.groovy.grails.plugins.codecs.SHA1Codec
+
 /**
  * Created by loicleger on 01/10/15.
  */
-class UtilisateurServiceSpec {
+@TestFor(UtilisateurService)
+@Mock(Utilisateur)
+class UtilisateurServiceSpec extends Specification {
+
+
+    def setup() {
+        service.utilisateurDAOService = Mock(UtilisateurDAOService)
+        mockCodec(SHA1Codec)
+    }
+
+    def cleanup() {
+    }
+
+    @Unroll
+    def "test qu'un utilisateur se connecte avec des identifiants correct" () {
+        given: "un visiteur qui veut se connecter avec son pseudo et son mot de passe et qui est membre "
+        String pseudo = "toto"
+        String mdp = "toto"
+
+        when: "le visiteur veut se connecter"
+        service.utilisateurDAOService.findByPseudo(pseudo) >> new Utilisateur(pseudo: "toto",passwordHash: "630547c1fada14c61e876be55ac877e13f5c03d7",passwordSalt: "toto")
+        Utilisateur membre = service.verifierIdentifiants(pseudo,mdp)
+
+        then: "le visiteur est connecte"
+        membre
+        !membre.hasErrors()
+
+    }
+
+    @Unroll
+    def "test qu'un utilisateur veut se connecter avec un pseudo incorrect" () {
+        given: "un visiteur qui veut se connecter avec son pseudo et son mot de passe et qui est membre "
+        String pseudo = "toti"
+        String mdp = "toto"
+
+        when: "le visiteur veut se connecter"
+        service.utilisateurDAOService.findByPseudo(pseudo) >> null
+        Utilisateur membre = service.verifierIdentifiants(pseudo,mdp)
+
+        then: "le visiteur est connecte"
+        !membre
+
+    }
+
+    @Unroll
+    def "test qu'un utilisateur veut se connecter avec un mot de passe incorrect" () {
+        given: "un visiteur qui veut se connecter avec son pseudo et son mot de passe et qui est membre "
+        String pseudo = "toto"
+        String mdp = "toti"
+
+        when: "le visiteur veut se connecter"
+        service.utilisateurDAOService.findByPseudo(pseudo) >> new Utilisateur(pseudo: "toto",passwordHash: "630547c1fada14c61e876be55ac877e13f5c03d7",passwordSalt: "toto")
+        Utilisateur membre = service.verifierIdentifiants(pseudo,mdp)
+
+        then: "le visiteur est connecte"
+        !membre
+
+    }
 }

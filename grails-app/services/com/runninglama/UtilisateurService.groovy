@@ -7,18 +7,20 @@ import java.security.MessageDigest
 @Transactional
 class UtilisateurService {
 
+    UtilisateurDAOService utilisateurDAOService
+
     def serviceMethod() {
 
     }
 
     def verifierIdentifiants(String pseudo,String mdp) {
-        Utilisateur utilisateur = Utilisateur.findByPseudo(pseudo)
+        Utilisateur utilisateur = utilisateurDAOService.findByPseudo(pseudo)
         if(utilisateur) {
             mdp = utilisateur.passwordSalt + mdp
-            MessageDigest md = MessageDigest.getInstance("SHA-1", "BC");
-            byte[] mdpToByte = mdp.bytes
-            String mdpBase = Hex.encodeToString(mdpToByte);
-            utilisateur.passwordHash.equals(mdpBase)
+            mdp = mdp.encodeAsSHA1()
+            println(mdp)
+            if(!utilisateur.passwordHash.equals(mdp))
+                return null
         }
         utilisateur
     }

@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
+    <meta name="layout" content="main"/>
     <title></title>
     <style type="text/css" media="screen">
         .form-signin
@@ -96,23 +97,24 @@
                 <div class="account-wall">
                     <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
                          alt="">
-                        <g:hasErrors bean="${utilisateurInstance}">
-                            <ul class="errors" role="alert">
-                                <g:eachError bean="${utilisateurInstance}" var="error">
-                                    <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-                                </g:eachError>
-                            </ul>
-                        </g:hasErrors>
-                        <g:form url="[resource:utilisateurInstance, action:'connexion']">
-                            <input name="pseudo" type="text" class="form-control" placeholder="Pseudo" required autofocus>
-                            <input name="mdp" type="password" class="form-control" placeholder="Mot de Passe" required>
-                            <button class="btn btn-lg btn-primary btn-block" type="submit">
-                                Se Connecter</button>
-                            <label class="checkbox pull-left">
-                                <input type="checkbox" value="remember-me">
-                                Se Souvenir de Moi
-                            </label>
-                        </g:form>
+                    <g:hasErrors bean="${utilisateurInstance}">
+                        <ul class="errors" role="alert">
+                            <g:eachError bean="${utilisateurInstance}" var="error">
+                                <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+                            </g:eachError>
+                        </ul>
+                    </g:hasErrors>
+                    <g:form class="form-signin" url="[resource:utilisateurInstance,action:'connecter']">
+                        <input name="pseudo" type="text" class="form-control" placeholder="Pseudo" required autofocus>
+                        <input name="mdp" type="password" class="form-control" placeholder="Mot de Passe" required>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            Se Connecter</button>
+                        <label class="checkbox pull-left">
+                            <input type="checkbox" value="remember-me">
+                            Se Souvenir de Moi
+                        </label>
+                        <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                    </g:form>
                 </div>
                 <a href="#" class="text-center new-account">Créer un compte</a>
             </div>
