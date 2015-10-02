@@ -37,12 +37,12 @@ class UtilisateurService {
 
     def inscrireUtilisateur(Utilisateur utilisateur) {
         if(utilisateur.motDePasse == utilisateur.motDePasseConfirmation) {
-                utilisateur.dateInscription = new Date()
-                String salt = generator((('A'..'Z')+('0'..'9')).join(), 9)
-                utilisateur.passwordSalt = salt
-                utilisateur.passwordHash = (salt+utilisateur.motDePasse).encodeAsSHA1()
-                utilisateur.dateInscription = new Date()
-                utilisateurDAOService.save(utilisateur)
+            utilisateur.dateInscription = new Date()
+            String salt = generator((('A'..'Z')+('0'..'9')).join(), 9)
+            utilisateur.passwordSalt = salt
+            utilisateur.passwordHash = (salt+utilisateur.motDePasse).encodeAsSHA1()
+            utilisateur.dateInscription = new Date()
+            utilisateurDAOService.save(utilisateur)
         } else {
             utilisateur.errors.rejectValue('motDePasse', 'nullable')
         }
