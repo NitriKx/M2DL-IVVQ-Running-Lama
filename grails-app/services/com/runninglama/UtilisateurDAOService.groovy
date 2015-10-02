@@ -6,7 +6,7 @@ import grails.transaction.Transactional
 class UtilisateurDAOService {
 
     Utilisateur findByPseudo(String pseudo) {
-        Utilisateur.findByPseudo(pseudo)
+        return Utilisateur.findByPseudo(pseudo)
     }
 
     def save(Utilisateur utilisateurInstance) {

@@ -95,8 +95,8 @@
             <div class="col-sm-6 col-md-4 col-md-offset-4">
                 <h1 class="text-center login-title">Se Connecter pour continuer sur le site</h1>
                 <div class="account-wall">
-                    <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
-                         alt="">
+                    <center><img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                         alt=""></center>
                     <g:if test="${message}">
                         <div class="alert alert-danger">
                             <p>${message}</p>
@@ -104,17 +104,14 @@
                     </g:if>
                     <g:form class="form-signin" url="[controller:'utilisateur',action:'connexionPost']">
                         <input name="pseudo" type="text" class="form-control" value="${fieldValue(bean:utilisateur,field:'pseudo')}" placeholder="Pseudo" required autofocus>
-                        <input name="mdp" type="password" class="form-control" value="${fieldValue(bean:utilisateur,field:'motDePasse')}" placeholder="Mot de Passe" required>
+                        <br>
+                        <input name="motDePasse" type="password" class="form-control" value="${fieldValue(bean:utilisateur,field:'motDePasse')}" placeholder="Mot de Passe" required>
+                        <br>
                         <button class="btn btn-lg btn-primary btn-block" type="submit">
                             Se Connecter</button>
-                        <label class="checkbox pull-left">
-                            <input type="checkbox" value="remember-me">
-                            Se Souvenir de Moi
-                        </label>
-                        <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
                     </g:form>
                 </div>
-                <a href="#" class="text-center new-account">Créer un compte</a>
+                <g:link controller="utilisateur" action="inscription">Créer un compte</g:link>
             </div>
         </div>
     </div>

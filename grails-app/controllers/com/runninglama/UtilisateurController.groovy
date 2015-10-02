@@ -32,7 +32,21 @@ class UtilisateurController {
             render(view: 'connexion', model: [message:"Identifiants Incorrects"])
         } else {
             this.getSession().setAttribute('utilisateur',utilisateur)
-            render view: 'index'
+            redirect(controller: 'accueil', action: 'index')
         }
+    }
+
+    def index() {
+        Utilisateur utilisateur = this.getSession().getAttribute('utilisateur')
+        if(utilisateur) {
+            // Redirection vers la gestion des voitures
+        } else {
+            connexion()
+        }
+    }
+
+    def deconnexion() {
+        this.getSession().invalidate()
+        redirect(controller: 'accueil', action: 'index')
     }
 }

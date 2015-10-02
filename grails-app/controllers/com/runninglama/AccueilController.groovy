@@ -3,6 +3,7 @@ package com.runninglama
 class AccueilController {
 
     def index() {
-        render view: 'index'
+        def lesDerniersUtilisateurs = Utilisateur.findAll()
+        render view: 'index', model:[lesDerniersUtilisateurs]
     }
 }

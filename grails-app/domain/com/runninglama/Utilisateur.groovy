@@ -20,9 +20,7 @@ class Utilisateur {
 
     @Transient
     String motDePasseConfirmation
-
-    //static hasMany = [Voiture:lesVoitures]
-
+    
 
     static constraints = {
         email email:true

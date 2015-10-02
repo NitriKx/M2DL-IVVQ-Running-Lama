@@ -76,17 +76,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-4 col-sm-3 col-md-3">
-                    <span class="button-checkbox">
-                        <button type="button" class="btn" data-color="info" tabindex="7"> J'accepte</button>
-                        <input type="checkbox" name="t_and_c" id="t_and_c" class="hidden" value="1">
-                    </span>
-                </div>
-                <div class="col-xs-8 col-sm-9 col-md-9">
-                    En cliquant sur <strong class="label label-primary">M'inscrire</strong>, vous acceptez <a href="#" data-toggle="modal" data-target="#t_and_c_m">Conditions d'utilisations</a> utilisées par notre service, incluant l'utilisation des cookies.
-                </div>
-            </div>
 
             <hr class="colorgraph">
             <div class="row">

@@ -14,6 +14,7 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
+
     <!-- Custom styles for this template -->
     <link href="<g:resource dir="css" file="justified-nav.css" />" rel="stylesheet">
 
@@ -24,6 +25,8 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 
 </head>
 
@@ -41,6 +44,9 @@
                 <li><a>Voir les trajets</a></li>
                 <li><a>Proposer un trajet</a></li>
                 <li><g:link controller="utilisateur" action="index">Espace membre</g:link></li>
+                <g:if test="${session.utilisateur}">
+                    <li><g:link controller="utilisateur" action="deconnexion">Se déconnecter</g:link></li>
+                </g:if>
 
 
             </ul>
@@ -51,7 +57,7 @@
 
     <!-- Site footer -->
     <footer class="footer">
-        <p>&copy; Company 2014</p>
+        <p>&copy; Running Lama 2015</p>
     </footer>
 
 </div> <!-- /container -->

@@ -7,7 +7,7 @@ import java.security.MessageDigest
 @Transactional
 class UtilisateurService {
 
-    UtilisateurDAOService utilisateurDAOService
+    def utilisateurDAOService
 
     def serviceMethod() {
 
@@ -16,18 +16,17 @@ class UtilisateurService {
     def verifierIdentifiants(Utilisateur utilisateur) {
         Utilisateur utilisateurATrouve = utilisateurDAOService.findByPseudo(utilisateur.pseudo)
         if(utilisateurATrouve) {
-            def mdp = utilisateur.passwordSalt + utilisateur.motDePasse
+            def mdp = utilisateurATrouve.passwordSalt + utilisateur.motDePasse
+            println("***********"+mdp)
             mdp = mdp.encodeAsSHA1()
-            println(mdp)
-            if(!utilisateur.passwordHash.equals(mdp)) {
-                return false
+            if(!utilisateurATrouve.passwordHash.equals(mdp)) {
+                return null
             }
 
         }else {
-            return false
+            return null
         }
-        utilisateur = utilisateurATrouve
-        return true
+        return utilisateurATrouve
     }
 
     def generator = { String alphabet, int n ->
