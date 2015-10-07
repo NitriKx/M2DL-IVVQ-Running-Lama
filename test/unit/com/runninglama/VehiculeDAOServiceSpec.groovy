@@ -33,6 +33,7 @@ class VehiculeDAOServiceSpec extends Specification {
 
         then: "le véhicule n'existe plus dans la base de données"
         Vehicule.findAllById(vehicule.id).isEmpty()
+        Vehicule.count() == 0
     }
 
 
@@ -61,5 +62,21 @@ class VehiculeDAOServiceSpec extends Specification {
 
         then: "le vehicule est dans la base de données"
         listeVehicule.contains(vehicule)
+    }
+
+    void "teste que  lorsqu'on ajoute un véhicule dans la base de données, le compteur de véhicule est incrémenté"() {
+
+        given: "une base de données sans véhicule et un véhicule valide"
+        def vehicule = creerVehiculeValide();
+        assertTrue(vehicule.validate())
+        assertTrue(Vehicule.count() == 0)
+        vehicule.save(flush: true)
+
+        when: "on demande l'ajout de ce véhicule"
+        def resultatAjout = service.save(vehicule)
+
+        then: "la base de données contient maintenant un véhicule"
+        assertNotNull(resultatAjout)
+        service.count() == 1
     }
 }

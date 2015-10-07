@@ -9,10 +9,6 @@ class UtilisateurService {
 
     def utilisateurDAOService
 
-    def serviceMethod() {
-
-    }
-
     def verifierIdentifiants(Utilisateur utilisateur) {
         Utilisateur utilisateurATrouve = utilisateurDAOService.findByPseudo(utilisateur.pseudo)
         if(utilisateurATrouve) {
