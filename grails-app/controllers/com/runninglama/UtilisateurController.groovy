@@ -17,7 +17,6 @@ class UtilisateurController {
 
     def inscriptionPost(params) {
         Utilisateur utilisateur = new Utilisateur(params)
-        println utilisateur
         utilisateur = utilisateurService.inscrireUtilisateur(utilisateur)
         render view:'inscription', model: [utilisateur: utilisateur]
     }
