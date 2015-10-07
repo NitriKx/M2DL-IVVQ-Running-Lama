@@ -4,6 +4,7 @@ branches:
   only:
   - pre-prod
   - /^dev-.*$/
+  - /^tech-.*$/
 
 
 sudo: required
@@ -28,12 +29,13 @@ script:
 
 after_script:
   - ./grailsw codenarc
-  - sed "s/sonar.projectName=RunningLama/sonar.projectName=RunningLama_${TRAVIS_BRANCH}/g" ./sonar-project.properties > ./sonar-project.properties
-  - docker run -v $(pwd):/data -v "$(pwd)/sonar-runner.properties":/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner
+  - sed -i "s/sonar.projectName=RunningLama/sonar.projectName=RunningLama_${TRAVIS_BRANCH}/g" ${TRAVIS_BUILD_DIR}/sonar-project.properties
+  - sed -i "s/sonar.projectKey=com.runninglama.RunningLama/sonar.projectKey=com.runninglama.RunningLama_${TRAVIS_BRANCH}/g" ${TRAVIS_BUILD_DIR}/sonar-project.properties
+  - docker run -v $(pwd):/data -v $(pwd)/sonar-runner.properties:/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner
 
-deploy:
-  provider: heroku
-  api_key:
-    secure: EbHFclzNLvwZ6BaoBmWTn0V3WgCd8pbz5caf7cFqTOcU/WtjoAJ+/21ZaoqLBZLMtHOibKDSBqa6bFoEEWzB9/9rGHs2MEfvcc4ihhP9b37Cv5W8ul0ZMNjcfrLEZlt2yFp49V7OxnX+V7rxi41TjUbW+6pTSohw/4VYyGEsma+menYXAN8gq+ksQndBWoesX3hIYMhzBpcJVbSei57NlCFKHOQupKlFW2AR7KvbZIFjNRyCGH6kQDfClB/OZiMbOI04JLH3JdBUutXfM3+zH/iMrRxQwINqJrgReYdhCgpBzmWhHDMllTWWZa1cIx/QPw14OxxjQdoeeJg254T8I2N4B51BSCu3VZxB4CH9G9Nt12gxva4x2K+zXs2s3soHIPRs1Qll4iTa5C/TkJor7K6ygAtLDALKcKuinbdhfZIY45td+923JvhWX7q20DlrxsJSLYdTBPJQqQIRv/U/AqLSOX90U+huZDe1of4SU7WBkT0JZRBxtAKYlebYAyeS1lPVV6VphcAxK2TZ8yFO5Mz/zkR9Ojsqx438dEkeNTgpGgXhkODR3SxEI5IFJMwQY6QQCIaBRamOrF5Vay/Y50esivBzhAkjHCSCQKmTv++ik0bzFAI7tJU9G2tgNYQNcHaaM68JTLZzcMi7DByBYOdPVbEjyHNSfqEIzkPFREQ=
-  app:
-    pre-prod: m2dl-ivvq-running-lama
+#deploy:
+#  provider: heroku
+#  api_key:
+#    secure: EbHFclzNLvwZ6BaoBmWTn0V3WgCd8pbz5caf7cFqTOcU/WtjoAJ+/21ZaoqLBZLMtHOibKDSBqa6bFoEEWzB9/9rGHs2MEfvcc4ihhP9b37Cv5W8ul0ZMNjcfrLEZlt2yFp49V7OxnX+V7rxi41TjUbW+6pTSohw/4VYyGEsma+menYXAN8gq+ksQndBWoesX3hIYMhzBpcJVbSei57NlCFKHOQupKlFW2AR7KvbZIFjNRyCGH6kQDfClB/OZiMbOI04JLH3JdBUutXfM3+zH/iMrRxQwINqJrgReYdhCgpBzmWhHDMllTWWZa1cIx/QPw14OxxjQdoeeJg254T8I2N4B51BSCu3VZxB4CH9G9Nt12gxva4x2K+zXs2s3soHIPRs1Qll4iTa5C/TkJor7K6ygAtLDALKcKuinbdhfZIY45td+923JvhWX7q20DlrxsJSLYdTBPJQqQIRv/U/AqLSOX90U+huZDe1of4SU7WBkT0JZRBxtAKYlebYAyeS1lPVV6VphcAxK2TZ8yFO5Mz/zkR9Ojsqx438dEkeNTgpGgXhkODR3SxEI5IFJMwQY6QQCIaBRamOrF5Vay/Y50esivBzhAkjHCSCQKmTv++ik0bzFAI7tJU9G2tgNYQNcHaaM68JTLZzcMi7DByBYOdPVbEjyHNSfqEIzkPFREQ=
+#  app:
+#    pre-prod: m2dl-ivvq-running-lama
