@@ -27,10 +27,11 @@ class UtilisateurController {
 
     def connexionPost(params) {
         Utilisateur utilisateur = new Utilisateur(params)
-        if(!utilisateurService.verifierIdentifiants(utilisateur)) {
+        Utilisateur utilisateurVerif = utilisateurService.verifierIdentifiants(utilisateur);
+        if(utilisateurVerif == null) {
             render(view: 'connexion', model: [message:"Identifiants Incorrects"])
         } else {
-            this.getSession().setAttribute('utilisateur',utilisateur)
+            this.getSession().setAttribute('utilisateur',utilisateurVerif)
             redirect(controller: 'accueil', action: 'index')
         }
     }

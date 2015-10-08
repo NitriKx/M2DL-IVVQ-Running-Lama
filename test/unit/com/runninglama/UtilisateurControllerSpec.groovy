@@ -1,6 +1,6 @@
 package com.runninglama
 
-
+import grails.util.GrailsWebUtil
 import grails.test.mixin.*
 import org.grails.datastore.mapping.core.Session
 import spock.lang.*
@@ -72,26 +72,36 @@ class UtilisateurControllerSpec extends Specification {
     void "test la connexion d'un utilisateur valide"() {
         given: "les informations d'un utilisateur qui souhaite se connecter"
         Utilisateur utilisateur = new Utilisateur(params)
+        def request = GrailsWebUtil.bindMockWebRequest();
+        request.session['utilisateur'] = utilisateur
 
         controller.utilisateurService.verifierIdentifiants(utilisateur) >> utilisateur
 
         when: "l'utilisateur se connecte"
         controller.connexionPost(params)
 
-        then: "l'utilisateur est redirigé sur la page d'accueil"
+        then: "L'utilisateur est ajouté dans la session"
+        request.session['utilisateur'] != null
+
+        and: "l'utilisateur est redirigé sur la page d'accueil"
         view == '/accueil/index'
     }
 
     void "test la connexion d'un utilisateur invalide"() {
         given: "les informations d'un utilisateur qui souhaite se connecter"
         Utilisateur utilisateur = Mock(Utilisateur);
+        def request = GrailsWebUtil.bindMockWebRequest();
+        request.session['utilisateur'] = utilisateur
         controller.utilisateurService.verifierIdentifiants(utilisateur) >> null
         controller.session.getAttribute('utilisateur') >> null
 
         when: "l'utilisateur se connecte"
         controller.connexionPost(params)
 
-        then: "l'utilisateur est redirigé sur la page de connexion"
+        then: "L'utilisateur n'est pas ajouté en session"
+        request.session['utilisateur'] == null
+
+        and: "l'utilisateur est redirigé sur la page de connexion"
         view == '/utilisateur/connexion'
     }
 
