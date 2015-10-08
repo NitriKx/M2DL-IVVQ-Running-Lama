@@ -71,17 +71,14 @@ class UtilisateurControllerSpec extends Specification {
 
     void "test la connexion d'un utilisateur valide"() {
         given: "les informations d'un utilisateur qui souhaite se connecter"
-        Utilisateur utilisateur = Mock(Utilisateur);
+        Utilisateur utilisateur = new Utilisateur(params)
+
         controller.utilisateurService.verifierIdentifiants(utilisateur) >> utilisateur
-        controller.session.getAttribute('utilisateur') >> utilisateur
 
         when: "l'utilisateur se connecte"
         controller.connexionPost(params)
 
-        then: "l'utilisateur est en session"
-        controller.session.getAttribute('utilisateur') != null
-
-        and: "l'utilisateur est redirigé sur la page d'accueil"
+        then: "l'utilisateur est redirigé sur la page d'accueil"
         view == '/accueil/index'
     }
 
@@ -94,10 +91,7 @@ class UtilisateurControllerSpec extends Specification {
         when: "l'utilisateur se connecte"
         controller.connexionPost(params)
 
-        then: "l'utilisateur n'est pas en session"
-        controller.session.getAttribute('utilisateur') == null
-
-        and: "l'utilisateur est redirigé sur la page de connexion"
+        then: "l'utilisateur est redirigé sur la page de connexion"
         view == '/utilisateur/connexion'
     }
 

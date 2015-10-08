@@ -13,7 +13,6 @@ class UtilisateurService {
         Utilisateur utilisateurATrouve = utilisateurDAOService.findByPseudo(utilisateur.pseudo)
         if(utilisateurATrouve) {
             def mdp = utilisateurATrouve.passwordSalt + utilisateur.motDePasse
-            println("***********"+mdp)
             mdp = mdp.encodeAsSHA1()
             if(!utilisateurATrouve.passwordHash.equals(mdp)) {
                 return null
