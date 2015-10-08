@@ -33,13 +33,15 @@ class VehiculeServiceSpec extends Specification {
     }
 
     void "teste que lorsqu'on appelle getNombreVehicule, la bonne couche de DAO est appelée"() {
+        given: "un utilisateur"
+        def utilisateur = Mock(Utilisateur)
 
         when: "on appelle le service getNombreVehicule"
-        def nombreVehicule = service.getNombreVehicules()
+        def nombreVehicule = service.getNombreVehicules(utilisateur, [])
 
         then: "la bonne couche de DAO est appelée"
         assertNotNull(nombreVehicule)
-        1 * service.vehiculeDAOService.count(_) >> { 0 }
+        1 * service.vehiculeDAOService.count(_ as Utilisateur, []) >> { 0 }
 
     }
 

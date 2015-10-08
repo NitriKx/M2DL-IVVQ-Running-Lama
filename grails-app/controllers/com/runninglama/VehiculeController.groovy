@@ -12,15 +12,23 @@ class VehiculeController {
     VehiculeService vehiculeService
 
     def index(Integer max) {
+        def utilisateur = session.getAttribute('utilisateur')
         params.max = Math.min(max ?: 10, 100)
-        respond vehiculeService.recupererListVehicule(params), model: [vehiculeInstanceCount: vehiculeService.getNombreVehicules()]
+        respond vehiculeService.recupererListVehicule(utilisateur, params), model: [vehiculeInstanceCount: vehiculeService.getNombreVehicules(utilisateur, [])]
     }
 
     def show(Vehicule vehiculeInstance) {
+        if (vehiculeInstance == null) {
+            notFound()
+            return
+        }
+
         respond vehiculeInstance
     }
 
     def create() {
+        def utilisateur = session.getAttribute('utilisateur')
+        params['possesseur'] = utilisateur
         respond vehiculeService.creeVehicule(params)
     }
 
@@ -41,6 +49,11 @@ class VehiculeController {
     }
 
     def edit(Vehicule vehiculeInstance) {
+        if (vehiculeInstance == null) {
+            notFound()
+            return
+        }
+
         respond vehiculeInstance
     }
 

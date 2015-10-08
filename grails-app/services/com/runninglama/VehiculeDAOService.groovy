@@ -13,11 +13,11 @@ class VehiculeDAOService {
         vehiculeInstance.delete(flush: true);
     }
 
-    def list(params) {
-        Vehicule.list(params)
+    def list(Utilisateur possesseur, params) {
+        Vehicule.findAllByPossesseur(possesseur, params)
     }
 
-    def count(params) {
-        Vehicule.count()
+    def count(Utilisateur possesseur, params) {
+        Vehicule.countByPossesseur(possesseur, params)
     }
 }

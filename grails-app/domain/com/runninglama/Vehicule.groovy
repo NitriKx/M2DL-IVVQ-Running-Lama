@@ -16,6 +16,12 @@ class Vehicule {
     int kilometrage
     TypeVehicule type
 
+    Utilisateur possesseur
+
+    static belongsTo = [
+            possesseur: Utilisateur
+    ]
+
     // Variables gérées par GORM
     Date dateCreated
     Date lastUpdated
@@ -27,5 +33,6 @@ class Vehicule {
         annee blank: false, nullable: false
         kilometrage blank: false, nullable: false
         type blank: false, nullable: false
+        possesseur nullable: false
     }
 }
