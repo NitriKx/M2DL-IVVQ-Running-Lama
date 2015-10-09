@@ -8,7 +8,7 @@ import spock.lang.Specification
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(VehiculeService)
-@Mock(Vehicule)
+@Mock([Vehicule, Utilisateur])
 class VehiculeServiceSpec extends Specification {
 
     def setup() {
@@ -29,7 +29,18 @@ class VehiculeServiceSpec extends Specification {
         then: "le véhicule est bien ajouté"
         1 * service.vehiculeDAOService.save(_ as Vehicule) >> { Vehicule v -> v }
         assertNotNull(vehicule)
+    }
 
+    void "teste que lorsqu'on appelle recupererListVehicule, la bonne couche de DAO est appelée"() {
+        given: "un utilisateur"
+        def utilisateur = Mock(Utilisateur)
+
+        when: "on appelle le service recupererListVehicule"
+        def listeVehicules = service.recupererListVehicule(utilisateur, [])
+
+        then: "la bonne couche de DAO est appelée"
+        assertNotNull(listeVehicules)
+        1 * service.vehiculeDAOService.list(_ as Utilisateur, []) >> { [] }
     }
 
     void "teste que lorsqu'on appelle getNombreVehicule, la bonne couche de DAO est appelée"() {
@@ -67,4 +78,17 @@ class VehiculeServiceSpec extends Specification {
         1 * service.vehiculeDAOService.delete(_ as Vehicule) >> { Vehicule v -> v }
 
     }
+
+    void "teste que si l'on crée une voiture pour un utilisateur, la voiture lui appartient bien"() {
+        given: "un utilisateur qui existe"
+        def utilisateur = TestsHelper.creeUtilisateurValide().save(flush: true);
+
+        when: "on lui cree une voiture"
+        def voiture = TestsHelper.creeVehiculeValide(utilisateur).save(flush: true);
+
+        then: "l'utilisateur possède bien la voiture"
+        service.vehiculeAppartientUtilisateur(utilisateur, voiture);
+    }
+
+
 }
