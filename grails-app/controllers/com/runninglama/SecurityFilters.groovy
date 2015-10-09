@@ -1,4 +1,4 @@
-package m2dl.ivvq.projet
+package com.runninglama
 
 class SecurityFilters {
 
