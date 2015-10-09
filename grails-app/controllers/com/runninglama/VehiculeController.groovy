@@ -49,24 +49,14 @@ class VehiculeController {
     }
 
     def edit(Vehicule vehiculeInstance) {
-        if(vehiculeInstance || !vehiculeService.vehiculeAppartientUtilisateur(session.getAttribute('utilisateur', vehiculeInstance)))
+        if(vehiculeInstance /*&& vehiculeService.vehiculeAppartientUtilisateur(session.getAttribute('utilisateur'), vehiculeInstance)*/)
         {
             respond vehiculeInstance
         }
         else
         {
-            redirectVehiculeIndex()
+            redirect(controller: 'vehicule', action: 'index')
         }
-    }
-
-    private Object redirectVehiculeIndex() {
-        redirect(controller: 'vehicule', action: 'index')
-        if (vehiculeInstance == null) {
-            notFound()
-            return
-        }
-
-        respond vehiculeInstance
     }
 
     def update(Vehicule vehiculeInstance) {
