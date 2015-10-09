@@ -30,6 +30,8 @@
 				<thead>
 						<tr>
 
+							<th>VehiculeInstance</th>
+
 							<g:sortableColumn property="nb_place" title="${message(code: 'vehicule.nb_place.label', default: 'Nbplace')}" />
 
 							<g:sortableColumn property="marque" title="${message(code: 'vehicule.marque.label', default: 'Marque')}" />
@@ -52,6 +54,8 @@
 					<g:each in="${vehiculeInstanceList}" status="i" var="vehiculeInstance">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
+							<td>${vehiculeInstance}/${vehiculeInstanceCount}</td>
+
 							<td><g:link action="show" id="${vehiculeInstance.id}">${fieldValue(bean: vehiculeInstance, field: "nb_place")}</g:link></td>
 
 							<td>${fieldValue(bean: vehiculeInstance, field: "marque")}</td>
@@ -66,9 +70,7 @@
 
 							<td>
 
-								<g:form url="[resource:vehiculeInstance]" name="formUpdate" methode="POST">
-										<g:actionSubmit class="btn btn-default" action="edit" value="Modifier"></g:actionSubmit>
-								</g:form>
+								<g:link class="btn btn-default" action="edit" id="${vehiculeInstance.id}">Modifier</g:link>
 
 							</td>
 
