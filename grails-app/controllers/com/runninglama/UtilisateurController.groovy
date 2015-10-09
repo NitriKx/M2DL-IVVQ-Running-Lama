@@ -36,6 +36,8 @@ class UtilisateurController {
         }
     }
 
+
+
     def index() {
         Utilisateur utilisateur = this.getSession().getAttribute('utilisateur')
         if(utilisateur) {

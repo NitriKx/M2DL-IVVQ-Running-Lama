@@ -8,7 +8,7 @@ import spock.lang.Specification
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(VehiculeDAOService)
-@Mock(Vehicule)
+@Mock([Vehicule, Utilisateur])
 class VehiculeDAOServiceSpec extends Specification {
 
     def setup() {
@@ -17,30 +17,30 @@ class VehiculeDAOServiceSpec extends Specification {
     def cleanup() {
     }
 
-    def creerVehiculeValide() {
-        new Vehicule(marque: "Telsa", modele: "Model X", annee: new Date(year: 2015), nb_place: 5,
-                kilometrage: 10000, type: TypeVehicule.VOITURE);
-    }
-
     void "teste que le vehicule est effectivement supprimé de la base de données"() {
 
         given: "un véhicule en base de données"
-        def vehicule = creerVehiculeValide();
-        vehicule.save(flush: true)
+        def utilisateur = TestsHelper.creeUtilisateurValide();
+        utilisateur = utilisateur.save(flush: true)
+        def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule = vehicule.save(flush: true)
 
         when: "on demande la suppression de ce véhicule"
         service.delete(vehicule)
 
         then: "le véhicule n'existe plus dans la base de données"
         Vehicule.findAllById(vehicule.id).isEmpty()
+        Vehicule.count() == 0
     }
 
 
     void "teste que le vehicule est effectivement ajouté de la base de données"() {
 
         given: "un véhicule valide pas en base de données"
-        def vehicule = creerVehiculeValide();
-        assertTrue(vehicule.validate())
+        def utilisateur = TestsHelper.creeUtilisateurValide();
+        utilisateur = utilisateur.save(flush: true)
+        def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule = vehicule.save(flush: true)
 
         when: "on demande l'ajout de ce véhicule"
         def resultatAjout = service.save(vehicule)
@@ -53,13 +53,32 @@ class VehiculeDAOServiceSpec extends Specification {
     void "test que si on ajoute des véhicule dans la base de données, l'opération de listage les retourne"() {
 
         given: "un véhicule valide dans la base de données"
-        def vehicule = creerVehiculeValide();
-        service.save(vehicule)
+        def utilisateur = TestsHelper.creeUtilisateurValide();
+        utilisateur = utilisateur.save(flush: true)
+        def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule = vehicule.save(flush: true)
 
         when: "on liste les vehicules"
-        def listeVehicule = service.list()
+        def listeVehicule = service.list(vehicule.possesseur, [:])
 
         then: "le vehicule est dans la base de données"
         listeVehicule.contains(vehicule)
+    }
+
+    void "teste que  lorsqu'on ajoute un véhicule dans la base de données, le compteur de véhicule est incrémenté"() {
+
+        given: "une base de données sans véhicule et un véhicule valide"
+        def utilisateur = TestsHelper.creeUtilisateurValide();
+        utilisateur = utilisateur.save(flush: true)
+        def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        assertTrue(Vehicule.count() == 0)
+        vehicule = vehicule.save(flush: true)
+
+        when: "on demande l'ajout de ce véhicule"
+        def resultatAjout = service.save(vehicule)
+
+        then: "la base de données contient maintenant un véhicule"
+        assertNotNull(resultatAjout)
+        service.count(resultatAjout.possesseur, [:]) == 1
     }
 }

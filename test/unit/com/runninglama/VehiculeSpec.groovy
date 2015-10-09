@@ -18,6 +18,10 @@ class VehiculeSpec extends Specification {
     def cleanup() {
     }
 
+    def creeUtilisateurValide() {
+        return TestsHelper.creeUtilisateurValide()
+    }
+
     @Unroll
     void "test vehicule invalide sans contraintes"() {
         given: "Vehicule avec  attributs sans contraintes"
@@ -27,6 +31,7 @@ class VehiculeSpec extends Specification {
         vehicule.marque = marque
         vehicule.modele = modele
         vehicule.type = type
+        vehicule.possesseur = possesseur
 
         when: "Les attributs sont invalides"
         def estValide = vehicule.validate()
@@ -35,11 +40,12 @@ class VehiculeSpec extends Specification {
         estValide == false
 
         where:
-        annee                 | nbPlace | kilometrage | marque   | modele  | type
-        null                  | 0       | -10         | null     | null    | null
-        new Date(2015, 9, -1) | -1      | -1          | ""       | ""      | TypeVehicule.MOTO
-        new Date(2015, 9, 10) | 0       | 1000        | "Audi"   | "ETron" | TypeVehicule.VOITURE
-        new Date(2015, 9, 10) | 10      | 1000        | "Nissan" | ""      | TypeVehicule.VOITURE
+        possesseur                | annee                 | nbPlace | kilometrage | marque   | modele  | type
+        null                      | null                  | 0       | -10         | null     | null    | null
+        null                      | new Date(2015, 9, 10) | 0       | 1000        | "Audi"   | "ETron" | TypeVehicule.VOITURE
+        creeUtilisateurValide()   | new Date(2015, 9, -1) | -1      | -1          | ""       | ""      | TypeVehicule.MOTO
+        creeUtilisateurValide()   | new Date(2015, 9, 10) | 0       | 1000        | "Audi"   | "ETron" | TypeVehicule.VOITURE
+        creeUtilisateurValide()   | new Date(2015, 9, 10) | 10      | 1000        | "Nissan" | ""      | TypeVehicule.VOITURE
     }
 
     @Unroll
@@ -51,17 +57,18 @@ class VehiculeSpec extends Specification {
         vehicule.marque = marque
         vehicule.modele = modele
         vehicule.type = type
+        vehicule.possesseur = possesseur
 
-        when: "Les contraintes sont respectées"
+        when: "Les contraintes sont respectÃ©es"
         def estValide = vehicule.validate()
 
         then: "Le vehicule est invalide"
         estValide == true
 
         where:
-        annee                  | nbPlace | kilometrage | marque    | modele | type
-        new Date(2015, 10, 10) | 1       | 1000        | "Nissan"  | "Leaf" | TypeVehicule.VOITURE
-        new Date(2015, 9, 10)  | 10      | 1000        | "Renault" | "Zoe"  | TypeVehicule.VOITURE
+        possesseur                | annee                  | nbPlace | kilometrage | marque    | modele | type
+        creeUtilisateurValide()   | new Date(2015, 10, 10) | 1       | 1000        | "Nissan"  | "Leaf" | TypeVehicule.VOITURE
+        creeUtilisateurValide()   | new Date(2015, 9, 10)  | 10      | 1000        | "Renault" | "Zoe"  | TypeVehicule.VOITURE
     }
 
 }
