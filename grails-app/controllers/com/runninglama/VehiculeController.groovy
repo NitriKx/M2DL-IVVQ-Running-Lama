@@ -41,7 +41,18 @@ class VehiculeController {
     }
 
     def edit(Vehicule vehiculeInstance) {
-        respond vehiculeInstance
+        if(vehiculeInstance/* || !vehiculeService.vehiculeAppartientUtilisateur(session.getAttribute('utilisateur')*/)
+        {
+            respond vehiculeInstance
+        }
+        else
+        {
+            redirectVehiculeIndex()
+        }
+    }
+
+    private Object redirectVehiculeIndex() {
+        redirect(controller: 'vehicule', action: 'index')
     }
 
     def update(Vehicule vehiculeInstance) {
