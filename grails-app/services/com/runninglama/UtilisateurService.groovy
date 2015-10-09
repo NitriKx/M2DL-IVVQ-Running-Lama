@@ -48,4 +48,32 @@ class UtilisateurService {
         }
         utilisateur
     }
+
+    def modifierUtilisateur(Utilisateur utilisateur,Utilisateur utilisateurModifie,String ancienMotDePasse) {
+        utilisateur.clearErrors()
+        utilisateur.setPseudo(utilisateurModifie.pseudo)
+        utilisateur.setEmail(utilisateurModifie.email)
+        utilisateur.setNom(utilisateurModifie.nom)
+        utilisateur.setPrenom(utilisateurModifie.prenom)
+        utilisateur.setTelephone(utilisateurModifie.telephone)
+        utilisateur.setDateNaissance(utilisateurModifie.dateNaissance)
+        if(!ancienMotDePasse.isEmpty()) {
+            def mdp = utilisateur.passwordSalt + ancienMotDePasse
+            mdp = mdp.encodeAsSHA1();
+            println("mdp "+mdp + "== "+ utilisateur.passwordHash)
+            if(mdp == utilisateur.passwordHash) {
+                if(utilisateurModifie.motDePasse == utilisateurModifie.motDePasseConfirmation) {
+                    utilisateur.setPasswordHash((utilisateur.passwordSalt+utilisateurModifie.motDePasse).encodeAsSHA1())
+                } else {
+                    utilisateur.errors.rejectValue('motDePasse', 'nullable')
+                }
+            } else {
+                utilisateur.errors.rejectValue('passwordHash', 'nullable')
+            }
+        }
+        if(!utilisateur.hasErrors()) {
+            utilisateurDAOService.save(utilisateur)
+        }
+        utilisateur
+    }
 }

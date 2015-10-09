@@ -28,10 +28,11 @@ class UtilisateurController {
 
     def connexionPost(params) {
         Utilisateur utilisateur = new Utilisateur(params)
-        if(!utilisateurService.verifierIdentifiants(utilisateur)) {
+        Utilisateur membre = utilisateurService.verifierIdentifiants(utilisateur)
+        if(!membre) {
             render(view: 'connexion', model: [message:"Identifiants Incorrects"])
         } else {
-            this.getSession().setAttribute('utilisateur',utilisateur)
+            this.getSession().setAttribute('utilisateur',membre)
             redirect(controller: 'accueil', action: 'index')
         }
     }
@@ -48,5 +49,22 @@ class UtilisateurController {
     def deconnexion() {
         this.getSession().invalidate()
         redirect(controller: 'accueil', action: 'index')
+    }
+
+    def modifierProfil() {
+        render(view: 'modifierProfil', model: [utilisateur: this.getSession().getAttribute('utilisateur')])
+    }
+
+    def modifierProfilPost() {
+        Utilisateur utilisateurModifie = new Utilisateur(params)
+        Utilisateur utilisateur = utilisateurService.modifierUtilisateur(this.getSession().getAttribute('utilisateur'),utilisateurModifie,params.ancienMotDePasse)
+        println("err"+utilisateur.hasErrors())
+        println("user"+utilisateur)
+        if(utilisateur.hasErrors()) {
+            render(view: 'modifierProfil',model: [utilisateur:  utilisateur])
+        } else {
+            this.getSession().setAttribute('utilisateur',utilisateur)
+            redirect(controller: 'accueil', action: 'index')
+        }
     }
 }

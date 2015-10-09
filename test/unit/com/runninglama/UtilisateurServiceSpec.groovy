@@ -2,12 +2,10 @@ package com.runninglama
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import org.springframework.validation.FieldError
 import spock.lang.Specification
 import spock.lang.Unroll
 import org.codehaus.groovy.grails.plugins.codecs.SHA1Codec
 
-import java.lang.reflect.Field
 
 /**
  * Created by loicleger on 01/10/15.
@@ -120,4 +118,63 @@ class UtilisateurServiceSpec extends Specification {
 
     }
 
+    @Unroll
+    def "test qu'un membre veut modifier son profil avec des champs corrects" () {
+        given: "un membre qui veut modifier son profil et qui remplit les champs "
+
+        Utilisateur utilisateur = new Utilisateur(pseudo:"toto",nom:"toto",prenom:"toto",email:"toto@toto.fr",telephone:"0505050505",passwordSalt: "abcd",passwordHash: "dee9b46e23c4b18ecb604673e72fcfc8f51fee70")
+        String pseudo = "lolo"
+        String ancienMotDePasse = "toto"
+        String motDePasse = "lalu"
+        String motDePasseConfirmation = "lalu"
+        String telephone = "0505050505"
+        Utilisateur utilisateurModifie = new Utilisateur(pseudo:pseudo,motDePasse: motDePasse,motDePasseConfirmation: motDePasseConfirmation,telephone: telephone)
+
+        when: "le membre valide"
+        service.modifierUtilisateur(utilisateur,utilisateurModifie,ancienMotDePasse)
+
+        then: "le membre est bien modfié"
+        1 * service.utilisateurDAOService.save(_)
+        utilisateur.pseudo=="lolo"
+        utilisateur.passwordHash=="92008f37677931d6c8fbba8f7317210ba95c3e7f"
+        utilisateur.telephone=="0505050505"
+    }
+
+    @Unroll
+    def "test qu'un membre veut modifier son profil avec des mots de passe différent" () {
+        given: "un membre qui veut modifier son profil et qui remplit les champs "
+        Utilisateur utilisateur = new Utilisateur(pseudo:"toto",nom:"toto",prenom:"toto",email:"toto@toto.fr",telephone:"0505050505",passwordSalt: "abcd",passwordHash: "dee9b46e23c4b18ecb604673e72fcfc8f51fee70")
+        String pseudo = "lolo"
+        String ancienMotDePasse = "toto"
+        String motDePasse = "lalu"
+        String motDePasseConfirmation = "lalo"
+        String telephone = "0505050505"
+        Utilisateur utilisateurModifie = new Utilisateur(pseudo:pseudo,motDePasse: motDePasse,motDePasseConfirmation: motDePasseConfirmation,telephone: telephone)
+
+        when: "le membre valide"
+        Utilisateur membre = service.modifierUtilisateur(utilisateur,utilisateurModifie,ancienMotDePasse)
+
+        then: "le membre n'est pas modfié et indormé des erreurs"
+        membre.hasErrors()
+        utilisateur.errors.getFieldError('motDePasse')
+    }
+
+    @Unroll
+    def "test qu'un membre veut modifier son profil avec un ancien mot de passe incorrect" () {
+        given: "un membre qui veut modifier son profil et qui remplit les champs "
+        Utilisateur utilisateur = new Utilisateur(pseudo:"toto",nom:"toto",prenom:"toto",email:"toto@toto.fr",telephone:"0505050505",passwordSalt: "abcd",passwordHash: "dee9b46e23c4b18ecb604673e72fcfc8f51fee70")
+        String pseudo = "lolo"
+        String ancienMotDePasse = "toti"
+        String motDePasse = "lalu"
+        String motDePasseConfirmation = "lalu"
+        String telephone = "0505050505"
+        Utilisateur utilisateurModifie = new Utilisateur(pseudo:pseudo,motDePasse: motDePasse,motDePasseConfirmation: motDePasseConfirmation,telephone: telephone)
+
+        when: "le membre valide"
+        Utilisateur membre = service.modifierUtilisateur(utilisateur,utilisateurModifie,ancienMotDePasse)
+
+        then: "le membre n'est pas modfié et indormé des erreurs"
+        membre.hasErrors()
+        utilisateur.errors.getFieldError('passwordHash')
+    }
 }
