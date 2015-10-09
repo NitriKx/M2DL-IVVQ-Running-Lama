@@ -1,8 +1,11 @@
 package com.runninglama
 
-
+import grails.util.GrailsWebUtil
 import grails.test.mixin.*
+import org.grails.datastore.mapping.core.Session
 import spock.lang.*
+
+import javax.servlet.http.HttpSession
 
 @TestFor(UtilisateurController)
 @Mock(Utilisateur)
@@ -21,7 +24,87 @@ class UtilisateurControllerSpec extends Specification {
         params["dateNaissance"] = new Date()
         params["email"] = 'julien.c@test.fr'
         params["telephone"] = '0987675434'
+        params["motDePasse"] = 'azerty'
     }
+
+    def setup() {
+        controller.utilisateurService = Mock(UtilisateurService)
+    }
+
+    void "test l'affichage du formulaire d'inscription"(){
+        when: "une demande d'accès au formulaire d'inscription"
+        controller.inscription()
+        then: "l'utilisateur est redirigé sur la page d'inscription"
+        view == '/utilisateur/inscription'
+        response.status == 200
+    }
+
+    void "test la deconnexion d'un utilisateur"() {
+        when: "un utilisateur se deconnecte"
+        controller.deconnexion();
+
+        then: "l'utilisateur est redirigé sur l'accueil"
+        response.redirectedUrl == '/accueil/index'
+    }
+
+    void "Test l'inscription d'un utilisateur valide"() {
+        given: "Un utilisateur valide"
+        Utilisateur utilisateur = Mock(Utilisateur);
+        utilisateur.hasErrors () >> false
+        controller.utilisateurService.inscrireUtilisateur(utilisateur) >> utilisateur
+
+        when: "on inscrit l'utilisateur"
+        controller.inscriptionPost(params)
+
+        then: "L'inscription est validée"
+        view == '/utilisateur/inscription'
+        response.status == 200
+    }
+
+    void "test l'affichage du formulaire de connexion"() {
+        when: "une demande d'accès au formulaire de connexion"
+        controller.connexion()
+        then: "l'utilisateur est redirigé sur la page d'inscription"
+        view == '/utilisateur/connexion'
+        response.status == 200
+    }
+
+    void "test la connexion d'un utilisateur valide"() {
+        given: "les informations d'un utilisateur qui souhaite se connecter"
+        Utilisateur utilisateur = new Utilisateur(params)
+        def request = GrailsWebUtil.bindMockWebRequest();
+        request.session['utilisateur'] = utilisateur
+
+        controller.utilisateurService.verifierIdentifiants(utilisateur) >> utilisateur
+
+        when: "l'utilisateur se connecte"
+        controller.connexionPost(params)
+
+        then: "L'utilisateur est ajouté dans la session"
+        request.session['utilisateur'] != null
+
+        and: "l'utilisateur est redirigé sur la page d'accueil"
+        view == '/accueil/index'
+    }
+
+    void "test la connexion d'un utilisateur invalide"() {
+        given: "les informations d'un utilisateur qui souhaite se connecter"
+        Utilisateur utilisateur = Mock(Utilisateur);
+        def request = GrailsWebUtil.bindMockWebRequest();
+        request.session['utilisateur'] = utilisateur
+        controller.utilisateurService.verifierIdentifiants(utilisateur) >> null
+        controller.session.getAttribute('utilisateur') >> null
+
+        when: "l'utilisateur se connecte"
+        controller.connexionPost(params)
+
+        then: "L'utilisateur n'est pas ajouté en session"
+        request.session['utilisateur'] == null
+
+        and: "l'utilisateur est redirigé sur la page de connexion"
+        view == '/utilisateur/connexion'
+    }
+
 
     /*
     void "Test the index action returns the correct model"() {

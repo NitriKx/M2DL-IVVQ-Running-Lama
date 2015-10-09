@@ -17,7 +17,6 @@ class UtilisateurController {
 
     def inscriptionPost(params) {
         Utilisateur utilisateur = new Utilisateur(params)
-        println utilisateur
         utilisateur = utilisateurService.inscrireUtilisateur(utilisateur)
         render view:'inscription', model: [utilisateur: utilisateur]
     }
@@ -28,11 +27,10 @@ class UtilisateurController {
 
     def connexionPost(params) {
         Utilisateur utilisateur = new Utilisateur(params)
-        Utilisateur membre = utilisateurService.verifierIdentifiants(utilisateur)
-        if(!membre) {
+        if(!utilisateurService.verifierIdentifiants(utilisateur)) {
             render(view: 'connexion', model: [message:"Identifiants Incorrects"])
         } else {
-            this.getSession().setAttribute('utilisateur',membre)
+            this.getSession().setAttribute('utilisateur',utilisateur)
             redirect(controller: 'accueil', action: 'index')
         }
     }

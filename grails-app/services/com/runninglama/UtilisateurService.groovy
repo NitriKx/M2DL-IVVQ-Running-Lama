@@ -9,15 +9,10 @@ class UtilisateurService {
 
     def utilisateurDAOService
 
-    def serviceMethod() {
-
-    }
-
     def verifierIdentifiants(Utilisateur utilisateur) {
         Utilisateur utilisateurATrouve = utilisateurDAOService.findByPseudo(utilisateur.pseudo)
         if(utilisateurATrouve) {
             def mdp = utilisateurATrouve.passwordSalt + utilisateur.motDePasse
-            println("***********"+mdp)
             mdp = mdp.encodeAsSHA1()
             if(!utilisateurATrouve.passwordHash.equals(mdp)) {
                 return null
