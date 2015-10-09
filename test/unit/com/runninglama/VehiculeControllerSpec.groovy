@@ -49,7 +49,15 @@ class VehiculeControllerSpec extends Specification {
         def vehicule = new Vehicule(utilisateur: utilisateur)
         assertFalse(vehicule.validate())
 
+        when: "l'action save est exécutée une un véhicule null"
+        controller.save(null)
+
+        then: "une erreur 404 est levée"
+        response.status == 404
+
+
         when: "l'action de sauvegarde est exécutée avec une instance de vehicule invalide"
+        response.reset()
         request.contentType = FORM_CONTENT_TYPE
         controller.save(vehicule)
 
