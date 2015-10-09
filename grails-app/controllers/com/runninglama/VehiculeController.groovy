@@ -49,7 +49,7 @@ class VehiculeController {
     }
 
     def edit(Vehicule vehiculeInstance) {
-        if(vehiculeInstance/* || !vehiculeService.vehiculeAppartientUtilisateur(session.getAttribute('utilisateur')*/)
+        if(vehiculeInstance || !vehiculeService.vehiculeAppartientUtilisateur(session.getAttribute('utilisateur', vehiculeInstance)))
         {
             respond vehiculeInstance
         }
