@@ -72,29 +72,28 @@ class UtilisateurControllerSpec extends Specification {
 
     void "test la connexion d'un utilisateur valide"() {
         given: "les informations d'un utilisateur qui souhaite se connecter"
-        def request = GrailsWebUtil.bindMockWebRequest();
-        //request.session['utilisateur'] = utilisateur
         def paramsConnexion = [:]
-        paramsConnexion['pseudo'] = "toto"
-        paramsConnexion['motDePasse'] = "toto"
-        Utilisateur utilisateur = new Utilisateur(paramsConnexion)
+        paramsConnexion['pseudo'] = "TheRunningLama"
+        paramsConnexion['motDePasse'] = "azerty"
+        Utilisateur utilisateur = new Utilisateur(params)
+        request.session['utilisateur'] = utilisateur
+
+        controller.utilisateurService.verifierIdentifiants(_ as Utilisateur) >> { Utilisateur u -> u }
 
         when: "l'utilisateur se connecte"
-        controller.utilisateurService.verifierIdentifiants(utilisateur) >> new Utilisateur(params)
         controller.connexionPost(paramsConnexion)
 
         then: "L'utilisateur est ajouté dans la session"
         request.session['utilisateur'] != null
 
         and: "l'utilisateur est redirigé sur la page d'accueil"
-        view == '/accueil/index'
+        response.redirectedUrl == '/accueil/index'
     }
 
     void "test la connexion d'un utilisateur invalide"() {
         given: "les informations d'un utilisateur qui souhaite se connecter"
-        Utilisateur utilisateur = Mock(Utilisateur);
         def request = GrailsWebUtil.bindMockWebRequest();
-        controller.utilisateurService.verifierIdentifiants(utilisateur) >> null
+        controller.utilisateurService.verifierIdentifiants(_ as Utilisateur) >> { null }
         controller.session.getAttribute('utilisateur') >> null
 
         when: "l'utilisateur se connecte"
