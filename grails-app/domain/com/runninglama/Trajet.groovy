@@ -26,5 +26,8 @@ class Trajet {
     static constraints = {
         depart nullable: false, blank: false
         arrivee nullable:false, blank: false
+        conducteur nullable: false, blank: false
+        vehicule nullable: false, blank: false
+        dateAller nullable: false, blank: false
     }
 }
