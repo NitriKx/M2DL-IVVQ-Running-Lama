@@ -30,6 +30,15 @@ class TrajetControllerSpec extends Specification {
 
     }
 
+
+    void "Test l'affichage du formulaire d'ajout de trajet"() {
+        when: "une demande d'accès au formulaire d'ajout"
+        controller.ajouterTrajet()
+        then: "l'utilisateur est redirigé sur la page d'inscription"
+        view == '/trajet/ajouter'
+        response.status == 200
+    }
+
     void "Test the index action returns the correct model"() {
 
         when: "The index action is executed"
