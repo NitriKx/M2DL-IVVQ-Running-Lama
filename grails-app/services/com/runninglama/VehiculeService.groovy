@@ -11,12 +11,16 @@ class VehiculeService {
         new Vehicule(params)
     }
 
-    def getNombreVehicules() {
-        vehiculeDAOService.count();
+    def vehiculeAppartientUtilisateur(Utilisateur possesseur, Vehicule vehicule) {
+        possesseur.vehicules.contains(vehicule)
     }
 
-    def recupererListVehicule(params) {
-        vehiculeDAOService.list(params);
+    def getNombreVehicules(Utilisateur possesseur, params) {
+        vehiculeDAOService.count(possesseur, params);
+    }
+
+    def recupererListVehicule(Utilisateur possesseur, params) {
+        vehiculeDAOService.list(possesseur, params);
     }
 
     def creeOuModifierVehicule(Vehicule vehiculeInstance) {

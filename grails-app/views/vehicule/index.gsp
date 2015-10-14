@@ -66,9 +66,7 @@
 
 							<td>
 
-								<g:form url="[resource:vehiculeInstance]" name="formUpdate" methode="POST">
-										<g:actionSubmit class="btn btn-default" action="edit" value="Modifier"></g:actionSubmit>
-								</g:form>
+								<g:link class="btn btn-default" action="edit" id="${vehiculeInstance.id}">Modifier</g:link>
 
 							</td>
 
