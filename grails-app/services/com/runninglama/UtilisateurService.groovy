@@ -9,21 +9,16 @@ class UtilisateurService {
 
     def utilisateurDAOService
 
-    def serviceMethod() {
-
-    }
-
     def verifierIdentifiants(Utilisateur utilisateur) {
         Utilisateur utilisateurATrouve = utilisateurDAOService.findByPseudo(utilisateur.pseudo)
-        if(utilisateurATrouve) {
+        if (utilisateurATrouve) {
             def mdp = utilisateurATrouve.passwordSalt + utilisateur.motDePasse
-            println("***********"+mdp)
             mdp = mdp.encodeAsSHA1()
-            if(!utilisateurATrouve.passwordHash.equals(mdp)) {
+            if (!utilisateurATrouve.passwordHash.equals(mdp)) {
                 return null
             }
 
-        }else {
+        } else {
             return null
         }
         return utilisateurATrouve
@@ -31,20 +26,48 @@ class UtilisateurService {
 
     def generator = { String alphabet, int n ->
         new Random().with {
-            (1..n).collect { alphabet[ nextInt( alphabet.length() ) ] }.join()
+            (1..n).collect { alphabet[nextInt(alphabet.length())] }.join()
         }
     }
 
     def inscrireUtilisateur(Utilisateur utilisateur) {
-        if(utilisateur.motDePasse == utilisateur.motDePasseConfirmation) {
+        if (utilisateur.motDePasse == utilisateur.motDePasseConfirmation) {
             utilisateur.dateInscription = new Date()
-            String salt = generator((('A'..'Z')+('0'..'9')).join(), 9)
+            String salt = generator((('A'..'Z') + ('0'..'9')).join(), 9)
             utilisateur.passwordSalt = salt
-            utilisateur.passwordHash = (salt+utilisateur.motDePasse).encodeAsSHA1()
+            utilisateur.passwordHash = (salt + utilisateur.motDePasse).encodeAsSHA1()
             utilisateur.dateInscription = new Date()
             utilisateurDAOService.save(utilisateur)
         } else {
             utilisateur.errors.rejectValue('motDePasse', 'nullable')
+        }
+        utilisateur
+    }
+
+    def modifierUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurModifie, String ancienMotDePasse) {
+        utilisateur.clearErrors()
+        utilisateur.setPseudo(utilisateurModifie.pseudo)
+        utilisateur.setEmail(utilisateurModifie.email)
+        utilisateur.setNom(utilisateurModifie.nom)
+        utilisateur.setPrenom(utilisateurModifie.prenom)
+        utilisateur.setTelephone(utilisateurModifie.telephone)
+        utilisateur.setDateNaissance(utilisateurModifie.dateNaissance)
+        if (!ancienMotDePasse.isEmpty()) {
+            def mdp = utilisateur.passwordSalt + ancienMotDePasse
+            mdp = mdp.encodeAsSHA1();
+            println("mdp " + mdp + "== " + utilisateur.passwordHash)
+            if (mdp == utilisateur.passwordHash) {
+                if (utilisateurModifie.motDePasse == utilisateurModifie.motDePasseConfirmation) {
+                    utilisateur.setPasswordHash((utilisateur.passwordSalt + utilisateurModifie.motDePasse).encodeAsSHA1())
+                } else {
+                    utilisateur.errors.rejectValue('motDePasse', 'nullable')
+                }
+            } else {
+                utilisateur.errors.rejectValue('passwordHash', 'nullable')
+            }
+        }
+        if (!utilisateur.hasErrors()) {
+            utilisateurDAOService.save(utilisateur)
         }
         utilisateur
     }
