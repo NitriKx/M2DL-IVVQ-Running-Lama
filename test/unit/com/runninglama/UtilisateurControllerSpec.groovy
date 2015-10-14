@@ -2,6 +2,7 @@ package com.runninglama
 
 import grails.util.GrailsWebUtil
 import grails.test.mixin.*
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
 import org.grails.datastore.mapping.core.Session
 import spock.lang.*
 
@@ -71,14 +72,16 @@ class UtilisateurControllerSpec extends Specification {
 
     void "test la connexion d'un utilisateur valide"() {
         given: "les informations d'un utilisateur qui souhaite se connecter"
-        Utilisateur utilisateur = new Utilisateur(params)
         def request = GrailsWebUtil.bindMockWebRequest();
-        request.session['utilisateur'] = utilisateur
-
-        controller.utilisateurService.verifierIdentifiants(utilisateur) >> utilisateur
+        //request.session['utilisateur'] = utilisateur
+        def paramsConnexion = [:]
+        paramsConnexion['pseudo'] = "toto"
+        paramsConnexion['motDePasse'] = "toto"
+        Utilisateur utilisateur = new Utilisateur(paramsConnexion)
 
         when: "l'utilisateur se connecte"
-        controller.connexionPost(params)
+        controller.utilisateurService.verifierIdentifiants(utilisateur) >> new Utilisateur(params)
+        controller.connexionPost(paramsConnexion)
 
         then: "L'utilisateur est ajouté dans la session"
         request.session['utilisateur'] != null
@@ -91,7 +94,6 @@ class UtilisateurControllerSpec extends Specification {
         given: "les informations d'un utilisateur qui souhaite se connecter"
         Utilisateur utilisateur = Mock(Utilisateur);
         def request = GrailsWebUtil.bindMockWebRequest();
-        request.session['utilisateur'] = utilisateur
         controller.utilisateurService.verifierIdentifiants(utilisateur) >> null
         controller.session.getAttribute('utilisateur') >> null
 
