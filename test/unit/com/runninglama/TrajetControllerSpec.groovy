@@ -10,8 +10,24 @@ class TrajetControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+        params["depart"] = 'Toulouse'
+        params["departLat"] = '123.345'
+        params["departLng"] = '1.4583'
+
+        params["arrivee"] = 'Muret'
+        params["arriveeLat"] = '123.563'
+        params["arriveeLng"] = '2.456'
+
+        params["dateAller"] = new Date()
+        params["dateRetour"] = new Date()
+
+        params["commentaire"] = 'Un commentaire'
+        params["prix"] = 12.5
+        params["nombrePlace"] = 4
+
+        params["conducteur"] = Mock(Utilisateur)
+        params["vehicule"] = Mock(Vehicule)
+
     }
 
     void "Test the index action returns the correct model"() {
