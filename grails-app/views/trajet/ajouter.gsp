@@ -15,34 +15,50 @@
     <div class="col-xs-12">
         <g:form name="formAjoutTrajet" url="[controller:'trajet',action:'ajouterTrajetPost']">
             <div class="row">
+                <g:hasErrors bean="${trajet}">
+                    <div class="alert alert-danger">
+                        <ul>
+                            <g:eachError var="err" bean="${trajet}">
+                                <li>${err}</li>
+                            </g:eachError>
+                        </ul>
+                    </div>
+                </g:hasErrors>
+                <g:if test="${trajet?.hasErrors() == false}">
+                    <div class="alert alert-success">
+                        <p>Votre inscription a bien été enregistrée.</p>
+                    </div>
+                </g:if>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div class="panel panel-default" style="min-height: 380px;">
                         <div class="panel-heading">Informations trajet</div>
                         <div class="panel-body">
-                            <input type="hidden" name="depart_lat" id="depart_lat">
-                            <input type="hidden" name="depart_lon" id="depart_lon">
-                            <input type="hidden" name="arrive_lat" id="arrive_lat">
-                            <input type="hidden" name="arrive_lon" id="arrive_lon">
+                            <input type="hidden" name="departLat" value="${fieldValue(bean:trajet,field:'departLat')}" id="departLat">
+                            <input type="hidden" name="departLng" value="${fieldValue(bean:trajet,field:'departLng')}" id="departLng">
+                            <input type="hidden" name="arriveeLat" value="${fieldValue(bean:trajet,field:'arriveeLat')}" id="arriveeLat">
+                            <input type="hidden" name="arriveeLng" value="${fieldValue(bean:trajet,field:'arriveeLng')}" id="arriveeLng">
                             <input type="hidden" name="methode" id="methode" value="perso">
 
                             <div class="form-group">
                                 <label for="start">Départ</label>
-                                <input class="form-control input-lg" id="start" name="depart_google" type="text" placeholder="">
+                                <input class="form-control input-lg" id="start" value="${fieldValue(bean:trajet,field:'depart')}" name="depart" type="text" placeholder="">
                             </div>
 
                             <div class="form-group">
                                 <label for="end">Arrivée</label>
-                                <input class="form-control input-lg" id="end" name="arrivee_google" type="text" placeholder="">
+                                <input class="form-control input-lg" id="end" name="arrivee" value="${fieldValue(bean:trajet,field:'arrivee')}" type="text" placeholder="">
                             </div>
 
                             <div class="form-group">
                                 <label>Date aller</label>
-                                <g:datePicker name="dateAller" value="${new Date()}" precision="day"/>
+                                <g:datePicker name="dateAller" value="${fieldValue(bean:trajet,field:'dateAller')}" precision="day"/>
                             </div>
 
                             <div class="form-group">
                                 <label>Date retour</label>
-                                <g:datePicker name="dateRetour" value="${new Date()}" precision="day"/>
+                                <g:datePicker name="dateRetour" value="${fieldValue(bean:trajet,field:'dateRetour')}" precision="day"/>
                             </div>
 
                             <center><button class="btn btn-success btn-lg" id="submitGoogle">Générer trajet</button></center>
@@ -235,10 +251,10 @@
 
             $('#duree').timepicker('setTime', duree);
             $('#distance').val(Math.round(distance));
-            $('#depart_lat').attr('value', depart_lat);
-            $('#depart_lon').attr('value', depart_lon);
-            $('#arrive_lat').attr('value', arrive_lat);
-            $('#arrive_lon').attr('value', arrive_lon);
+            $('#departLat').attr('value', depart_lat);
+            $('#departLng').attr('value', depart_lon);
+            $('#arriveeLat').attr('value', arrive_lat);
+            $('#arriveeLng').attr('value', arrive_lon);
 
             lastResponse = response;
         }
@@ -317,10 +333,10 @@
 
          $('#duree').timepicker('setTime', duree);
          $('#distance').val(Math.round(distance));
-         $('#depart_lat').attr('value', depart_lat);
-         $('#depart_lon').attr('value', depart_lon);
-         $('#arrive_lat').attr('value', arrive_lat);
-         $('#arrive_lon').attr('value', arrive_lon);
+         $('#departLat').attr('value', depart_lat);
+         $('#departLng').attr('value', depart_lon);
+         $('#arriveeLat').attr('value', arrive_lat);
+         $('#arriveeLng').attr('value', arrive_lon);
          $('#methode').attr('value', 'google');
          }
          });
@@ -336,35 +352,6 @@
          destination:end,
          travelMode: google.maps.TravelMode.DRIVING
          };
-
-         directionsService.route(request, function(response, status) {
-         if (status == google.maps.DirectionsStatus.OK) {
-         directionsDisplay.setDirections(response);
-         console.log(response);
-         dureeSeconde = response.routes[0].legs[0].duration.value;
-         var d = new Date(dureeSeconde * 1000); // js fonctionne en milisecondes
-         var t = [];
-         t.push(d.getHours()-1);
-         t.push(d.getMinutes());
-         duree =  t.join(':');
-         distanceKilometre = response.routes[0].legs[0].distance.value;
-         distance = distanceKilometre / 1000;
-         depart_lat = response.routes[0].legs[0].start_location.k;
-         depart_lon = response.routes[0].legs[0].start_location.A;
-         arrive_lat = response.routes[0].legs[0].end_location.k;
-         arrive_lon = response.routes[0].legs[0].end_location.A;
-
-         $('#duree').timepicker('setTime', duree);
-         $('#distance').val(Math.round(distance));
-         $('#depart_lat').attr('value', depart_lat);
-         $('#depart_lon').attr('value', depart_lon);
-         $('#arrive_lat').attr('value', arrive_lat);
-         $('#arrive_lon').attr('value', arrive_lon);
-         $('#methode').attr('value', 'adresse');
-         }
-         });
-         }
-         }
 
          $('#selectArrivee').change(calcSelect);
          $('#selectDepart').change(calcSelect);

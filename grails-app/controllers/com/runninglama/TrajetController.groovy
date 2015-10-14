@@ -11,7 +11,8 @@ class TrajetController {
 
 
     def ajouterTrajet() {
-        render view:'ajouter'
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
+        render view:'ajouter', model: []
     }
 
     def ajouterTrajetPost() {
