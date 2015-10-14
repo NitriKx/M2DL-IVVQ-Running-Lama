@@ -1,5 +1,8 @@
 package com.runninglama
 
+import grails.transaction.Transactional
+
+@Transactional
 class AccueilController {
 
     def index() {
