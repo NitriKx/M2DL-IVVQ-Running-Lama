@@ -8,7 +8,12 @@ class TrajetService {
     TrajetDAOService trajetDAOService
 
     def ajouterTrajet(Trajet trajet) {
-        trajet.setConducteur(Utilisateur.findById(1))
+        trajet.validate()
+        println(trajet)
+        if(trajet.hasErrors()) {
+            println("******ERR"+trajet.getErrors())
+        }
+
         trajetDAOService.save(trajet)
     }
 }

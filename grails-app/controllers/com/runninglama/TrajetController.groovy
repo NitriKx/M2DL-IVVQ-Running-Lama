@@ -12,8 +12,9 @@ class TrajetController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def liste() {
-        def lesTrajets = Trajet.findAll();
-        render view:'liste', model: [lesTrajets]
+        def lesTrajets = Trajet.list();
+        print lesTrajets
+        render view:'liste', model: [lesTrajets:lesTrajets]
     }
 
     def ajouterTrajet() {
@@ -23,8 +24,10 @@ class TrajetController {
     }
 
     def ajouterTrajetPost(Trajet trajet) {
+        println(params.trajet.vehicule)
+        trajet.setVehicule(Vehicule.findById(params.trajet.vehicule))
+        trajet.setConducteur(session.getAttribute('utilisateur'))
         trajetService.ajouterTrajet(trajet)
-        print trajet
         redirect(view: 'index' ,controller: 'accueil')
     }
 

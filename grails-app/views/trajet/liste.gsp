@@ -15,7 +15,7 @@
     <div class="col-xs-12">
         <g:each var="trajet" in="${lesTrajets}">
             <div class="panel panel-default">
-                <div class="panel-heading">${trajet.depart} -> ${trajet.arrive}</div>
+                <div class="panel-heading">${trajet.depart} -> ${trajet.arrivee}</div>
                 <div class="panel-body">
                     Panel content
                 </div>
