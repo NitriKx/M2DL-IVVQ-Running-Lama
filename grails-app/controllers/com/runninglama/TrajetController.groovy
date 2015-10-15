@@ -7,6 +7,8 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class TrajetController {
 
+    TrajetService trajetService
+
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def liste() {
@@ -15,11 +17,15 @@ class TrajetController {
     }
 
     def ajouterTrajet() {
-        render view:'ajouter'
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
+        println(Trajet.list())
+        render view:'ajouter', model: [listeVehicules:utilisateur.getVehicules()]
     }
 
-    def ajouterTrajetPost() {
-
+    def ajouterTrajetPost(Trajet trajet) {
+        trajetService.ajouterTrajet(trajet)
+        print trajet
+        redirect(view: 'index' ,controller: 'accueil')
     }
 
 
