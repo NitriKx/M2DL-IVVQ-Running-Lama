@@ -38,6 +38,9 @@ class VehiculeController {
             return
         }
 
+        vehiculeInstance.possesseur = (Utilisateur) session.getAttribute('utilisateur')
+        vehiculeInstance.validate()
+
         if (vehiculeInstance.hasErrors()) {
             respond vehiculeInstance.errors, view: 'create'
             return

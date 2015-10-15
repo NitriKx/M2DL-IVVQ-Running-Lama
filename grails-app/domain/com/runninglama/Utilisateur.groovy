@@ -15,11 +15,17 @@ class Utilisateur {
     String email
     String telephone
 
-    List vehicules
+    //List vehicules
+
+    //static fetchMode = [vehicules:"eager"]
 
     static hasMany = [
             vehicules: Vehicule
     ]
+
+    static  mapping = {
+        vehicules lazy: false
+    }
 
     @Transient
     String motDePasse

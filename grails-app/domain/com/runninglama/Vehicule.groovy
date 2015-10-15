@@ -35,4 +35,9 @@ class Vehicule {
         type blank: false, nullable: false
         possesseur nullable: false
     }
+
+    @Override
+    String toString() {
+        return "${marque} - ${modele} - ${kilometrage}"
+    }
 }

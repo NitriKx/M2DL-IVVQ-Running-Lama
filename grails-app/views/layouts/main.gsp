@@ -38,11 +38,11 @@
            Multiple lines will require custom code not provided by Bootstrap. -->
     <div class="masthead">
         <h3 class="text-muted">Running Lama</h3>
-        <nav>
+        <nav style="margin-bottom: 20px;">
             <ul class="nav nav-justified">
                 <li><g:link controller="accueil" action="index">Accueil</g:link></li>
-                <li><a>Voir les trajets</a></li>
-                <li><a>Proposer un trajet</a></li>
+                <li><g:link controller="trajet" action="liste">Voir les trajets</g:link></li>
+                <li><g:link controller="trajet" action="ajouterTrajet">Ajouter un trajet</g:link></li>
                 <li><g:link controller="utilisateur" action="index">Espace membre</g:link></li>
                 <g:if test="${session.utilisateur}">
                     <li><g:link controller="utilisateur" action="deconnexion">Se déconnecter</g:link></li>
