@@ -12,7 +12,7 @@ class TrajetController {
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def liste() {
-        def lesTrajets = Trajet.all();
+        def lesTrajets = Trajet.findAll();
         render view:'liste', model: [lesTrajets]
     }
 

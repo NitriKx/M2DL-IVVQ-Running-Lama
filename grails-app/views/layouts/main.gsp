@@ -41,7 +41,7 @@
         <nav style="margin-bottom: 20px;">
             <ul class="nav nav-justified">
                 <li><g:link controller="accueil" action="index">Accueil</g:link></li>
-                <li><a>Voir les trajets</a></li>
+                <li><g:link controller="trajet" action="liste">Voir les trajets</g:link></li>
                 <li><g:link controller="trajet" action="ajouterTrajet">Ajouter un trajet</g:link></li>
                 <li><g:link controller="utilisateur" action="index">Espace membre</g:link></li>
                 <g:if test="${session.utilisateur}">
