@@ -10,8 +10,33 @@ class TrajetControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+        params["depart"] = 'Toulouse'
+        params["departLat"] = '123.345'
+        params["departLng"] = '1.4583'
+
+        params["arrivee"] = 'Muret'
+        params["arriveeLat"] = '123.563'
+        params["arriveeLng"] = '2.456'
+
+        params["dateAller"] = new Date()
+        params["dateRetour"] = new Date()
+
+        params["commentaire"] = 'Un commentaire'
+        params["prix"] = 12.5
+        params["nombrePlace"] = 4
+
+        params["conducteur"] = Mock(Utilisateur)
+        params["vehicule"] = Mock(Vehicule)
+
+    }
+
+
+    void "Test l'affichage du formulaire d'ajout de trajet"() {
+        when: "une demande d'accès au formulaire d'ajout"
+        controller.ajouterTrajet()
+        then: "l'utilisateur est redirigé sur la page d'inscription"
+        view == '/trajet/ajouter'
+        response.status == 200
     }
 
     void "Test the index action returns the correct model"() {
