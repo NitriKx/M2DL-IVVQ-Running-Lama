@@ -24,6 +24,7 @@ class VehiculeService {
     }
 
     def creeOuModifierVehicule(Vehicule vehiculeInstance) {
+        vehiculeInstance.possesseur.addToVehicules(vehiculeInstance)
         vehiculeDAOService.save(vehiculeInstance);
     }
 
