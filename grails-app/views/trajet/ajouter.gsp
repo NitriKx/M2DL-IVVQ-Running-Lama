@@ -80,12 +80,12 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <label>Véhicule</label>
-                                <g:select name="vehicule" from="" value="" noSelection="['':'-Choisir un véhicule-']"/>
+                                <g:select name="vehicule" from="${listeVehicules}" noSelection="['':'-Choisir un véhicule-']"/>
                             </div>
 
                             <div class="form-group">
                                 <label for="nbPlaces">Nombre de place</label>
-                                <input class="form-control input-lg" id="nbPlaces" name="nbPlaces" type="number" placeholder="">
+                                <input class="form-control input-lg" id="nbPlaces" value="${fieldValue(bean:trajet,field:'nombrePlace')}" name="nombrePlace" type="number" placeholder="">
                             </div>
                         </div>
                     </div>
@@ -96,12 +96,12 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <label for="nbPlaces">Prix par place</label>
-                                <input class="form-control input-lg" id="prix" name="prix" type="number" placeholder="">
+                                <input class="form-control input-lg" id="prix" value="${fieldValue(bean:trajet,field:'prix')}" name="prix" type="number" placeholder="">
                             </div>
 
                             <div class="form-group">
                                 <label for="nbPlaces">Commentaires</label>
-                                <textarea class="form-control input-lg" id="" name="commentaire"></textarea>
+                                <textarea class="form-control input-lg" id="" value="${fieldValue(bean:trajet,field:'commentaire')}" name="commentaire"></textarea>
                             </div>
                         </div>
                     </div>
@@ -343,20 +343,22 @@
          });
 
          function calcSelect() {
-         var start = document.getElementById('selectDepart').value;
-         var end = document.getElementById('selectArrivee').value;
+             var start = document.getElementById('selectDepart').value;
+             var end = document.getElementById('selectArrivee').value;
 
-         if(start != '0' && end != '0') {
-         var request = {
-         origin:start,
-         destination:end,
-         travelMode: google.maps.TravelMode.DRIVING
-         };
+             if (start != '0' && end != '0') {
+                 var request = {
+                     origin: start,
+                     destination: end,
+                     travelMode: google.maps.TravelMode.DRIVING
+                 };
 
-         $('#selectArrivee').change(calcSelect);
-         $('#selectDepart').change(calcSelect);
+                 $('#selectArrivee').change(calcSelect);
+                 $('#selectDepart').change(calcSelect);
 
-         google.maps.event.addDomListener(window, 'load', initialize);
+                 google.maps.event.addDomListener(window, 'load', initialize);
+             }
+         }
 
     });
 

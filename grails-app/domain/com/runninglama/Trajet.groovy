@@ -26,5 +26,31 @@ class Trajet {
     static constraints = {
         depart nullable: false, blank: false
         arrivee nullable:false, blank: false
+        conducteur nullable: false, blank: false
+        vehicule nullable: false, blank: false
+        dateAller nullable: false, blank: false
+    }
+
+
+    @Override
+    public String toString() {
+        return "Trajet{" +
+                "id=" + id +
+                ", depart='" + depart + '\'' +
+                ", departLat='" + departLat + '\'' +
+                ", departLng='" + departLng + '\'' +
+                ", arrivee='" + arrivee + '\'' +
+                ", arriveeLat='" + arriveeLat + '\'' +
+                ", arriveeLng='" + arriveeLng + '\'' +
+                ", dateAller=" + dateAller +
+                ", dateRetour=" + dateRetour +
+                ", commentaire='" + commentaire + '\'' +
+                ", prix=" + prix +
+                ", nombrePlace=" + nombrePlace +
+                ", conducteur=" + conducteur +
+                ", vehicule=" + vehicule +
+                ", version=" + version +
+                ", participants=" + participants +
+                '}';
     }
 }
