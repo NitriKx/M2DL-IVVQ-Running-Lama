@@ -80,7 +80,7 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <label>Véhicule</label>
-                                <g:select name="vehicule" from="${listeVehicules}" noSelection="['':'-Choisir un véhicule-']"/>
+                                <g:select optionKey="id" name="trajet.vehicule" from="${listeVehicules}" value="${trajet?.vehicule?.id}" noSelection="['':'-Choisir un véhicule-']"/>
                             </div>
 
                             <div class="form-group">
