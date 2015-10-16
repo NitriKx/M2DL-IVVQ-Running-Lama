@@ -1,12 +1,5 @@
 package com.runninglama
 
-enum TypeVehicule
-{
-    MOTO,
-    BUS,
-    VOITURE
-}
-
 class Vehicule {
 
     int nb_place

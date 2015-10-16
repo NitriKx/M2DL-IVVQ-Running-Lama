@@ -31,6 +31,7 @@ after_script:
   - ./grailsw codenarc
   - sed -i "s/sonar.projectName=RunningLama/sonar.projectName=RunningLama_${TRAVIS_BRANCH}/g" ${TRAVIS_BUILD_DIR}/sonar-project.properties
   - sed -i "s/sonar.projectKey=com.runninglama.RunningLama/sonar.projectKey=com.runninglama.RunningLama_${TRAVIS_BRANCH}/g" ${TRAVIS_BUILD_DIR}/sonar-project.properties
+  - sed -i 's/line number="0"/line number="1"/g' ${TRAVIS_BUILD_DIR}/target/test-reports/cobertura/coverage.xml
   - docker run -v $(pwd):/data -v $(pwd)/sonar-runner.properties:/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner
 
 deploy:

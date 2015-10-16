@@ -56,11 +56,11 @@ grails.project.dependency.resolution = {
     plugins {
         // plugins for the build system only
         build ":tomcat:7.0.54"
+        build ":codenarc:0.24.1"
 
         // plugins for the compile step
         compile ":scaffolding:2.0.3"
         compile ':cache:1.1.7'
-        compile ":codenarc:0.24.1"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.16" // or ":hibernate4:4.3.5.4"
@@ -75,7 +75,6 @@ grails.project.dependency.resolution = {
 coverage {
     xml = true
     sourceInclusions = ['grails-app/domain', 'grails-app/services', 'grails-app/controllers']
-    exclusions = ["*"]
 }
 
 codenarc.reports = {
