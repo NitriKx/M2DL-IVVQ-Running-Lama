@@ -16,4 +16,8 @@ class TrajetService {
 
         trajetDAOService.save(trajet)
     }
+
+    def rechercherTrajet(params) {
+        trajetDAOService.search(params)
+    }
 }

@@ -31,6 +31,16 @@ class TrajetController {
         redirect(view: 'index' ,controller: 'accueil')
     }
 
+    def rechercherTrajet() {
+//        params.max = Math.min(max ?: 10, 100)
+//        def  res = params
+//        def temp = res
+//        println(params.toString())
+//        def result2 = Trajet.findAll()
+//        def pt = 'mrd'
+        def result = trajetService.rechercherTrajet(params)
+        respond result
+    }
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)

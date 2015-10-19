@@ -39,6 +39,7 @@
                             <input type="hidden" name="departLng" value="${fieldValue(bean:trajet,field:'departLng')}" id="departLng">
                             <input type="hidden" name="arriveeLat" value="${fieldValue(bean:trajet,field:'arriveeLat')}" id="arriveeLat">
                             <input type="hidden" name="arriveeLng" value="${fieldValue(bean:trajet,field:'arriveeLng')}" id="arriveeLng">
+                            <input type="hidden" name="total" id="total">
                             <input type="hidden" name="methode" id="methode" value="perso">
 
                             <div class="form-group">
@@ -249,7 +250,7 @@
             arrive_lat = response.routes[0].legs[0].end_location.k;
             arrive_lon = response.routes[0].legs[0].end_location.A;
 
-            $('#duree').timepicker('setTime', duree);
+//            $('#duree').timepicker('setTime', duree);
             $('#distance').val(Math.round(distance));
             $('#departLat').attr('value', depart_lat);
             $('#departLng').attr('value', depart_lon);
@@ -331,7 +332,7 @@
          arrive_lat = response.routes[0].legs[0].end_location.k;
          arrive_lon = response.routes[0].legs[0].end_location.A;
 
-         $('#duree').timepicker('setTime', duree);
+//         $('#duree').timepicker('setTime', duree);
          $('#distance').val(Math.round(distance));
          $('#departLat').attr('value', depart_lat);
          $('#departLng').attr('value', depart_lon);

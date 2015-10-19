@@ -16,9 +16,7 @@
 			</ul>
 		</div>
 		-->
-		<g:form name="formCreate" method="PUT">
-			<g:actionSubmit class="btn btn-default" action="create" value="Ajouter un véhicule"></g:actionSubmit>
-		</g:form>
+		<g:link class="btn btn-default" action="create">Ajouter un véhicule</g:link>
 
 		<div id="list-vehicule" class="content scaffold-list" role="main">
 			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
