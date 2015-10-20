@@ -28,6 +28,13 @@ class TrajetControllerSpec extends Specification {
         params["conducteur"] = Mock(Utilisateur)
         params["vehicule"] = Mock(Vehicule)
 
+        params["depart_google"] = params["depart"]
+        params["arrivee_google"] = params["arrivee"]
+
+    }
+
+    def setup() {
+        controller.trajetService = Mock(TrajetService)
     }
 
 
@@ -36,6 +43,18 @@ class TrajetControllerSpec extends Specification {
         controller.ajouterTrajet()
         then: "l'utilisateur est redirigé sur la page d'inscription"
         view == '/trajet/ajouter'
+        response.status == 200
+    }
+
+    void "Teste la recherche de trajet"() {
+
+        when: "on appelle l'action rechercherTrajet"
+        controller.rechercherTrajet(params)
+
+        then: "le modèle retourné est correct"
+        1 * controller.trajetService.rechercherTrajet(params) >> []
+        !model.vehiculeInstanceList
+        view == '/trajet/rechercherTrajet'
         response.status == 200
     }
 
