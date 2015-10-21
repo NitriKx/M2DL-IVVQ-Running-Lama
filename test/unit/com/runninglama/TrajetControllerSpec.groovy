@@ -32,7 +32,11 @@ class TrajetControllerSpec extends Specification {
 
 
     void "Test l'affichage du formulaire d'ajout de trajet"() {
-        when: "une demande d'accès au formulaire d'ajout"
+        when: "une demande d'accès au formulaire d'ajout par un utilisateur connecté"
+
+        def utilisateur = TestsHelper.creeUtilisateurValide()
+        request.session['utilisateur'] = utilisateur
+
         controller.ajouterTrajet()
         then: "l'utilisateur est redirigé sur la page d'inscription"
         view == '/trajet/ajouter'
