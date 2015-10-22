@@ -28,15 +28,16 @@ class UtilisateurServiceSpec extends Specification {
         given: "un visiteur qui veut se connecter avec son pseudo et son mot de passe et qui est membre "
         String pseudo = "toto"
         String motDePasse = "toto"
-        Utilisateur utilisateur = new Utilisateur(pseudo: pseudo,motDePasse: motDePasse)
+        Utilisateur utilisateur = new Utilisateur(pseudo: pseudo)
+        utilisateur.motDePasse = motDePasse
 
         when: "le visiteur veut se connecter"
-        service.utilisateurDAOService.findByPseudo(pseudo) >> new Utilisateur(pseudo: "toto",passwordHash: "630547c1fada14c61e876be55ac877e13f5c03d7",passwordSalt: "toto")
+        service.utilisateurDAOService.findByPseudo(pseudo) >> new Utilisateur(pseudo: "toto", passwordHash: "630547c1fada14c61e876be55ac877e13f5c03d7", passwordSalt: "toto")
         Utilisateur membre = service.verifierIdentifiants(utilisateur)
 
         then: "le visiteur est connecte"
         membre
-        !membre.hasErrors()
+        membre.hasErrors() == false
 
     }
 
@@ -110,11 +111,11 @@ class UtilisateurServiceSpec extends Specification {
                 nom:nom,prenom: prenom,email: email,telephone: telephone,dateNaissance: date)
 
         when: "le visiteur veut s'inscrire et clique sur m'inscrire"
-        service.inscrireUtilisateur(utilisateur)
+        def membre = service.inscrireUtilisateur(utilisateur)
 
         then: "le visiteur est inscrit"
-        utilisateur.hasErrors()
-        utilisateur.errors.getFieldError('motDePasse')
+        membre.hasErrors() == true
+        membre.errors.getFieldError('motDePasse')
 
     }
 
@@ -155,8 +156,8 @@ class UtilisateurServiceSpec extends Specification {
         Utilisateur membre = service.modifierUtilisateur(utilisateur,utilisateurModifie,ancienMotDePasse)
 
         then: "le membre n'est pas modfié et indormé des erreurs"
-        membre.hasErrors()
-        utilisateur.errors.getFieldError('motDePasse')
+        membre.hasErrors() == true
+        membre.errors.getFieldError('motDePasse')
     }
 
     @Unroll
@@ -174,7 +175,7 @@ class UtilisateurServiceSpec extends Specification {
         Utilisateur membre = service.modifierUtilisateur(utilisateur,utilisateurModifie,ancienMotDePasse)
 
         then: "le membre n'est pas modfié et indormé des erreurs"
-        membre.hasErrors()
-        utilisateur.errors.getFieldError('passwordHash')
+        membre.hasErrors() == true
+        membre.errors.getFieldError('passwordHash')
     }
 }
