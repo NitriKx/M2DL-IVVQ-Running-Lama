@@ -5,7 +5,7 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(TrajetController)
-@Mock(Trajet)
+@Mock([Trajet, Utilisateur, Vehicule])
 class TrajetControllerSpec extends Specification {
 
     def populateValidParams(params) {
@@ -30,8 +30,17 @@ class TrajetControllerSpec extends Specification {
 
     }
 
+    def setup() {
+        def utilisateur = TestsHelper.creeUtilisateurValide()
+        request.session['utilisateur'] = utilisateur
+        controller.trajetService = Mock(TrajetService)
+    }
+
 
     void "Test l'affichage du formulaire d'ajout de trajet"() {
+        given: "Un véhicule qui appartient a un utilisateur"
+        Vehicule vehicule = Mock(Vehicule)
+        vehicule.possesseur >> request.session['utilisateur']
         when: "une demande d'accès au formulaire d'ajout"
         controller.ajouterTrajet()
         then: "l'utilisateur est redirigé sur la page"
@@ -49,12 +58,16 @@ class TrajetControllerSpec extends Specification {
 
     void "test l'affichage du recapitulatif d'un trajet"() {
         given: "un trajet sauvegarder en base de données"
-        Trajet trajet = Mock(Trajet)
-        trajet.id >> 3
+        Utilisateur utilisateur = request.session['utilisateur']
+        utilisateur.save(flush:true)
+        Vehicule vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule.save();
+        Trajet trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule)
+        trajet.save(flush:true)
         when: "une demande d'accès au récapitulatif d'un trajet"
         controller.voirTrajet(trajet.id)
         then: "l'utilisateur est redirigé sur la page"
-        view == '/trajet/voirTrajet/3'
+        view == '/trajet/voir'
         response.status == 200
     }
 
@@ -62,6 +75,7 @@ class TrajetControllerSpec extends Specification {
         given: "un trajet sauvegarder en base de données"
         Trajet trajet = Mock(Trajet)
         trajet.id >> null
+
         when: "une demande d'accès au récapitulatif d'un trajet"
         controller.voirTrajet(trajet.id)
         then: "Un code d'erreur 404 est renvoyé"
@@ -70,8 +84,12 @@ class TrajetControllerSpec extends Specification {
 
     void "test la suppression d'un trajet existant"() {
         given: "un trajet sauvegarder en base de données"
-        Trajet trajet = TestsHelper.creerTrajetValide();
-        trajet.save()
+        Utilisateur utilisateur = request.session['utilisateur']
+        utilisateur.save(flush:true)
+        Vehicule vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule.save();
+        Trajet trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule)
+        trajet.save(flush:true)
 
         when: "une demande de suppression"
         controller.supprimer(trajet.id)

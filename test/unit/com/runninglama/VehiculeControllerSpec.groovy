@@ -16,6 +16,7 @@ class VehiculeControllerSpec extends Specification {
     def setup() {
         controller.vehiculeService = Mock(VehiculeService)
         utilisateur = TestsHelper.creeUtilisateurValide()
+        utilisateur.save()
         request.session['utilisateur'] = utilisateur
     }
 

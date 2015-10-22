@@ -16,7 +16,7 @@ class TrajetController {
         render view:'liste', model: [lesTrajets:lesTrajets]
     }
 
-    def voirTrajet(Integer id) {
+    def voirTrajet(Long id) {
         Trajet trajet = Trajet.findById(id);
         Utilisateur utilisateur = session.getAttribute('utilisateur')
         if(trajet != null) {
@@ -26,7 +26,7 @@ class TrajetController {
         }
     }
 
-    def supprimer(Integer id) {
+    def supprimer(Long id) {
         Trajet trajet = Trajet.findById(id)
         if(trajet != null) {
             trajetService.delete(trajet)
