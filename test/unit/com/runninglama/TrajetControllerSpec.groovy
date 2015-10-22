@@ -34,140 +34,55 @@ class TrajetControllerSpec extends Specification {
     void "Test l'affichage du formulaire d'ajout de trajet"() {
         when: "une demande d'accès au formulaire d'ajout"
         controller.ajouterTrajet()
-        then: "l'utilisateur est redirigé sur la page d'inscription"
+        then: "l'utilisateur est redirigé sur la page"
         view == '/trajet/ajouter'
         response.status == 200
     }
 
-    void "Test the index action returns the correct model"() {
-
-        when: "The index action is executed"
-        controller.index()
-
-        then: "The model is correct"
-        !model.trajetInstanceList
-        model.trajetInstanceCount == 0
+    void "test l'affichage de la liste des trajet"() {
+        when: "une demande d'accès a la liste des trajet"
+        controller.liste()
+        then: "l'utilisateur est redirigé sur la page"
+        view == '/trajet/liste'
+        response.status == 200
     }
 
-    void "Test the create action returns the correct model"() {
-        when: "The create action is executed"
-        controller.create()
-
-        then: "The model is correctly created"
-        model.trajetInstance != null
+    void "test l'affichage du recapitulatif d'un trajet"() {
+        given: "un trajet sauvegarder en base de données"
+        Trajet trajet = Mock(Trajet)
+        trajet.id >> 3
+        when: "une demande d'accès au récapitulatif d'un trajet"
+        controller.voirTrajet(trajet.id)
+        then: "l'utilisateur est redirigé sur la page"
+        view == '/trajet/voirTrajet/3'
+        response.status == 200
     }
 
-    void "Test the save action correctly persists an instance"() {
-
-        when: "The save action is executed with an invalid instance"
-        request.contentType = FORM_CONTENT_TYPE
-        def trajet = new Trajet()
-        trajet.validate()
-        controller.save(trajet)
-
-        then: "The create view is rendered again with the correct model"
-        model.trajetInstance != null
-        view == 'create'
-
-        when: "The save action is executed with a valid instance"
-        response.reset()
-        populateValidParams(params)
-        trajet = new Trajet(params)
-
-        controller.save(trajet)
-
-        then: "A redirect is issued to the show action"
-        response.redirectedUrl == '/trajet/show/1'
-        controller.flash.message != null
-        Trajet.count() == 1
-    }
-
-    void "Test that the show action returns the correct model"() {
-        when: "The show action is executed with a null domain"
-        controller.show(null)
-
-        then: "A 404 error is returned"
+    void "test l'affichage du recapitulatif d'un trajet qui n'existe pas"() {
+        given: "un trajet sauvegarder en base de données"
+        Trajet trajet = Mock(Trajet)
+        trajet.id >> null
+        when: "une demande d'accès au récapitulatif d'un trajet"
+        controller.voirTrajet(trajet.id)
+        then: "Un code d'erreur 404 est renvoyé"
         response.status == 404
-
-        when: "A domain instance is passed to the show action"
-        populateValidParams(params)
-        def trajet = new Trajet(params)
-        controller.show(trajet)
-
-        then: "A model is populated containing the domain instance"
-        model.trajetInstance == trajet
     }
 
-    void "Test that the edit action returns the correct model"() {
-        when: "The edit action is executed with a null domain"
-        controller.edit(null)
+    void "test la suppression d'un trajet existant"() {
+        given: "un trajet sauvegarder en base de données"
+        Trajet trajet = TestsHelper.creerTrajetValide();
+        trajet.save()
 
-        then: "A 404 error is returned"
-        response.status == 404
-
-        when: "A domain instance is passed to the edit action"
-        populateValidParams(params)
-        def trajet = new Trajet(params)
-        controller.edit(trajet)
-
-        then: "A model is populated containing the domain instance"
-        model.trajetInstance == trajet
+        when: "une demande de suppression"
+        controller.supprimer(trajet.id)
+        then: "Le service est appelé"
+        1*controller.trajetService.delete(_)
     }
 
-    void "Test the update action performs an update on a valid domain instance"() {
-        when: "Update is called for a domain instance that doesn't exist"
-        request.contentType = FORM_CONTENT_TYPE
-        controller.update(null)
-
-        then: "A 404 error is returned"
-        response.redirectedUrl == '/trajet/index'
-        flash.message != null
-
-
-        when: "An invalid domain instance is passed to the update action"
-        response.reset()
-        def trajet = new Trajet()
-        trajet.validate()
-        controller.update(trajet)
-
-        then: "The edit view is rendered again with the invalid instance"
-        view == 'edit'
-        model.trajetInstance == trajet
-
-        when: "A valid domain instance is passed to the update action"
-        response.reset()
-        populateValidParams(params)
-        trajet = new Trajet(params).save(flush: true)
-        controller.update(trajet)
-
-        then: "A redirect is issues to the show action"
-        response.redirectedUrl == "/trajet/show/$trajet.id"
-        flash.message != null
-    }
-
-    void "Test that the delete action deletes an instance if it exists"() {
-        when: "The delete action is called for a null instance"
-        request.contentType = FORM_CONTENT_TYPE
-        controller.delete(null)
-
-        then: "A 404 is returned"
-        response.redirectedUrl == '/trajet/index'
-        flash.message != null
-
-        when: "A domain instance is created"
-        response.reset()
-        populateValidParams(params)
-        def trajet = new Trajet(params).save(flush: true)
-
-        then: "It exists"
-        Trajet.count() == 1
-
-        when: "The domain instance is passed to the delete action"
-        controller.delete(trajet)
-
-        then: "The instance is deleted"
-        Trajet.count() == 0
-        response.redirectedUrl == '/trajet/index'
-        flash.message != null
+    void "test la suppression d'un trajet inexistant"() {
+        when: "une demande de suppression sur un trajet qui n'existe pas"
+        controller.supprimer(65)
+        then: "Le service est n'est pas appelé"
+        0*controller.trajetService.delete(_)
     }
 }

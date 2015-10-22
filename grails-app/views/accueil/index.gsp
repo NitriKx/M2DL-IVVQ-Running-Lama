@@ -48,7 +48,11 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Les derniers trajets</div>
                 <div class="panel-body">
-                    Basic panel example
+                    <ul>
+                        <g:each var="trajet" in="${lesTrajets}">
+                            <li><g:link controller="trajet" action="voirTrajet" params="[id: trajet.id]">${trajet.depart} -> ${trajet.arrivee}</g:link></li>
+                        </g:each>
+                    </ul>
                 </div>
             </div>
         </div>

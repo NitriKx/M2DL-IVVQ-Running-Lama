@@ -33,6 +33,15 @@ class TestsHelper {
                 kilometrage: 10000, type: TypeVehicule.VOITURE);
     }
 
+    static creeTrajetValide() {
+        def utiisateur = creeUtilisateurValide();
+        def trajet = new Trajet(depart: "Toulouse", departLat: "", departLng: "",
+                arrivee: "Muret", arriveeLat: "", arriveeLng: "",
+                dateAller: new Date(), dateRetour: new Date(),
+                commentaire: "Un commentaire", prix:34, nombrePlace: 5,
+                conducteur: utiisateur, vehicule: utiisateur)
+        return trajet
+    }
 
 
 }

@@ -7,6 +7,8 @@ class AccueilController {
 
     def index() {
         def lesDerniersUtilisateurs = Utilisateur.findAll()
-        render view: 'index', model:[lesDerniersUtilisateurs:lesDerniersUtilisateurs]
+        def lesTrajets = Trajet.list();
+
+        render view: 'index', model:[lesDerniersUtilisateurs:lesDerniersUtilisateurs, lesTrajets:lesTrajets]
     }
 }
