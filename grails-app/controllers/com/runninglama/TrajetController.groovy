@@ -13,13 +13,32 @@ class TrajetController {
 
     def liste() {
         def lesTrajets = Trajet.list();
-        print lesTrajets
         render view:'liste', model: [lesTrajets:lesTrajets]
+    }
+
+    def voirTrajet(Long id) {
+        Trajet trajet = Trajet.findById(id);
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
+        if(trajet != null) {
+            render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur]
+        } else {
+            notFound()
+        }
+    }
+
+    def supprimer(Long id) {
+        Trajet trajet = Trajet.findById(id)
+        if(trajet != null) {
+            trajetService.delete(trajet)
+            flash.message = "Le trajet a été supprimé"
+        } else {
+            flash.message = "Impossible de supprimer le message"
+        }
+        liste()
     }
 
     def ajouterTrajet() {
         Utilisateur utilisateur = session.getAttribute('utilisateur')
-        println(Trajet.list())
         render view:'ajouter', model: [listeVehicules:utilisateur.getVehicules()]
     }
 
@@ -31,94 +50,11 @@ class TrajetController {
         redirect(view: 'index' ,controller: 'accueil')
     }
 
-
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Trajet.list(params), model: [trajetInstanceCount: Trajet.count()]
-    }
-
-    def show(Trajet trajetInstance) {
-        respond trajetInstance
-    }
-
-    def create() {
-        respond new Trajet(params)
-    }
-
-    @Transactional
-    def save(Trajet trajetInstance) {
-        if (trajetInstance == null) {
-            notFound()
-            return
-        }
-
-        if (trajetInstance.hasErrors()) {
-            respond trajetInstance.errors, view: 'create'
-            return
-        }
-
-        trajetInstance.save flush: true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'trajet.label', default: 'Trajet'), trajetInstance.id])
-                redirect trajetInstance
-            }
-            '*' { respond trajetInstance, [status: CREATED] }
-        }
-    }
-
-    def edit(Trajet trajetInstance) {
-        respond trajetInstance
-    }
-
-    @Transactional
-    def update(Trajet trajetInstance) {
-        if (trajetInstance == null) {
-            notFound()
-            return
-        }
-
-        if (trajetInstance.hasErrors()) {
-            respond trajetInstance.errors, view: 'edit'
-            return
-        }
-
-        trajetInstance.save flush: true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Trajet.label', default: 'Trajet'), trajetInstance.id])
-                redirect trajetInstance
-            }
-            '*' { respond trajetInstance, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(Trajet trajetInstance) {
-
-        if (trajetInstance == null) {
-            notFound()
-            return
-        }
-
-        trajetInstance.delete flush: true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Trajet.label', default: 'Trajet'), trajetInstance.id])
-                redirect action: "index", method: "GET"
-            }
-            '*' { render status: NO_CONTENT }
-        }
-    }
-
     protected void notFound() {
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'trajet.label', default: 'Trajet'), params.id])
-                redirect action: "index", method: "GET"
+                redirect controller: "accueil", action: "index", method: "GET"
             }
             '*' { render status: NOT_FOUND }
         }

@@ -16,4 +16,8 @@ class TrajetService {
 
         trajetDAOService.save(trajet)
     }
+
+    def delete(Trajet trajet) {
+        trajetDAOService.delete(trajet)
+    }
 }
