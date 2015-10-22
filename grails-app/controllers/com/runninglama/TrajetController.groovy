@@ -1,5 +1,6 @@
 package com.runninglama
 
+import grails.test.GrailsMock
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -43,8 +44,7 @@ class TrajetController {
     }
 
     def ajouterTrajetPost(Trajet trajet) {
-        println(params.trajet.vehicule)
-        trajet.setVehicule(Vehicule.findById(params.trajet.vehicule))
+        trajet.setVehicule(Vehicule.findById(params.vehicule))
         trajet.setConducteur(session.getAttribute('utilisateur'))
         trajetService.ajouterTrajet(trajet)
         redirect(view: 'index' ,controller: 'accueil')

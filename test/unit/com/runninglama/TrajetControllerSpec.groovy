@@ -1,6 +1,6 @@
 package com.runninglama
 
-
+import grails.test.GrailsMock
 import grails.test.mixin.*
 import spock.lang.*
 
@@ -42,6 +42,7 @@ class TrajetControllerSpec extends Specification {
         Vehicule vehicule = Mock(Vehicule)
         vehicule.possesseur >> request.session['utilisateur']
         when: "une demande d'accès au formulaire d'ajout"
+
         controller.ajouterTrajet()
         then: "l'utilisateur est redirigé sur la page"
         view == '/trajet/ajouter'
@@ -102,5 +103,21 @@ class TrajetControllerSpec extends Specification {
         controller.supprimer(65)
         then: "Le service est n'est pas appelé"
         0*controller.trajetService.delete(_)
+    }
+
+    void "Test d'un ajout de trajet avec des champs corrects"() {
+        given: "un membre qui veut ajouter un trajet"
+        Trajet trajet = new Trajet(params)
+        def utilisateur = TestsHelper.creeUtilisateurValide()
+        request.session['utilisateur'] = utilisateur
+        GroovyMock(Vehicule, global: true)
+
+        when: "il valide le trajet"
+        Vehicule.findById(_) >> Mock(Vehicule)
+        controller.ajouterTrajetPost(trajet)
+
+        then:"the trajet is created"
+        response.redirectedUrl == '/accueil'
+
     }
 }

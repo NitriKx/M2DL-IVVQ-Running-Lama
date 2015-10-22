@@ -106,6 +106,54 @@ class UtilisateurControllerSpec extends Specification {
         view == '/utilisateur/connexion'
     }
 
+    void "test l'affichage du formulaire de modif"() {
+        when: "une demande d'accès au formulaire de connexion"
+        controller.modifierProfil()
+        then: "l'utilisateur est redirigé sur la page de modif de profil"
+        view == '/utilisateur/modifierProfil'
+        response.status == 200
+    }
+
+    void "test la modification du profil"() {
+        given: "les informations modifiés d'un utilisateur qui est connecté"
+        Utilisateur membre = new Utilisateur(params)
+        request.session['utilisateur'] = membre
+        Utilisateur nouveauMembre = TestsHelper.creeUtilisateurValide()
+        nouveauMembre.setPseudo("NewPseudo")
+
+        when: "l'utilisateur se connecte"
+        nouveauMembre.validate()
+        controller.utilisateurService.modifierUtilisateur(_ as Utilisateur,_ as Utilisateur,_) >> { Utilisateur u,Utilisateur u2,String p -> nouveauMembre }
+        controller.modifierProfilPost()
+
+        then: "L'utilisateur est modifié"
+        nouveauMembre.getPseudo() == "NewPseudo"
+        nouveauMembre.hasErrors() == false
+
+        and: "l'utilisateur est redirigé sur la page de connexion"
+        response.redirectUrl == '/accueil/index'
+    }
+
+    void "test la modification du profil avec erreurs"() {
+        given: "les informations modifiés d'un utilisateur qui est connecté"
+        Utilisateur membre = new Utilisateur(params)
+        request.session['utilisateur'] = membre
+        Utilisateur nouveauMembre = new Utilisateur(params)
+        nouveauMembre.setPseudo(controller.params.pseudo)
+
+        when: "l'utilisateur se connecte"
+        nouveauMembre.validate()
+        controller.utilisateurService.modifierUtilisateur(_ as Utilisateur,_ as Utilisateur,_) >> { Utilisateur u,Utilisateur u2,String p -> nouveauMembre }
+        controller.modifierProfilPost()
+
+        then: "L'utilisateur n'est pas ajouté en session"
+        request.session['utilisateur'] == membre
+        nouveauMembre.hasErrors() == true
+
+        and: "l'utilisateur est redirigé sur la page de connexion"
+        view == '/utilisateur/modifierProfil'
+    }
+
 
     /*
     void "Test the index action returns the correct model"() {
