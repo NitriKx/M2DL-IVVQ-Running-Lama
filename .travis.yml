@@ -34,6 +34,9 @@ after_script:
   - sed -i 's/line number="0"/line number="1"/g' ${TRAVIS_BUILD_DIR}/target/test-reports/cobertura/coverage.xml
   - docker run -v $(pwd):/data -v $(pwd)/sonar-runner.properties:/usr/local/sonar-runner-2.4/conf/sonar-runner.properties pierrevincent/sonar-runner
 
+after_success:
+  - ./grailsw coveralls
+
 deploy:
   provider: heroku
   api_key:
