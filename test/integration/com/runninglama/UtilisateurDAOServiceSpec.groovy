@@ -9,9 +9,7 @@ import grails.test.mixin.*
  */
 class UtilisateurDAOServiceSpec extends Specification {
 
-    //def UtilisateurDAOService service = new UtilisateurDAOService()
-
-    UtilisateurDAOService service
+    def utilisateurDAOService
 
     def setup() {
     }
@@ -29,7 +27,7 @@ class UtilisateurDAOServiceSpec extends Specification {
         utilisateur.validate() != false
 
         when: "on demande l'ajout de cet utilisateur"
-        def resultatAjout = service.save(utilisateur)
+        def resultatAjout = utilisateurDAOService.save(utilisateur)
 
 
         then: "l'utilisateur existe dans la base de données"
@@ -51,11 +49,11 @@ class UtilisateurDAOServiceSpec extends Specification {
         utilisateur.validate() != false
 
         when: "on demande l'ajout de cet utilisateur"
-        def resultatAjout = service.save(utilisateur)
+        def resultatAjout = utilisateurDAOService.save(utilisateur)
 
         then: "l'utilisateur peut etre retrouvé par son pseudo"
         resultatAjout != null
-        def utilisateurRetourne = service.findByPseudo(aPseudo)
+        def utilisateurRetourne = utilisateurDAOService.findByPseudo(aPseudo)
         utilisateurRetourne != null
 
         where:

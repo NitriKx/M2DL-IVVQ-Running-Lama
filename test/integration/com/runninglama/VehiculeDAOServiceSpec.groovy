@@ -9,7 +9,7 @@ import spock.lang.Specification
  */
 class VehiculeDAOServiceSpec extends Specification {
 
-    VehiculeDAOService service
+    def vehiculeDAOService
 
     def setup() {
     }
@@ -26,7 +26,7 @@ class VehiculeDAOServiceSpec extends Specification {
         vehicule = vehicule.save(flush: true)
 
         when: "on demande la suppression de ce véhicule"
-        service.delete(vehicule)
+        vehiculeDAOService.delete(vehicule)
 
         then: "le véhicule n'existe plus dans la base de données"
         Vehicule.findAllById(vehicule.id).isEmpty()
@@ -43,7 +43,7 @@ class VehiculeDAOServiceSpec extends Specification {
         vehicule = vehicule.save(flush: true)
 
         when: "on demande l'ajout de ce véhicule"
-        def resultatAjout = service.save(vehicule)
+        def resultatAjout = vehiculeDAOService.save(vehicule)
 
         then: "le véhicule existe dans la base de données"
         resultatAjout != null
@@ -59,7 +59,7 @@ class VehiculeDAOServiceSpec extends Specification {
         vehicule = vehicule.save(flush: true)
 
         when: "on liste les vehicules"
-        def listeVehicule = service.list(vehicule.possesseur, [:])
+        def listeVehicule = vehiculeDAOService.list(vehicule.possesseur, [:])
 
         then: "le vehicule est dans la base de données"
         listeVehicule.contains(vehicule)
@@ -75,10 +75,10 @@ class VehiculeDAOServiceSpec extends Specification {
         vehicule = vehicule.save(flush: true)
 
         when: "on demande l'ajout de ce véhicule"
-        def resultatAjout = service.save(vehicule)
+        def resultatAjout = vehiculeDAOService.save(vehicule)
 
         then: "la base de données contient maintenant un véhicule"
         resultatAjout != null
-        service.count(resultatAjout.possesseur, [:]) == 1
+        vehiculeDAOService.count(resultatAjout.possesseur, [:]) == 1
     }
 }

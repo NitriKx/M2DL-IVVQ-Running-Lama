@@ -9,7 +9,7 @@ import spock.lang.*
  */
 class TrajetDAOServiceSpec extends Specification {
 
-    TrajetDAOService service
+    def trajetDAOService
 
     def setup() {
     }
@@ -27,7 +27,7 @@ class TrajetDAOServiceSpec extends Specification {
         trajet.save(flush: true)
 
         when: "on demande l'ajout d'un trajet"
-        def resultatAjout = service.save(trajet)
+        def resultatAjout = trajetDAOService.save(trajet)
 
         then: "le trajet existe dans la base de données"
         resultatAjout != null
