@@ -1,6 +1,6 @@
 package com.runninglama
 
-
+import grails.test.GrailsMock
 import grails.test.mixin.*
 import spock.lang.*
 
@@ -28,6 +28,10 @@ class TrajetControllerSpec extends Specification {
         params["conducteur"] = Mock(Utilisateur)
         params["vehicule"] = Mock(Vehicule)
 
+    }
+
+    def setup() {
+        controller.trajetService = Mock(TrajetService)
     }
 
 
@@ -173,5 +177,21 @@ class TrajetControllerSpec extends Specification {
         Trajet.count() == 0
         response.redirectedUrl == '/trajet/index'
         flash.message != null
+    }
+
+    void "Test d'un ajout de trajet avec des champs corrects"() {
+        given: "un membre qui veut ajouter un trajet"
+        Trajet trajet = new Trajet(params)
+        def utilisateur = TestsHelper.creeUtilisateurValide()
+        request.session['utilisateur'] = utilisateur
+        GroovyMock(Vehicule, global: true)
+
+        when: "il valide le trajet"
+        Vehicule.findById(_) >> Mock(Vehicule)
+        controller.ajouterTrajetPost(trajet)
+
+        then:"the trajet is created"
+        response.redirectedUrl == '/accueil'
+
     }
 }
