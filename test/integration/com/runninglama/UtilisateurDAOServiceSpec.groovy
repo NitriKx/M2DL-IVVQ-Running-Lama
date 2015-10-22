@@ -7,12 +7,11 @@ import grails.test.mixin.*
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(UtilisateurDAOService)
-@Mock(Utilisateur)
 class UtilisateurDAOServiceSpec extends Specification {
 
     //def UtilisateurDAOService service = new UtilisateurDAOService()
 
+    UtilisateurDAOService service
 
     def setup() {
     }

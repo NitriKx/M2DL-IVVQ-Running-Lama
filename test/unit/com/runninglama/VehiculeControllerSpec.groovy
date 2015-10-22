@@ -3,6 +3,7 @@ package com.runninglama
 
 import grails.test.mixin.*
 import grails.util.GrailsWebUtil
+import org.springframework.http.HttpStatus
 import spock.lang.*
 
 import javax.servlet.http.HttpSession
@@ -15,9 +16,23 @@ class VehiculeControllerSpec extends Specification {
 
     def setup() {
         controller.vehiculeService = Mock(VehiculeService)
+
+        // On force l'utilisateur dans la session car le filtre de sécurité fait le controle en intégration
         utilisateur = TestsHelper.creeUtilisateurValide()
         request.session['utilisateur'] = utilisateur
     }
+
+    def cleanup() {
+        request.session['utilisateur'] = null
+    }
+
+
+
+
+    //
+    //  INDEX
+    //
+
 
     void "Test the index action returns the correct model"() {
 
@@ -31,6 +46,14 @@ class VehiculeControllerSpec extends Specification {
         model.vehiculeInstanceCount == 0
     }
 
+
+
+
+    //
+    //  CREATE
+    //
+
+
     void "teste que la création d'une instance du modèle retourne un Vehicule valide"() {
 
         when: "The create action is executed"
@@ -43,52 +66,75 @@ class VehiculeControllerSpec extends Specification {
         model.vehiculeInstance != null
     }
 
-    void "teste que l'action save enregistre bien l'instance qu'on lui passe"() {
 
-        given: "un utilisateur authentifé"
-        def vehicule = new Vehicule(utilisateur: utilisateur)
-        assertFalse(vehicule.validate())
 
-        when: "l'action save est exécutée une un véhicule null"
+    //
+    //  SAVE
+    //
+
+
+    void "teste que l'action save retourne bien une erreur si l'instance est null (mode formulaire)"() {
+        when: "l'action show est appelée avec un objet null"
+        request.contentType = FORM_CONTENT_TYPE
         controller.save(null)
 
-        then: "une erreur 404 est levée"
-        response.status == 404
+        then: "une erreur 404 est retournée"
+        response.redirectedUrl == '/vehicule/index'
+        flash.message != null
+    }
 
+    void "teste que l'action save retourne bien une erreur si l'instance est null (mode non formulaire)"() {
+        when: "l'action show est appelée avec un objet null"
+        controller.save(null)
 
-        when: "l'action de sauvegarde est exécutée avec une instance de vehicule invalide"
-        response.reset()
-        request.contentType = FORM_CONTENT_TYPE
-        controller.save(vehicule)
+        then: "une erreur 404 est retournée"
+        response.status == HttpStatus.NOT_FOUND.value()
+        flash.message == null
+    }
 
-        then: "The create view is rendered again with the correct model"
-        0 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v -> v }
-        model.vehiculeInstance != null
-        view == 'create'
-
+    void "teste que l'action save enregistre bien l'instance qu'on lui passe"() {
         when: "The save action is executed with a valid instance"
-        response.reset()
-        vehicule = TestsHelper.creeVehiculeValide(controller.session.getAttribute("utilisateur"))
+        def vehicule = TestsHelper.creeVehiculeValide(controller.session.getAttribute("utilisateur"))
 
         controller.save(vehicule)
 
         then: "A redirect is issued to the index"
         1 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v ->
-            v.save(flush: true)
+            Mock(Vehicule)
         }
         response.redirectedUrl == '/vehicule/index'
-        controller.flash.message == null
-        Vehicule.count() == 1
+        flash.message == null
+    }
+
+
+
+    //
+    //  SHOW
+    //
+
+
+    void "teste que l'action show retourne bien une erreur si l'instance est null (mode formulaire)"() {
+        when: "l'action show est appelée avec un objet null"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.show(null)
+
+        then: "une erreur 404 est retournée"
+        response.redirectedUrl == '/vehicule/index'
+        flash.message != null
+    }
+
+    void "teste que l'action show retourne bien une erreur si l'instance est null (mode non formulaire)"() {
+        when: "l'action show est appelée avec un objet null"
+        controller.show(null)
+
+        then: "une erreur 404 est retournée"
+        response.status == HttpStatus.NOT_FOUND.value()
+        flash.message == null
     }
 
     void "teste que l'action show retourne bien le bon modèle"() {
-        when: "l'action show est exécutée une un véhicule null"
-        controller.show(null)
-
-        then: "une erreur 404 est levée"
-        response.status == 404
-
         when: "une instance du domaine est passée à l'action show"
+        response.reset()
         def vehicule = TestsHelper.creeVehiculeValide(utilisateur)
         controller.show(vehicule)
 
@@ -96,46 +142,121 @@ class VehiculeControllerSpec extends Specification {
         model.vehiculeInstance == vehicule
     }
 
-    void "teste que l'action edit retourne bien le bon modèle"() {
+    void "teste que si un utilisateur n'a pas le droit de show un véhicule il reçoit une erreur (mode formulaire)"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
 
-        /*
-        TODO : Il faut un utilisateur en session pour que ce test passe correctement
-        Sinon, il est bien dirié vers l'index mais grâce au filtre seulement)
+        when: "l'utilisateur sans vehicule veut afficher le vehicule de l'autre utilisateur"
+        controller.show(vehicule)
 
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        1 * controller.vehiculeService.vehiculeAppartientUtilisateur(_ as Utilisateur, _ as Vehicule) >> { Utilisateur u, Vehicule v -> false }
+        response.status == HttpStatus.FORBIDDEN.value()
+    }
+
+    void "teste que si un utilisateur n'a pas le droit de show un véhicule il reçoit une erreur (mode non formulaire)"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
+
+        when: "l'utilisateur sans vehicule veut afficher le vehicule de l'autre utilisateur"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.show(vehicule)
+
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        1 * controller.vehiculeService.vehiculeAppartientUtilisateur(_ as Utilisateur, _ as Vehicule) >> { Utilisateur u, Vehicule v -> false }
+        response.redirectedUrl == '/vehicule/index'
+        flash.message != null
+    }
+
+
+
+    //
+    //   EDIT
+    //
+
+    void "teste que l'action edit retourne bien une erreur si l'instance est null (mode formulaire)"() {
+        when: "l'action edit est appelée avec un objet null"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.edit(null)
+
+        then: "une erreur 404 est retournée"
+        response.redirectedUrl == '/vehicule/index'
+        flash.message != null
+    }
+
+    void "teste que l'action edit retourne bien une erreur si l'instance est null (mode non formulaire)"() {
         when: "l'action edit est appelée avec un objet null"
         controller.edit(null)
 
-        then: "redirection vers l'index"
-        response.redirectedUrl == '/vehicule/index'
-*/
+        then: "une erreur 404 est retournée"
+        response.status == HttpStatus.NOT_FOUND.value()
+        flash.message == null
+    }
+
+    void "teste que l'action edit retourne bien le bon modèle"() {
+
         when: "une instance du domain est passée à la méthode edit"
+        response.reset()
         def vehicule = TestsHelper.creeVehiculeValide(utilisateur)
         controller.edit(vehicule)
 
         then: "l'objet est bien ajouté au modèle"
         model.vehiculeInstance == vehicule
-
-        /*
-        TODO : Il faut un utilisateur en session pour que ce test passe (filtrage sinon)
-        when: "une instance du domain est passée à la méthode edit"
-        def vehicule2 = TestsHelper.creeVehiculeValide(utilisateur)
-        controller.edit(vehicule2)
-
-        then: "l'utilisateur est dirigé vers la page d'édition"
-        response.redirectedUrl.contains('/vehicule/edit')
-        */
     }
 
-    void "teste que l'action update enregistre bien les modification faites au modèle"() {
-        when: "update est appelée avec un object null (qui n'existe pas)"
+    void "teste que si un utilisateur n'a pas le droit de edit un véhicule il reçoit une erreur (mode formulaire)"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
+
+        when: "l'utilisateur sans vehicule veut edit le vehicule de l'autre utilisateur"
+        controller.edit(vehicule)
+
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        1 * controller.vehiculeService.vehiculeAppartientUtilisateur(_ as Utilisateur, _ as Vehicule) >> { Utilisateur u, Vehicule v -> false }
+        response.status == HttpStatus.FORBIDDEN.value()
+    }
+
+    void "teste que si un utilisateur n'a pas le droit de edit un véhicule il reçoit une erreur (mode non formulaire)"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
+
+        when: "l'utilisateur sans vehicule veut edit le vehicule de l'autre utilisateur"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.edit(vehicule)
+
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        1 * controller.vehiculeService.vehiculeAppartientUtilisateur(_ as Utilisateur, _ as Vehicule) >> { Utilisateur u, Vehicule v -> false }
+        response.redirectedUrl == '/vehicule/index'
+        flash.message != null
+    }
+
+
+
+    //
+    //  UPDATE
+    //
+
+    void "teste que l'action update retourne bien une erreur si l'instance est null (mode formulaire)"() {
+        when: "l'action update est appelée avec un objet null"
         request.contentType = FORM_CONTENT_TYPE
         controller.update(null)
 
         then: "une erreur 404 est retournée"
         response.redirectedUrl == '/vehicule/index'
         flash.message != null
+    }
+
+    void "teste que l'action update retourne bien une erreur si l'instance est null (mode non formulaire)"() {
+        when: "l'action update est appelée avec un objet null"
+        controller.update(null)
+
+        then: "une erreur 404 est retournée"
+        response.status == HttpStatus.NOT_FOUND.value()
+        flash.message == null
+    }
 
 
+    void "teste que l'action update enregistre bien les modification faites au modèle"() {
         when: "une instance invalide est passée à la méthode update"
         response.reset()
         def vehicule = new Vehicule()
@@ -155,10 +276,41 @@ class VehiculeControllerSpec extends Specification {
         then: "une redirection vers l'index est retournée"
         1 * controller.vehiculeService.creeOuModifierVehicule(_ as Vehicule) >> { Vehicule v -> v }
         response.redirectedUrl == "/vehicule/index"
+    }
+
+    void "teste que si un utilisateur n'a pas le droit de update un véhicule il reçoit une erreur (mode formulaire)"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
+
+        when: "l'utilisateur sans vehicule veut modifier le vehicule de l'autre utilisateur"
+        controller.update(vehicule)
+
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        1 * controller.vehiculeService.vehiculeAppartientUtilisateur(_ as Utilisateur, _ as Vehicule) >> { Utilisateur u, Vehicule v -> false }
+        response.status == HttpStatus.FORBIDDEN.value()
+    }
+
+    void "teste que si un utilisateur n'a pas le droit de update un véhicule il reçoit une erreur (mode non formulaire)"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
+
+        when: "l'utilisateur sans vehicule veut modifier le vehicule de l'autre utilisateur"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.update(vehicule)
+
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        1 * controller.vehiculeService.vehiculeAppartientUtilisateur(_ as Utilisateur, _ as Vehicule) >> { Utilisateur u, Vehicule v -> false }
+        response.redirectedUrl == '/vehicule/index'
         flash.message != null
     }
 
-    void "teste que l'action delete efface bien un véhicule qui existe"() {
+
+
+    //
+    //  DELETE
+    //
+
+    void "teste que l'action delete retourne bien une erreur si l'instance est null (mode formulaire)"() {
         when: "l'action delete est appelée avec un objet null"
         request.contentType = FORM_CONTENT_TYPE
         controller.delete(null)
@@ -166,13 +318,21 @@ class VehiculeControllerSpec extends Specification {
         then: "une erreur 404 est retournée"
         response.redirectedUrl == '/vehicule/index'
         flash.message != null
+    }
 
-        when: "une instance de domaine valide"
+    void "teste que l'action delete retourne bien une erreur si l'instance est null (mode non formulaire)"() {
+        when: "l'action delete est appelée avec un objet null"
+        controller.delete(null)
+
+        then: "une erreur 404 est retournée"
+        response.status == HttpStatus.NOT_FOUND.value()
+        flash.message == null
+    }
+
+    void "teste que l'action delete efface bien un véhicule qui existe"() {
+        given: "une instance de domaine valide"
         response.reset()
         def vehicule = TestsHelper.creeVehiculeValide(utilisateur).save(flush: true)
-
-        then: "qui est sauvegardée"
-        Vehicule.count() == 1
 
         when: "l'instance est passée à delete"
         controller.delete(vehicule)
@@ -182,7 +342,32 @@ class VehiculeControllerSpec extends Specification {
             v.delete(flush: true)
         }
 
-        Vehicule.count() == 0
+        response.redirectedUrl == '/vehicule/index'
+    }
+
+
+    void "teste que si un utilisateur n'a pas le droit de delete un véhicule il reçoit une erreur (mode formulaire)"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
+
+        when: "l'utilisateur sans vehicule veut supprimer le vehicule de l'autre utilisateur"
+        controller.delete(vehicule)
+
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        1 * controller.vehiculeService.vehiculeAppartientUtilisateur(_ as Utilisateur, _ as Vehicule) >> { Utilisateur u, Vehicule v -> false }
+        response.status == HttpStatus.FORBIDDEN.value()
+    }
+
+    void "teste que si un utilisateur n'a pas le droit de delete un véhicule il reçoit une erreur (mode non formulaire)"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
+
+        when: "l'utilisateur sans vehicule veut supprimer le vehicule de l'autre utilisateur"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.delete(vehicule)
+
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        1 * controller.vehiculeService.vehiculeAppartientUtilisateur(_ as Utilisateur, _ as Vehicule) >> { Utilisateur u, Vehicule v -> false }
         response.redirectedUrl == '/vehicule/index'
         flash.message != null
     }

@@ -7,8 +7,9 @@ import spock.lang.*
 /**
  *
  */
-@TestFor(TrajetDAOService)
 class TrajetDAOServiceSpec extends Specification {
+
+    TrajetDAOService service
 
     def setup() {
     }
