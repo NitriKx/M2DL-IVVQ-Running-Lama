@@ -37,6 +37,10 @@ class TrajetSpec extends Specification {
         where:
         aDepart    | aArrivee | aDepartLat   | aDepartLng  | aArriveelat  | aArriveeLng | aDateAller | aDateRetour | aCommentaire  | aPrix | aNombrePlace | aConducteur | aVehicule
         "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
+        "Toulouse" | "Muret"  | null         | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
+        "Toulouse" | "Muret"  | "43.6008029" | null        | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | null         | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | null        | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
     }
 
 
@@ -62,10 +66,6 @@ class TrajetSpec extends Specification {
         aDepart    | aArrivee | aDepartLat   | aDepartLng  | aArriveelat  | aArriveeLng | aDateAller | aDateRetour | aCommentaire  | aPrix | aNombrePlace | aConducteur       | aVehicule
         null       | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
         "Toulouse" | null     | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
-        "Toulouse" | "Muret"  | null         | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
-        "Toulouse" | "Muret"  | "43.6008029" | null        | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | null         | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | null        | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
         "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | null       | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
         "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | null        | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule)
         "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | null  | 4            | Mock(Utilisateur) | Mock(Vehicule)
