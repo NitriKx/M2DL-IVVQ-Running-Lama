@@ -51,6 +51,11 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.27'
         runtime 'postgresql:postgresql:8.4-702.jdbc3'
         test "org.grails:grails-datastore-test-support:1.0-grails-2.3"
+
+        // Latest httpcore and httpmime for Coveralls plugin
+        build 'org.apache.httpcomponents:httpcore:4.3.2'
+        build 'org.apache.httpcomponents:httpclient:4.3.2'
+        build 'org.apache.httpcomponents:httpmime:4.3.3'
     }
 
     plugins {

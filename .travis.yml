@@ -15,8 +15,6 @@ services:
 jdk:
   - oraclejdk7
 
-
-
 before_install:
   - openssl aes-256-cbc -K $encrypted_4bff5548dd92_key -iv $encrypted_4bff5548dd92_iv -in sonar-credentials.txt.enc -out sonar-credentials.txt -d
 
