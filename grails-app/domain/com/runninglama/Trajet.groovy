@@ -39,27 +39,4 @@ class Trajet {
         prix nullable: false, blank: false
         nombrePlace nullable: false, blank: false, min:1
     }
-
-
-    @Override
-    public String toString() {
-        return "Trajet{" +
-                "id=" + id +
-                ", depart='" + depart + '\'' +
-                ", departLat='" + departLat + '\'' +
-                ", departLng='" + departLng + '\'' +
-                ", arrivee='" + arrivee + '\'' +
-                ", arriveeLat='" + arriveeLat + '\'' +
-                ", arriveeLng='" + arriveeLng + '\'' +
-                ", dateAller=" + dateAller +
-                ", dateRetour=" + dateRetour +
-                ", commentaire='" + commentaire + '\'' +
-                ", prix=" + prix +
-                ", nombrePlace=" + nombrePlace +
-                ", conducteur=" + conducteur +
-                ", vehicule=" + vehicule +
-                ", version=" + version +
-                ", participants=" + participants +
-                '}';
-    }
 }
