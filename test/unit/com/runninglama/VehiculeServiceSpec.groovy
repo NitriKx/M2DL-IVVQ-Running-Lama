@@ -22,8 +22,8 @@ class VehiculeServiceSpec extends Specification {
 
         given: "un nouveau véhicule à insérer par un utilisateur connecté"
         Vehicule vehicule = Mock(Vehicule)
-        def utilisateur = TestsHelper.creeUtilisateurValide()
-        vehicule.possesseur >> utilisateur
+        vehicule.possesseur >> TestsHelper.creeUtilisateurValide()
+
         when: "on insère un nouveau véhicule"
         vehicule = service.creeOuModifierVehicule(vehicule)
 

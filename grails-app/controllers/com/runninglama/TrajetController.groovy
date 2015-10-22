@@ -1,11 +1,9 @@
 package com.runninglama
 
-import grails.test.GrailsMock
-
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
-@Transactional(readOnly = true)
+@Transactional
 class TrajetController {
 
     TrajetService trajetService
@@ -17,14 +15,28 @@ class TrajetController {
         render view:'liste', model: [lesTrajets:lesTrajets]
     }
 
+    def create() {
+        respond new Trajet(params)
+    }
+
     def voirTrajet(Long id) {
         Trajet trajet = Trajet.findById(id);
         Utilisateur utilisateur = session.getAttribute('utilisateur')
         if(trajet != null) {
             render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur]
         } else {
-            notFound()
+            render view: 'ajouter', model: [listeVehicules: utilisateur.getVehicules()]
         }
+    }
+
+    def rechercherTrajet() {
+        def result = trajetService.rechercherTrajet(params)
+        respond action: 'rechercherTrajet', model: [trajetInstanceList: result]
+    }
+
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Trajet.list(params), model: [trajetInstanceCount: Trajet.count()]
     }
 
     def supprimer(Long id) {
@@ -44,7 +56,7 @@ class TrajetController {
     }
 
     def ajouterTrajetPost(Trajet trajet) {
-        trajet.setVehicule(Vehicule.findById(params.vehicule))
+        trajet.setVehicule(Vehicule.findById(trajet.vehicule.id))
         trajet.setConducteur(session.getAttribute('utilisateur'))
         trajetService.ajouterTrajet(trajet)
         redirect(view: 'index' ,controller: 'accueil')

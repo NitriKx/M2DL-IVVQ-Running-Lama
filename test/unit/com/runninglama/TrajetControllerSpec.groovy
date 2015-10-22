@@ -8,28 +8,6 @@ import spock.lang.*
 @Mock([Trajet, Utilisateur, Vehicule])
 class TrajetControllerSpec extends Specification {
 
-    def populateValidParams(params) {
-        assert params != null
-        params["depart"] = 'Toulouse'
-        params["departLat"] = '123.345'
-        params["departLng"] = '1.4583'
-
-        params["arrivee"] = 'Muret'
-        params["arriveeLat"] = '123.563'
-        params["arriveeLng"] = '2.456'
-
-        params["dateAller"] = new Date()
-        params["dateRetour"] = new Date()
-
-        params["commentaire"] = 'Un commentaire'
-        params["prix"] = 12.5
-        params["nombrePlace"] = 4
-
-        params["conducteur"] = Mock(Utilisateur)
-        params["vehicule"] = Mock(Vehicule)
-
-    }
-
     def setup() {
         def utilisateur = TestsHelper.creeUtilisateurValide()
         request.session['utilisateur'] = utilisateur
@@ -37,7 +15,7 @@ class TrajetControllerSpec extends Specification {
     }
 
 
-    void "Test l'affichage du formulaire d'ajout de trajet"() {
+    void "teste l'affichage du formulaire d'ajout de trajet"() {
         given: "Un véhicule qui appartient a un utilisateur"
         Vehicule vehicule = Mock(Vehicule)
         vehicule.possesseur >> request.session['utilisateur']
@@ -49,7 +27,7 @@ class TrajetControllerSpec extends Specification {
         response.status == 200
     }
 
-    void "test l'affichage de la liste des trajet"() {
+    void "teste l'affichage de la liste des trajet"() {
         when: "une demande d'accès a la liste des trajet"
         controller.liste()
         then: "l'utilisateur est redirigé sur la page"
@@ -57,7 +35,37 @@ class TrajetControllerSpec extends Specification {
         response.status == 200
     }
 
-    void "test l'affichage du recapitulatif d'un trajet"() {
+    void "teste la recherche de trajet"() {
+
+        when: "on appelle l'action rechercherTrajet"
+        controller.rechercherTrajet()
+
+        then: "le modèle retourné est correct"
+        1 * controller.trajetService.rechercherTrajet(_) >> { it -> [] }
+        !model.vehiculeInstanceList
+        view == '/trajet/rechercherTrajet'
+        response.status == 200
+    }
+
+    void "teste the index action returns the correct model"() {
+
+        when: "The index action is executed"
+        controller.index()
+
+        then: "The model is correct"
+        !model.trajetInstanceList
+        model.trajetInstanceCount == 0
+    }
+
+    void "teste the create action returns the correct model"() {
+        when: "The create action is executed"
+        controller.create()
+
+        then: "The model is correctly created"
+        model.trajetInstance != null
+    }
+
+    void "teste l'affichage du recapitulatif d'un trajet"() {
         given: "un trajet sauvegarder en base de données"
         Utilisateur utilisateur = request.session['utilisateur']
         utilisateur.save(flush:true)
@@ -72,18 +80,19 @@ class TrajetControllerSpec extends Specification {
         response.status == 200
     }
 
-    void "test l'affichage du recapitulatif d'un trajet qui n'existe pas"() {
+    void "teste l'affichage du recapitulatif d'un trajet qui n'existe pas"() {
         given: "un trajet sauvegarder en base de données"
         Trajet trajet = Mock(Trajet)
         trajet.id >> null
 
         when: "une demande d'accès au récapitulatif d'un trajet"
         controller.voirTrajet(trajet.id)
-        then: "Un code d'erreur 404 est renvoyé"
-        response.status == 404
+        then: "on ramène l'utilisateur sur la page d'ajout"
+        view == '/trajet/ajouter'
+        response.status == 200
     }
 
-    void "test la suppression d'un trajet existant"() {
+    void "teste la suppression d'un trajet existant"() {
         given: "un trajet sauvegarder en base de données"
         Utilisateur utilisateur = request.session['utilisateur']
         utilisateur.save(flush:true)
@@ -98,14 +107,14 @@ class TrajetControllerSpec extends Specification {
         1*controller.trajetService.delete(_)
     }
 
-    void "test la suppression d'un trajet inexistant"() {
+    void "teste la suppression d'un trajet inexistant"() {
         when: "une demande de suppression sur un trajet qui n'existe pas"
         controller.supprimer(65)
         then: "Le service est n'est pas appelé"
         0*controller.trajetService.delete(_)
     }
 
-    void "Test d'un ajout de trajet avec des champs corrects"() {
+    void "teste d'un ajout de trajet avec des champs corrects"() {
         given: "un membre qui veut ajouter un trajet"
         Trajet trajet = new Trajet(params)
         def utilisateur = TestsHelper.creeUtilisateurValide()
@@ -114,6 +123,8 @@ class TrajetControllerSpec extends Specification {
 
         when: "il valide le trajet"
         Vehicule.findById(_) >> Mock(Vehicule)
+        params.trajet >> { it -> Mock(Trajet) }
+        params.trajet.vehicule >> { it -> Mock(Vehicule) }
         controller.ajouterTrajetPost(trajet)
 
         then:"the trajet is created"
@@ -121,10 +132,11 @@ class TrajetControllerSpec extends Specification {
 
     }
 
-    void "test l'affichage d'un trajet qui n'existe pas"() {
+    void "teste l'affichage d'un trajet qui n'existe pas"() {
         when: "Un utilisateur essaye d'acceder a un trajet qui n'existe pas"
         controller.voirTrajet(null)
-        then: "Une erreur 404 est levée"
-        response.status == 404
+        then: "on ramène l'utilisateur sur la page d'ajout"
+        view == '/trajet/ajouter'
+        response.status == 200
     }
 }

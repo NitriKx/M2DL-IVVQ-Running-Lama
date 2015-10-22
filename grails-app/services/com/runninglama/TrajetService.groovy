@@ -15,4 +15,8 @@ class TrajetService {
     def delete(Trajet trajet) {
         trajetDAOService.delete(trajet)
     }
+
+    def rechercherTrajet(params) {
+        trajetDAOService.search(params)
+    }
 }

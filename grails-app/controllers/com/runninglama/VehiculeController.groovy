@@ -7,7 +7,7 @@ import grails.transaction.Transactional
 @Transactional
 class VehiculeController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    static allowedMethods = [ save: "POST", update: "PUT", delete: "DELETE" ]
 
     VehiculeService vehiculeService
 
@@ -20,6 +20,12 @@ class VehiculeController {
     def show(Vehicule vehiculeInstance) {
         if (vehiculeInstance == null) {
             notFound()
+            return
+        }
+
+        def utilisateurAuthentifie = ControllersHelper.recupererUtilisateurAuthentifie(session)
+        if (vehiculeService.vehiculeAppartientUtilisateur(utilisateurAuthentifie, vehiculeInstance) == false) {
+            vehiculeInterdit()
             return
         }
 
@@ -52,14 +58,19 @@ class VehiculeController {
     }
 
     def edit(Vehicule vehiculeInstance) {
-        if(vehiculeInstance /*&& vehiculeService.vehiculeAppartientUtilisateur(session.getAttribute('utilisateur'), vehiculeInstance)*/)
-        {
-            respond vehiculeInstance
+
+        if (!vehiculeInstance) {
+            notFound()
+            return
         }
-        else
-        {
-            redirect(controller: 'vehicule', action: 'index')
+
+        def utilisateurAuthentifie = ControllersHelper.recupererUtilisateurAuthentifie(session)
+        if (vehiculeService.vehiculeAppartientUtilisateur(utilisateurAuthentifie, vehiculeInstance) == false) {
+            vehiculeInterdit()
+            return
         }
+
+        respond vehiculeInstance
     }
 
     def update(Vehicule vehiculeInstance) {
@@ -70,6 +81,12 @@ class VehiculeController {
 
         if (vehiculeInstance.hasErrors()) {
             respond vehiculeInstance.errors, view: 'edit'
+            return
+        }
+
+        def utilisateurAuthentifie = ControllersHelper.recupererUtilisateurAuthentifie(session)
+        if (vehiculeService.vehiculeAppartientUtilisateur(utilisateurAuthentifie, vehiculeInstance) == false) {
+            vehiculeInterdit()
             return
         }
 
@@ -85,6 +102,12 @@ class VehiculeController {
             return
         }
 
+        def utilisateurAuthentifie = ControllersHelper.recupererUtilisateurAuthentifie(session)
+        if (vehiculeService.vehiculeAppartientUtilisateur(utilisateurAuthentifie, vehiculeInstance) == false) {
+            vehiculeInterdit()
+            return
+        }
+
         vehiculeService.supprimerVehicule(vehiculeInstance)
 
         redirect(action: 'index')
@@ -97,6 +120,16 @@ class VehiculeController {
                 redirect action: "index", method: "GET"
             }
             '*' { render status: NOT_FOUND }
+        }
+    }
+
+    protected void vehiculeInterdit() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.forbidden.message')
+                redirect action: "index", method: "GET"
+            }
+            '*' { render status: FORBIDDEN }
         }
     }
 }

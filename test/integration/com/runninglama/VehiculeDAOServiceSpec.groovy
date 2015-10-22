@@ -7,9 +7,9 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(VehiculeDAOService)
-@Mock([Vehicule, Utilisateur])
 class VehiculeDAOServiceSpec extends Specification {
+
+    def vehiculeDAOService
 
     def setup() {
     }
@@ -26,7 +26,7 @@ class VehiculeDAOServiceSpec extends Specification {
         vehicule = vehicule.save(flush: true)
 
         when: "on demande la suppression de ce véhicule"
-        service.delete(vehicule)
+        vehiculeDAOService.delete(vehicule)
 
         then: "le véhicule n'existe plus dans la base de données"
         Vehicule.findAllById(vehicule.id).isEmpty()
@@ -43,10 +43,10 @@ class VehiculeDAOServiceSpec extends Specification {
         vehicule = vehicule.save(flush: true)
 
         when: "on demande l'ajout de ce véhicule"
-        def resultatAjout = service.save(vehicule)
+        def resultatAjout = vehiculeDAOService.save(vehicule)
 
         then: "le véhicule existe dans la base de données"
-        assertNotNull(resultatAjout)
+        resultatAjout != null
         Vehicule.findAllById(resultatAjout.id).size() == 1
     }
 
@@ -59,7 +59,7 @@ class VehiculeDAOServiceSpec extends Specification {
         vehicule = vehicule.save(flush: true)
 
         when: "on liste les vehicules"
-        def listeVehicule = service.list(vehicule.possesseur, [:])
+        def listeVehicule = vehiculeDAOService.list(vehicule.possesseur, [:])
 
         then: "le vehicule est dans la base de données"
         listeVehicule.contains(vehicule)
@@ -71,14 +71,14 @@ class VehiculeDAOServiceSpec extends Specification {
         def utilisateur = TestsHelper.creeUtilisateurValide();
         utilisateur = utilisateur.save(flush: true)
         def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
-        assertTrue(Vehicule.count() == 0)
+        Vehicule.count() == 0
         vehicule = vehicule.save(flush: true)
 
         when: "on demande l'ajout de ce véhicule"
-        def resultatAjout = service.save(vehicule)
+        def resultatAjout = vehiculeDAOService.save(vehicule)
 
         then: "la base de données contient maintenant un véhicule"
-        assertNotNull(resultatAjout)
-        service.count(resultatAjout.possesseur, [:]) == 1
+        resultatAjout != null
+        vehiculeDAOService.count(resultatAjout.possesseur, [:]) == 1
     }
 }

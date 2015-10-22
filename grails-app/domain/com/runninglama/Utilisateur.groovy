@@ -27,10 +27,10 @@ class Utilisateur {
         vehicules lazy: false
     }
 
-    @Transient
-    String motDePasse
 
-    @Transient
+    static transients = ['motDePasse','motDePasseConfirmation']
+
+    String motDePasse
     String motDePasseConfirmation
     
 
@@ -40,7 +40,9 @@ class Utilisateur {
         telephone size: 10..10
         passwordHash nullable: false, blank: false
         passwordSalt nullable: false, blank: false
-        motDePasse nullable:true
-        motDePasseConfirmation nullable:true
+        motDePasse bindable: true
+        motDePasseConfirmation bindable: true
     }
+
+
 }

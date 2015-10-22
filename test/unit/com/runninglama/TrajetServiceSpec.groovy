@@ -11,6 +11,14 @@ import spock.lang.Specification
 @Mock(Trajet)
 class TrajetServiceSpec extends Specification {
 
+    def populateValidParams(params) {
+        assert params != null
+        params["depart_google"] = 'okinawa'
+        params["arrivee_google"] = 'osaka'
+        params["dateAller"] = new Date(2015, 10, 20)
+        params["prixMax"] = '20'
+    }
+
     def setup() {
         service.trajetDAOService = Mock(TrajetDAOService)
     }
@@ -33,10 +41,21 @@ class TrajetServiceSpec extends Specification {
         given: "un trajet a sauvegarder"
         Trajet trajet = Mock(Trajet)
 
-        when:"le controlleur demande la suppression du trajet"
+        when: "le controlleur demande la suppression du trajet"
         service.ajouterTrajet(trajet)
 
         then: "la couche DAO est appelé"
-        1*service.trajetDAOService.save(_)
+        1 * service.trajetDAOService.save(_)
     }
+
+    void "teste que lorsqu'on appelle recupererListVehicule, la bonne couche de DAO est appel�e"() {
+
+        when: "on appelle le service recupererListVehicule"
+        def listeTrajets = service.rechercherTrajet(null)
+
+        then: "la bonne couche de DAO est appel�e"
+        assertNotNull(listeTrajets)
+        1 * service.trajetDAOService.search(null) >> { [] }
+    }
+
 }

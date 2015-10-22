@@ -7,12 +7,9 @@ import grails.test.mixin.*
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
-@TestFor(UtilisateurDAOService)
-@Mock(Utilisateur)
 class UtilisateurDAOServiceSpec extends Specification {
 
-    //def UtilisateurDAOService service = new UtilisateurDAOService()
-
+    def utilisateurDAOService
 
     def setup() {
     }
@@ -27,14 +24,14 @@ class UtilisateurDAOServiceSpec extends Specification {
         def utilisateur = new Utilisateur(dateDerniereConnexion: aDateDerniereConnexion, telephone: aTelephone,
                                             pseudo: aPseudo, dateInscription: aDateInscription, dateNaissance: aDateNaissance,
                                             email: aEmail, nom: aNom, prenom: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt, motDePasse: aMotDePasse, motDePasseConfirmation: aMotDePasseConfirmation)
-        assertTrue(utilisateur.validate() != false)
+        utilisateur.validate() != false
 
         when: "on demande l'ajout de cet utilisateur"
-        def resultatAjout = service.save(utilisateur)
+        def resultatAjout = utilisateurDAOService.save(utilisateur)
 
 
         then: "l'utilisateur existe dans la base de données"
-        assertNotNull(resultatAjout)
+        resultatAjout != null
         Utilisateur.findAllById(resultatAjout.id).size() == 1
 
         where:
@@ -49,15 +46,15 @@ class UtilisateurDAOServiceSpec extends Specification {
         def utilisateur = new Utilisateur(dateDerniereConnexion: aDateDerniereConnexion, telephone: aTelephone,
                 pseudo: aPseudo, dateInscription: aDateInscription, dateNaissance: aDateNaissance,
                 email: aEmail, nom: aNom, prenom: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt, motDePasse: aMotDePasse, motDePasseConfirmation: aMotDePasseConfirmation)
-        assertTrue(utilisateur.validate() != false)
+        utilisateur.validate() != false
 
         when: "on demande l'ajout de cet utilisateur"
-        def resultatAjout = service.save(utilisateur)
+        def resultatAjout = utilisateurDAOService.save(utilisateur)
 
         then: "l'utilisateur peut etre retrouvé par son pseudo"
-        assertNotNull(resultatAjout)
-        def utilisateurRetourne = service.findByPseudo(aPseudo)
-        assertNotNull(utilisateurRetourne)
+        resultatAjout != null
+        def utilisateurRetourne = utilisateurDAOService.findByPseudo(aPseudo)
+        utilisateurRetourne != null
 
         where:
         aPseudo            | aPrenom  | aNom      | aEmail               | aTelephone   | aDateDerniereConnexion | aDateInscription | aDateNaissance | aPasswordHash        | aPasswordSalt  | aMotDePasse | aMotDePasseConfirmation
