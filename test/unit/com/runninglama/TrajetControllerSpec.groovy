@@ -116,18 +116,17 @@ class TrajetControllerSpec extends Specification {
 
     void "teste d'un ajout de trajet avec des champs corrects"() {
         given: "un membre qui veut ajouter un trajet"
-        Trajet trajet = new Trajet(params)
+        Trajet trajet = Mock(Trajet)
+        trajet.vehicule >> Mock(Vehicule)
+        trajet.vehicule.id >> null
         def utilisateur = TestsHelper.creeUtilisateurValide()
         request.session['utilisateur'] = utilisateur
-        GroovyMock(Vehicule, global: true)
 
         when: "il valide le trajet"
-        Vehicule.findById(_) >> Mock(Vehicule)
-        params.trajet >> { it -> Mock(Trajet) }
-        params.trajet.vehicule >> { it -> Mock(Vehicule) }
         controller.ajouterTrajetPost(trajet)
 
         then:"the trajet is created"
+        1 * controller.trajetService.ajouterTrajet(_)
         response.redirectedUrl == '/accueil'
 
     }
