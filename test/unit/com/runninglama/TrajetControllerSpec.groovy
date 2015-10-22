@@ -120,4 +120,11 @@ class TrajetControllerSpec extends Specification {
         response.redirectedUrl == '/accueil'
 
     }
+
+    void "test l'affichage d'un trajet qui n'existe pas"() {
+        when: "Un utilisateur essaye d'acceder a un trajet qui n'existe pas"
+        controller.voirTrajet(null)
+        then: "Une erreur 404 est levée"
+        response.status == 404
+    }
 }

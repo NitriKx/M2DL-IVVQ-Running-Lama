@@ -154,6 +154,29 @@ class UtilisateurControllerSpec extends Specification {
         view == '/utilisateur/modifierProfil'
     }
 
+    void "test la methode index avec un utilisateur connecté"() {
+        given: "Un utilisateur qui est connecté"
+        def utilisateur = TestsHelper.creeUtilisateurValide()
+        request.session['utilisateur'] = utilisateur
+
+        when:"L'utilisateur souhaite acceder a son profil"
+        controller.index()
+
+        then:"L'utilisateut est bien redirigé vers son profil"
+        response.redirectUrl == '/utilisateur/modifierProfil'
+    }
+
+    void "test la methode index avec un utilisateur non connecté"() {
+        given: "Un utilisateur qui est connecté"
+        request.session['utilisateur'] = null
+
+        when:"L'utilisateur souhaite acceder a son profil"
+        controller.index()
+
+        then:"L'utilisateut est bien redirigé vers le formulaire de connexion"
+        response.redirectUrl == '/utilisateur/connexion'
+    }
+
 
     /*
     void "Test the index action returns the correct model"() {

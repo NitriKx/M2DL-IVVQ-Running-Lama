@@ -41,9 +41,9 @@ class UtilisateurController {
     def index() {
         Utilisateur utilisateur = this.getSession().getAttribute('utilisateur')
         if(utilisateur) {
-            modifierProfil()
+            redirect(controller: 'utilisateur', action: 'modifierProfil')
         } else {
-            connexion()
+            redirect(controller: 'utilisateur', action: 'connexion')
         }
     }
 
