@@ -27,14 +27,14 @@ class UtilisateurDAOServiceSpec extends Specification {
         def utilisateur = new Utilisateur(dateDerniereConnexion: aDateDerniereConnexion, telephone: aTelephone,
                                             pseudo: aPseudo, dateInscription: aDateInscription, dateNaissance: aDateNaissance,
                                             email: aEmail, nom: aNom, prenom: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt, motDePasse: aMotDePasse, motDePasseConfirmation: aMotDePasseConfirmation)
-        assertTrue(utilisateur.validate() != false)
+        utilisateur.validate() != false
 
         when: "on demande l'ajout de cet utilisateur"
         def resultatAjout = service.save(utilisateur)
 
 
         then: "l'utilisateur existe dans la base de données"
-        assertNotNull(resultatAjout)
+        resultatAjout != null
         Utilisateur.findAllById(resultatAjout.id).size() == 1
 
         where:
@@ -49,15 +49,15 @@ class UtilisateurDAOServiceSpec extends Specification {
         def utilisateur = new Utilisateur(dateDerniereConnexion: aDateDerniereConnexion, telephone: aTelephone,
                 pseudo: aPseudo, dateInscription: aDateInscription, dateNaissance: aDateNaissance,
                 email: aEmail, nom: aNom, prenom: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt, motDePasse: aMotDePasse, motDePasseConfirmation: aMotDePasseConfirmation)
-        assertTrue(utilisateur.validate() != false)
+        utilisateur.validate() != false
 
         when: "on demande l'ajout de cet utilisateur"
         def resultatAjout = service.save(utilisateur)
 
         then: "l'utilisateur peut etre retrouvé par son pseudo"
-        assertNotNull(resultatAjout)
+        resultatAjout != null
         def utilisateurRetourne = service.findByPseudo(aPseudo)
-        assertNotNull(utilisateurRetourne)
+        utilisateurRetourne != null
 
         where:
         aPseudo            | aPrenom  | aNom      | aEmail               | aTelephone   | aDateDerniereConnexion | aDateInscription | aDateNaissance | aPasswordHash        | aPasswordSalt  | aMotDePasse | aMotDePasseConfirmation

@@ -46,7 +46,7 @@ class VehiculeDAOServiceSpec extends Specification {
         def resultatAjout = service.save(vehicule)
 
         then: "le véhicule existe dans la base de données"
-        assertNotNull(resultatAjout)
+        resultatAjout != null
         Vehicule.findAllById(resultatAjout.id).size() == 1
     }
 
@@ -71,14 +71,14 @@ class VehiculeDAOServiceSpec extends Specification {
         def utilisateur = TestsHelper.creeUtilisateurValide();
         utilisateur = utilisateur.save(flush: true)
         def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
-        assertTrue(Vehicule.count() == 0)
+        Vehicule.count() == 0
         vehicule = vehicule.save(flush: true)
 
         when: "on demande l'ajout de ce véhicule"
         def resultatAjout = service.save(vehicule)
 
         then: "la base de données contient maintenant un véhicule"
-        assertNotNull(resultatAjout)
+        resultatAjout != null
         service.count(resultatAjout.possesseur, [:]) == 1
     }
 }

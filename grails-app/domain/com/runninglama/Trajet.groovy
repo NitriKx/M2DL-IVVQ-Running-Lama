@@ -38,6 +38,7 @@ class Trajet {
         dateRetour nullable: false, blank: false
         prix nullable: false, blank: false
         nombrePlace nullable: false, blank: false, min:1
+        commentaire nullable: true, blank: true
     }
 
 

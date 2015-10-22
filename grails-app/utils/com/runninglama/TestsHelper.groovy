@@ -33,6 +33,11 @@ class TestsHelper {
                 kilometrage: 10000, type: TypeVehicule.VOITURE);
     }
 
+    static creeTrajetValide(Utilisateur conducteur, Vehicule vehiculeUtilise) {
+        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", prix: 29.99, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
+                    depart: "Toulouse", departLat: "43.604652", departLng: "1.444209",
+                    arrivee: "Pakistan", arriveeLat: "30.375321", arriveeLng: "69.345115")
+    }
 
 
 }
