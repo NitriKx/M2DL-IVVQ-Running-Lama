@@ -7,12 +7,12 @@ class TrajetService {
 
     TrajetDAOService trajetDAOService
 
-    def ajouterTrajet(Trajet trajet) {
+    def creerOuModifier(Trajet trajet) {
         trajet.validate()
         trajetDAOService.save(trajet)
     }
 
-    def delete(Trajet trajet) {
+    def supprimer(Trajet trajet) {
         trajetDAOService.delete(trajet)
     }
 

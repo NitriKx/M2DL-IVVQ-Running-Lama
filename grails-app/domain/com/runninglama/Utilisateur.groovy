@@ -44,5 +44,9 @@ class Utilisateur {
         motDePasseConfirmation bindable: true
     }
 
+    boolean participe(Trajet trajet) {
+        return trajet.participants.size() > 0 || trajet.conducteur.id == this.id
+    }
+
 
 }

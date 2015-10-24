@@ -42,7 +42,7 @@ class TrajetController {
     def supprimer(Long id) {
         Trajet trajet = Trajet.findById(id)
         if(trajet != null) {
-            trajetService.delete(trajet)
+            trajetService.supprimer(trajet)
             flash.message = "Le trajet a été supprimé"
         } else {
             flash.message = "Impossible de supprimer le message"
@@ -58,17 +58,15 @@ class TrajetController {
     def ajouterTrajetPost(Trajet trajet) {
         trajet.setVehicule(Vehicule.findById(trajet.vehicule.id))
         trajet.setConducteur(session.getAttribute('utilisateur'))
-        trajetService.ajouterTrajet(trajet)
+        trajetService.creerOuModifier(trajet)
         redirect(view: 'index' ,controller: 'accueil')
     }
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'trajet.label', default: 'Trajet'), params.id])
-                redirect controller: "accueil", action: "index", method: "GET"
-            }
-            '*' { render status: NOT_FOUND }
-        }
+    def ajouterParticipant(Long idTrajet) {
+        Trajet trajet = Trajet.findById(idTrajet)
+        Utilisateur utilisateur = session.utilisateur
+        trajet.participants.add(utilisateur)
+        trajetService.creerOuModifier(trajet)
+        voirTrajet(idTrajet)
     }
 }

@@ -31,7 +31,7 @@ class TrajetServiceSpec extends Specification {
         Trajet trajet = Mock(Trajet)
 
         when:"le controlleur demande la suppression du trajet"
-        service.delete(trajet)
+        service.supprimer(trajet)
 
         then: "la couche DAO est appelé"
         1*service.trajetDAOService.delete(_)
@@ -42,7 +42,7 @@ class TrajetServiceSpec extends Specification {
         Trajet trajet = Mock(Trajet)
 
         when: "le controlleur demande la suppression du trajet"
-        service.ajouterTrajet(trajet)
+        service.creerOuModifier(trajet)
 
         then: "la couche DAO est appelé"
         1 * service.trajetDAOService.save(_)

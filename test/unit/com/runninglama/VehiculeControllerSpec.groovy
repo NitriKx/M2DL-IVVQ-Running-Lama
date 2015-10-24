@@ -311,7 +311,7 @@ class VehiculeControllerSpec extends Specification {
     //
 
     void "teste que l'action delete retourne bien une erreur si l'instance est null (mode formulaire)"() {
-        when: "l'action delete est appelée avec un objet null"
+        when: "l'action supprimer est appelée avec un objet null"
         request.contentType = FORM_CONTENT_TYPE
         controller.delete(null)
 
@@ -321,7 +321,7 @@ class VehiculeControllerSpec extends Specification {
     }
 
     void "teste que l'action delete retourne bien une erreur si l'instance est null (mode non formulaire)"() {
-        when: "l'action delete est appelée avec un objet null"
+        when: "l'action supprimer est appelée avec un objet null"
         controller.delete(null)
 
         then: "une erreur 404 est retournée"
@@ -334,7 +334,7 @@ class VehiculeControllerSpec extends Specification {
         response.reset()
         def vehicule = TestsHelper.creeVehiculeValide(utilisateur).save(flush: true)
 
-        when: "l'instance est passée à delete"
+        when: "l'instance est passée à supprimer"
         controller.delete(vehicule)
 
         then: "l'instance est supprimée"
