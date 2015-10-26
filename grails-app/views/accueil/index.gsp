@@ -70,7 +70,7 @@ Time: 08:53
 
             <div class="row">
                 <div class="col-xs-12">
-                    <g:form name="formRechercherTrajet" url="[controller:'trajet',action:'rechercherTrajet']">
+                    <g:form id="rechercheForm" name="formRechercherTrajet" url="[controller:'trajet',action:'rechercherTrajet']">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="panel panel-default" style="min-height: 380px;">
@@ -97,12 +97,8 @@ Time: 08:53
                                             <g:datePicker name="dateAller" value="${new Date()}" precision="day"/>
                                         </div>
 
-                                        %{--<div class="form-group">--}%
-                                            %{--<label for="boolDateRetour">Retour?</label>--}%
-                                            %{--<input class="form-control input-lg" type="checkbox" id="boolDateRetour" name="boolDateRetour" value='false'>--}%
-                                        %{--</div>--}%
-
                                         <div class="form-group">
+                                            <input type="checkbox" id="boolDateRetour" name="boolDateRetour" value='false'/>
                                             <label>Date retour</label>
                                             <g:datePicker id="dateRetour" name="dateRetour" value="${new Date()}" precision="day" disabled="true"/>
                                         </div>
@@ -143,7 +139,9 @@ Time: 08:53
                                 </div>
                             </div>
                         </div>
-                        <input type="submit" value="Rechercher le trajet" class="btn btn-primary btn-lg pull-right">
+                        %{--<button class="btn btn-primary btn-lg pull-right" id="submitForm">Rechercher le trajet</button>--}%
+                        <input type="submit" class="btn btn-primary btn-lg pull-right">Rechercher le trajet</input>
+                        %{--<input type="submit" value="Merde!"/>--}%
                     </g:form>
                 </div>
             </div>
@@ -155,40 +153,29 @@ Time: 08:53
 
                 $(document).ready(function() {
 
-//                    $('#boolDateRetour').click(function(e){
-//                        if($(this).is(':checked'))
-//                        {
-//                            $(this).val('true');
-//                            $('#dateRetour_day').prop('disabled', false);
-//                            $('#dateRetour_month').prop('disabled', false);
-//                            $('#dateRetour_year').prop('disabled', false);
-//                        }
-//                        else
-//                        {
-//                            $(this).val('false');
-//                            $('#dateRetour_day').prop('disabled', true);
-//                            $('#dateRetour_month').prop('disabled', true);
-//                            $('#dateRetour_year').prop('disabled', true);
-//                        }
-//                    });
+                    $('#boolDateRetour').removeProp('checked');
+                    $('#boolDateRetour').val('false');
+                    $('#dateRetour_day').prop('disabled', true);
+                    $('#dateRetour_month').prop('disabled', true);
+                    $('#dateRetour_year').prop('disabled', true);
+                    $('#boolDateRetour').click(function(e){
+                        if($(this).is(':checked'))
+                        {
+                            $(this).val('true');
+                            $('#dateRetour_day').prop('disabled', false);
+                            $('#dateRetour_month').prop('disabled', false);
+                            $('#dateRetour_year').prop('disabled', false);
+                        }
+                        else
+                        {
+                            $(this).val('false');
+                            $('#dateRetour_day').prop('disabled', true);
+                            $('#dateRetour_month').prop('disabled', true);
+                            $('#dateRetour_year').prop('disabled', true);
+                        }
+                    });
 
                     var lastResponse;
-
-                    $('#btn_form-trajet').click(function(e) {
-                        e.preventDefault();
-                        waypts = lastResponse.Tb.waypoints;
-                        if(typeof(waypts)!='undefined') {
-                            waypts.forEach(lesWaypts);
-                        }
-                        function lesWaypts(element, index, array) {
-                            $('#lesWaypts').append('<input type="hidden" name="lat'+index+'" value="'+element.location.k+'" /> ');
-                            $('#lesWaypts').append('<input type="hidden" name="lon'+index+'" value="'+element.location.A+'" /> ');
-                            $('#nb_waypts').attr('value', index+1);
-                        }
-
-                        $( "#form-trajet" ).submit();
-
-                    });
 
 
                     // Auto complete des champs pour la localisation Google maps
@@ -210,10 +197,10 @@ Time: 08:53
                     var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);;
                     var directionsService = new google.maps.DirectionsService();
                     var map;
-
-                    var australia = new google.maps.LatLng(-25.274398, 133.775136);
+//                    var placesService;
 
                     function initialize() {
+                    console.log("function initialize() {");
 
                         var france = new google.maps.LatLng(46.227638, 2.213749);
                         var mapOptions = {
@@ -222,6 +209,7 @@ Time: 08:53
                         }
                         map = new google.maps.Map(document.getElementById('map'), mapOptions);
                         directionsDisplay.setMap(map);
+//                        placesService = new google.maps.places.PlacesService(map);
 
                         google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
                             computeTotalDistance(directionsDisplay.getDirections());
@@ -231,91 +219,7 @@ Time: 08:53
                     }
 
 
-                    $('#selectArrivee').change(calcSelect);
-                    $('#selectDepart').change(calcSelect);
-
-                    $('#submitGoogle').click(calcSelectGoogle);
-
-                    function calcSelectGoogle(e) {
-                        e.preventDefault();
-
-                        var start = document.getElementById('start').value;
-                        var end = document.getElementById('end').value;
-
-                        if(start != "" && end != "") {
-                            var request = {
-                                origin:start,
-                                destination:end,
-                                optimizeWaypoints: true,
-                                travelMode: google.maps.TravelMode.DRIVING,
-                            };
-
-                            directionsService.route(request, function(response, status) {
-                                if (status == google.maps.DirectionsStatus.OK) {
-                                    directionsDisplay.setDirections(response);
-                                }
-                            });
-                            $('#methode').attr('value', 'google');
-                        }
-
-                    }
-
-                    function calcSelect(e) {
-                        e.preventDefault();
-
-                        var start = document.getElementById('selectDepart').value;
-                        var end = document.getElementById('selectArrivee').value;
-
-                        console.log(start);
-                        console.log(end);
-
-
-                        if(start != 0 && end != 0) {
-                            var request = {
-                                origin:start,
-                                destination:end,
-                                optimizeWaypoints: true,
-                                travelMode: google.maps.TravelMode.DRIVING,
-                            };
-
-                            directionsService.route(request, function(response, status) {
-                                if (status == google.maps.DirectionsStatus.OK) {
-                                    directionsDisplay.setDirections(response);
-                                }
-                            });
-                            $('#methode').attr('value', 'adresse');
-                        }
-                    }
-
-                    function computeTotalDistance(response) {
-                        console.log(response);
-                        dureeSeconde = response.routes[0].legs[0].duration.value;
-                        var d = new Date(dureeSeconde * 1000); // js fonctionne en milisecondes
-                        var t = [];
-                        t.push(d.getHours()-1);
-                        t.push(d.getMinutes());
-                        duree =  t.join(':');
-                        distanceKilometre = response.routes[0].legs[0].distance.value;
-                        distance = distanceKilometre / 1000;
-                        depart_lat = response.routes[0].legs[0].start_location.k;
-                        depart_lon = response.routes[0].legs[0].start_location.A;
-                        arrive_lat = response.routes[0].legs[0].end_location.k;
-                        arrive_lon = response.routes[0].legs[0].end_location.A;
-
-//                            $('#duree').timepicker('setTime', duree);
-                        $('#distance').val(Math.round(distance));
-                        $('#depart_lat').attr('value', depart_lat);
-                        $('#depart_lon').attr('value', depart_lon);
-                        $('#arrive_lat').attr('value', arrive_lat);
-                        $('#arrive_lon').attr('value', arrive_lon);
-
-                        lastResponse = response;
-                    }
-
                     google.maps.event.addDomListener(window, 'load', initialize);
-
-
-
 
                     // Gestion de la MAP
                     var directionsDisplay;
@@ -327,36 +231,66 @@ Time: 08:53
                     var map;
 
                     function computeTotalDistance(result) {
+                    console.log("function computeTotalDistance(result) {");
                         var total = 0;
                         var myroute = result.routes[0];
                         for (var i = 0; i < myroute.legs.length; i++) {
                             total += myroute.legs[i].distance.value;
                         }
                         total = total / 1000.0;
-                        // document.getElementById('total').innerHTML = total + ' km';
+                         document.getElementById('total').innerHTML = total + ' km';
                     }
 
 
-
-                    function initialize() {
-                        directionsDisplay = new google.maps.DirectionsRenderer();
-                        var france = new google.maps.LatLng(46.227638, 2.213749);
-                        var mapOptions = {
-                            zoom:5,
-                            center: france
-                        }
-                        map = new google.maps.Map(document.getElementById('map'), mapOptions);
-                        directionsDisplay.setMap(map);
-
-                        google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
-                            computeTotalDistance(directionsDisplay.getDirections());
-                        });
-                    }
 
                     //chemin du tracé du futur polyline
 
 
                     $('#submitGoogle').click(function(e) {
+                        console.log("$('#submitGoogle').click(function(e) {");
+                        e.preventDefault();
+                        var start = document.getElementById('start').value;
+                        var end = document.getElementById('end').value;
+                        var request = {
+                            origin:start,
+                            destination:end,
+                            optimizeWaypoints: true,
+                            travelMode: google.maps.TravelMode.DRIVING,
+                        };
+
+                        directionsService.route(request, function(response, status) {
+                            console.log('response : ');
+                            console.log(response);
+//                            console.log('placesService.getDetails() : ');
+//                            console.log(placesService.getDetails(response, status));
+                            if (status == google.maps.DirectionsStatus.OK) {
+                                directionsDisplay.setDirections(response);
+                                console.log(response);
+                                dureeSeconde = response.routes[0].legs[0].duration.value;
+                                var d = new Date(dureeSeconde * 1000); // js fonctionne en milisecondes
+                                var t = [];
+                                t.push(d.getHours()-1);
+                                t.push(d.getMinutes());
+                                duree =  t.join(':');
+                                distanceKilometre = response.routes[0].legs[0].distance.value;
+                                distance = distanceKilometre / 1000;
+                                depart_lat = response.routes[0].legs[0].start_location.lat();
+                                depart_lon = response.routes[0].legs[0].start_location.lng();
+                                arrive_lat = response.routes[0].legs[0].end_location.lat();
+                                arrive_lon = response.routes[0].legs[0].end_location.lng();
+
+                                //$('#duree').timepicker('setTime', duree);
+                                $('#distance').val(Math.round(distance));
+                                $('#depart_lat').attr('value', depart_lat);
+                                $('#depart_lon').attr('value', depart_lon);
+                                $('#arrive_lat').attr('value', arrive_lat);
+                                $('#arrive_lon').attr('value', arrive_lon);
+                                $('#methode').attr('value', 'google');
+                            }
+                        });
+                    });
+
+                    $('#rechercheForm').submit(function(e){
                         e.preventDefault();
                         var start = document.getElementById('start').value;
                         var end = document.getElementById('end').value;
@@ -379,65 +313,22 @@ Time: 08:53
                                 duree =  t.join(':');
                                 distanceKilometre = response.routes[0].legs[0].distance.value;
                                 distance = distanceKilometre / 1000;
-                                depart_lat = response.routes[0].legs[0].start_location.k;
-                                depart_lon = response.routes[0].legs[0].start_location.A;
-                                arrive_lat = response.routes[0].legs[0].end_location.k;
-                                arrive_lon = response.routes[0].legs[0].end_location.A;
+                                depart_lat = response.routes[0].legs[0].start_location.lat();
+                                depart_lon = response.routes[0].legs[0].start_location.lng();
+                                arrive_lat = response.routes[0].legs[0].end_location.lat();
+                                arrive_lon = response.routes[0].legs[0].end_location.lng();
 
-                                //$('#duree').timepicker('setTime', duree);
                                 $('#distance').val(Math.round(distance));
                                 $('#depart_lat').attr('value', depart_lat);
                                 $('#depart_lon').attr('value', depart_lon);
                                 $('#arrive_lat').attr('value', arrive_lat);
                                 $('#arrive_lon').attr('value', arrive_lon);
                                 $('#methode').attr('value', 'google');
+
+                                $('#rechercheForm').submit();
                             }
                         });
                     });
-
-                    function calcSelect() {
-                        var start = document.getElementById('selectDepart').value;
-                        var end = document.getElementById('selectArrivee').value;
-
-                        if(start != '0' && end != '0') {
-                            var request = {
-                                origin:start,
-                                destination:end,
-                                travelMode: google.maps.TravelMode.DRIVING
-                            };
-
-                            directionsService.route(request, function(response, status) {
-                                if (status == google.maps.DirectionsStatus.OK) {
-                                    directionsDisplay.setDirections(response);
-                                    console.log(response);
-                                    dureeSeconde = response.routes[0].legs[0].duration.value;
-                                    var d = new Date(dureeSeconde * 1000); // js fonctionne en milisecondes
-                                    var t = [];
-                                    t.push(d.getHours()-1);
-                                    t.push(d.getMinutes());
-                                    duree =  t.join(':');
-                                    distanceKilometre = response.routes[0].legs[0].distance.value;
-                                    distance = distanceKilometre / 1000;
-                                    depart_lat = response.routes[0].legs[0].start_location.k;
-                                    depart_lon = response.routes[0].legs[0].start_location.A;
-                                    arrive_lat = response.routes[0].legs[0].end_location.k;
-                                    arrive_lon = response.routes[0].legs[0].end_location.A;
-
-                                    //$('#duree').timepicker('setTime', duree);
-                                    $('#distance').val(Math.round(distance));
-                                    $('#depart_lat').attr('value', depart_lat);
-                                    $('#depart_lon').attr('value', depart_lon);
-                                    $('#arrive_lat').attr('value', arrive_lat);
-                                    $('#arrive_lon').attr('value', arrive_lon);
-                                    $('#methode').attr('value', 'adresse');
-                                }
-                            });
-                        }
-                    }
-
-                    $('#selectArrivee').change(calcSelect);
-                    $('#selectDepart').change(calcSelect);
-
                     google.maps.event.addDomListener(window, 'load', initialize);
 
                 });
