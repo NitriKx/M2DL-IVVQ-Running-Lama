@@ -80,6 +80,7 @@ Time: 08:53
                                         <input type="hidden" name="depart_lon" id="depart_lon">
                                         <input type="hidden" name="arrive_lat" id="arrive_lat">
                                         <input type="hidden" name="arrive_lon" id="arrive_lon">
+                                        <input type="hidden" name="total" id="total">
                                         <input type="hidden" name="methode" id="methode" value="perso">
 
                                         <div class="form-group">
@@ -139,9 +140,8 @@ Time: 08:53
                                 </div>
                             </div>
                         </div>
-                        %{--<button class="btn btn-primary btn-lg pull-right" id="submitForm">Rechercher le trajet</button>--}%
-                        <input type="submit" class="btn btn-primary btn-lg pull-right">Rechercher le trajet</input>
-                        %{--<input type="submit" value="Merde!"/>--}%
+                        <button class="btn btn-primary btn-lg pull-right" id="submitForm">Rechercher le trajet</button>
+                        %{--<input id="submitForm" type="submit" class="btn btn-primary btn-lg pull-right">Rechercher le trajet</input>--}%
                     </g:form>
                 </div>
             </div>
@@ -290,7 +290,8 @@ Time: 08:53
                         });
                     });
 
-                    $('#rechercheForm').submit(function(e){
+                    $('#submitForm').click(function(e){
+                        console.log('submit');
                         e.preventDefault();
                         var start = document.getElementById('start').value;
                         var end = document.getElementById('end').value;
@@ -326,6 +327,10 @@ Time: 08:53
                                 $('#methode').attr('value', 'google');
 
                                 $('#rechercheForm').submit();
+                            }
+                            else
+                            {
+                                alert("Depart et/ou arrivée invalide(s)");
                             }
                         });
                     });

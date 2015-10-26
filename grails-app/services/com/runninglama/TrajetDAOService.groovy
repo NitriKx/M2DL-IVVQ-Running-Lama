@@ -18,14 +18,8 @@ class TrajetDAOService {
                         ilike ('arrivee', '%' + params.arrivee_google + '%')
                         le('prix', Float.parseFloat(params.prixMax))
                         eq('dateAller', params.dateAller)
-//                eq('dateRetour', new Date(params.dateRetour))
+                        if(params.boolDateRetour) { eq('dateRetour', params.dateRetour)}
                     }
-
-
-//            maxResults params.int( 'max' ) ?: 10
-//            firstResult params.int( 'offset' ) ?: 0
-//            if( params.sort && params.order ) order params.sort, params.order
         }
-        def ress = result
     }
 }

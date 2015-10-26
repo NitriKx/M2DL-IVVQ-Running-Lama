@@ -132,7 +132,8 @@
                     </div>
                 </div>
             </div>
-            <input type="submit" value="Ajouter le trajet" class="btn btn-primary btn-lg pull-right">
+            %{--<input id="submitAjout" type="submit" value="Ajouter le trajet" class="btn btn-primary btn-lg pull-right">--}%
+            <button class="btn btn-primary btn-lg pull-right" id="submitAjout">Ajouter le trajet</button>
         </g:form>
     </div>
 </div>
@@ -161,7 +162,6 @@
             draggable: true
         };
         var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-        ;
         var directionsService = new google.maps.DirectionsService();
         var map;
 
@@ -272,7 +272,7 @@
             });
         });
 
-        $('#rechercheForm').submit(function(e){
+        $('#submitAjout').click(function(e){
             e.preventDefault();
             var start = document.getElementById('start').value;
             var end = document.getElementById('end').value;
@@ -301,13 +301,17 @@
                     arrive_lon = response.routes[0].legs[0].end_location.lng();
 
                     $('#distance').val(Math.round(distance));
-                    $('#depart_lat').attr('value', depart_lat);
-                    $('#depart_lon').attr('value', depart_lon);
-                    $('#arrive_lat').attr('value', arrive_lat);
-                    $('#arrive_lon').attr('value', arrive_lon);
+                    $('#departLat').attr('value', depart_lat);
+                    $('#departLng').attr('value', depart_lon);
+                    $('#arriveeLat').attr('value', arrive_lat);
+                    $('#arriveeLng').attr('value', arrive_lon);
                     $('#methode').attr('value', 'google');
 
                     $('#ajoutTrajetForm').submit();
+                }
+                else
+                {
+                    alert("Départ et/ou arrivée invalide(s)");
                 }
             });
         });

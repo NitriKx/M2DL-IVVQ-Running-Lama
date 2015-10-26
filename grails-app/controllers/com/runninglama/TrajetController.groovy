@@ -24,6 +24,7 @@ class TrajetController {
     }
 
     def ajouterTrajetPost(Trajet trajet) {
+        println('aTP : ' + trajet)
         println(params.trajet.vehicule)
         trajet.setVehicule(Vehicule.findById(params.trajet.vehicule))
         trajet.setConducteur(session.getAttribute('utilisateur'))
@@ -32,14 +33,8 @@ class TrajetController {
     }
 
     def rechercherTrajet() {
-//        params.max = Math.min(max ?: 10, 100)
-//        def  res = params
-//        def temp = res
-//        println(params.toString())
-//        def result2 = Trajet.findAll()
-//        def pt = 'mrd'
         def result = trajetService.rechercherTrajet(params)
-        respond result
+        render view:'rechercherTrajet', model: [trajetInstanceList:result]
     }
 
     def index(Integer max) {
