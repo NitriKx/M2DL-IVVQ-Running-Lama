@@ -70,7 +70,7 @@
                     <td>${fieldValue(bean: trajetInstance, field: "conducteur")}</td>
 
                     <td>
-                        <g:link class="btn btn-default" action="voirTrajet" params="[id: trajetInstance.id]" id="${trajetInstance.id}">Choisir</g:link>
+                        <g:link class="btn btn-info" action="voirTrajet" id="${trajetInstance.id}">Voir</g:link>
                     </td>
                 </tr>
             </g:each>

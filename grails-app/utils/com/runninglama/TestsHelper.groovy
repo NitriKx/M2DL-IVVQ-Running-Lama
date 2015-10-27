@@ -39,5 +39,17 @@ class TestsHelper {
                     arrivee: "Pakistan", arriveeLat: "30.375321", arriveeLng: "69.345115")
     }
 
+    static creeTrajetValide2(Utilisateur conducteur, Vehicule vehiculeUtilise) {
+        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", prix: 50, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
+                    depart: "okinawa", departLat: "26.212401", departLng: "127.680932",
+                    arrivee: "osaka", arriveeLat: "34.693738", arriveeLng: "135.502165")
+    }
+
+    static creeTrajetValide3(Utilisateur conducteur, Vehicule vehiculeUtilise) {
+        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", prix: 100, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
+                    depart: "Okinawa, Préfecture d'Okinawa, Japon", departLat: "26.212401", departLng: "127.680932",
+                    arrivee: "Osaka, Préfecture d'Osaka, Japon", arriveeLat: "135.502165")
+    }
+
 
 }
