@@ -20,7 +20,7 @@ class TrajetController {
     }
 
     def voirTrajet(Long id) {
-        Trajet trajet = Trajet.findById(id);
+        Trajet trajet = trajetService.trouverTrajet(id);
         Utilisateur utilisateur = session.getAttribute('utilisateur')
         if(trajet != null) {
             render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur]
@@ -40,7 +40,7 @@ class TrajetController {
     }
 
     def supprimer(Long id) {
-        Trajet trajet = Trajet.findById(id)
+        Trajet trajet = trajetService.trouverTrajet(id)
         if(trajet != null) {
             trajetService.supprimer(trajet)
             flash.message = "Le trajet a été supprimé"
@@ -63,7 +63,7 @@ class TrajetController {
     }
 
     def ajouterParticipant(Long idTrajet) {
-        Trajet trajet = Trajet.findById(idTrajet)
+        Trajet trajet = trajetService.trouverTrajet(idTrajet)
         Utilisateur utilisateur = session.utilisateur
         trajet.participants.add(utilisateur)
         trajetService.creerOuModifier(trajet)

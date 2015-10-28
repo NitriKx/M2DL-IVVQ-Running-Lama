@@ -1,20 +1,20 @@
 package com.runninglama
 
-import grails.test.spock.Integration
 import spock.lang.*
 
 /**
  *
  */
-@Integration
 class TrajetControllerIntegration extends Specification {
 
     def trajetController
 
     def setup() {
+
     }
 
     def cleanup() {
+
     }
 
     void "test l'ajout d'un participant a un trajet"() {

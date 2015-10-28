@@ -19,4 +19,8 @@ class TrajetService {
     def rechercherTrajet(params) {
         trajetDAOService.search(params)
     }
+
+    def trouverTrajet(Long id) {
+        trajetDAOService.trouver(id)
+    }
 }
