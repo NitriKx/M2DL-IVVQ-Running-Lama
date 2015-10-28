@@ -1,5 +1,6 @@
 package com.runninglama
 
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -12,21 +13,22 @@ class TrajetController {
 
     def liste() {
         def lesTrajets = Trajet.list();
+        print lesTrajets
         render view:'liste', model: [lesTrajets:lesTrajets]
     }
 
-    def create() {
-        respond new Trajet(params)
+    def ajouterTrajet() {
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
+        println(Trajet.list())
+        render view:'ajouter', model: [listeVehicules:utilisateur.getVehicules()]
     }
 
-    def voirTrajet(Long id) {
-        Trajet trajet = Trajet.findById(id);
-        Utilisateur utilisateur = session.getAttribute('utilisateur')
-        if(trajet != null) {
-            render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur]
-        } else {
-            render view: 'ajouter', model: [listeVehicules: utilisateur.getVehicules()]
-        }
+    def ajouterTrajetPost(Trajet trajet) {
+        println(params.trajet.vehicule)
+        trajet.setVehicule(Vehicule.findById(params.trajet.vehicule))
+        trajet.setConducteur(session.getAttribute('utilisateur'))
+        trajetService.ajouterTrajet(trajet)
+        redirect(view: 'index' ,controller: 'accueil')
     }
 
     def rechercherTrajet() {
@@ -48,18 +50,6 @@ class TrajetController {
             flash.message = "Impossible de supprimer le message"
         }
         liste()
-    }
-
-    def ajouterTrajet() {
-        Utilisateur utilisateur = session.getAttribute('utilisateur')
-        render view:'ajouter', model: [listeVehicules:utilisateur.getVehicules()]
-    }
-
-    def ajouterTrajetPost(Trajet trajet) {
-        trajet.setVehicule(Vehicule.findById(trajet.vehicule.id))
-        trajet.setConducteur(session.getAttribute('utilisateur'))
-        trajetService.ajouterTrajet(trajet)
-        redirect(view: 'index' ,controller: 'accueil')
     }
 
     protected void notFound() {

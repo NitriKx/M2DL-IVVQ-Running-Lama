@@ -43,6 +43,8 @@
 
                 <th><g:message code="trajet.conducteur.label" default="Conducteur" /></th>
 
+                <th></th>
+
             </tr>
             </thead>
             <tbody>
@@ -67,6 +69,9 @@
 
                     <td>${fieldValue(bean: trajetInstance, field: "conducteur")}</td>
 
+                    <td>
+                        <g:link class="btn btn-info" action="voirTrajet" id="${trajetInstance.id}">Voir</g:link>
+                    </td>
                 </tr>
             </g:each>
             </tbody>

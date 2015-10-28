@@ -63,9 +63,7 @@
 							<td>${fieldValue(bean: vehiculeInstance, field: "type")}</td>
 
 							<td>
-
 								<g:link class="btn btn-default" action="edit" id="${vehiculeInstance.id}">Modifier</g:link>
-
 							</td>
 
 							<td>
