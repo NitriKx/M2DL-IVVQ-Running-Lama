@@ -125,7 +125,7 @@ class TrajetControllerSpec extends Specification {
         controller.ajouterTrajetPost(trajet)
 
         then:"the trajet is created"
-        1 * controller.trajetService.creerOuModifier(_)
+        1 * controller.trajetService.ajouterOuModifierTrajet(_)
         response.redirectedUrl == '/accueil'
 
     }
@@ -145,6 +145,6 @@ class TrajetControllerSpec extends Specification {
 //
 //        then:"le controlleur appel le service"
 //        1 * controller.trajetService.trouverTrajet(_)
-//        1 * controller.trajetService.creerOuModifier(_)
+//        1 * controller.trajetService.ajouterOuModifierTrajet(_)
 //    }
 }

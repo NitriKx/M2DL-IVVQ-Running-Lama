@@ -26,7 +26,7 @@
         <div class="row">
             <g:if test="${trajet.conducteur.id == session?.utilisateur?.id}">
                 <g:link controller="trajet" action="supprimer" params="[id: trajet.id]" class="btn btn-danger">Supprimer</g:link>
-                <g:link controller="trajet" action="modifier" params="[id: trajet.id]" class="btn btn-primary">Modifier</g:link>
+                <g:link controller="trajet" action="editer" params="[id: trajet.id]" class="btn btn-primary">Modifier</g:link>
             </g:if>
 
             <g:if test="${!session?.utilisateur?.participe(trajet)}">
