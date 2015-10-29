@@ -15,20 +15,11 @@ class TrajetControllerSpec extends Specification {
     }
 
 
-<<<<<<< HEAD
     void "teste l'affichage du formulaire d'ajout de trajet"() {
         given: "Un véhicule qui appartient a un utilisateur"
         Vehicule vehicule = Mock(Vehicule)
         vehicule.possesseur >> request.session['utilisateur']
-        when: "une demande d'accès au formulaire d'ajout"
-=======
-    void "Test l'affichage du formulaire d'ajout de trajet"() {
         when: "une demande d'accès au formulaire d'ajout par un utilisateur connecté"
-
-        def utilisateur = TestsHelper.creeUtilisateurValide()
-        request.session['utilisateur'] = utilisateur
->>>>>>> dev-35-AjoutNoteCommentaie
-
         controller.ajouterTrajet()
         then: "l'utilisateur est redirigé sur la page"
         view == '/trajet/ajouter'
@@ -47,17 +38,8 @@ class TrajetControllerSpec extends Specification {
 
         when: "on appelle l'action rechercherTrajet"
         controller.rechercherTrajet()
-<<<<<<< HEAD
 
         then: "le modèle retourné est correct"
-        1 * controller.trajetService.rechercherTrajet(_) >> { it -> [] }
-        !model.vehiculeInstanceList
-        view == '/trajet/rechercherTrajet'
-=======
-
-
-        then: "le modèle retourné est correct"
->>>>>>> dev-35-AjoutNoteCommentaie
         response.status == 200
         view == '/trajet/rechercherTrajet'
 
