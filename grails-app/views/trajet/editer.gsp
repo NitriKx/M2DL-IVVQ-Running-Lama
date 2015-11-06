@@ -17,6 +17,7 @@
     <div class="row">
         <div class="col-xs-12">
             <g:form name="formAjoutTrajet" url="[controller:'trajet',action:'updateTrajet']">
+                <g:hiddenField name="id" value="${trajet?.id}" />
                 <g:hiddenField name="version" value="${trajet?.version}" />
 
                 <div class="row">
