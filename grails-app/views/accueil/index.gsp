@@ -131,7 +131,6 @@
 
 </div>
 <!-- /.container -->
-<script src="js/jquery.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 
 <script type="text/javascript">

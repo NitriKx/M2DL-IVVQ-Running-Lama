@@ -19,7 +19,7 @@
         <!-- Map Column -->
         <div class="col-md-8">
             <!-- Embedded Google Map -->
-            <iframe width="100%" height="400px" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?hl=en&amp;ie=UTF8&amp;ll=37.0625,-95.677068&amp;spn=56.506174,79.013672&amp;t=m&amp;z=4&amp;output=embed"></iframe>
+            <div id="map" style="width: auto; height: 400px;"></div>
         </div>
         <!-- Contact Details Column -->
         <div class="col-md-4">
@@ -45,9 +45,43 @@
         </div>
     </div>
     <!-- /.row -->
-
 </div>
 <!-- /.container -->
-<script src="js/jquery.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&language=fr"></script>
+<script>
+    function initialiser() {
+        var latlng = new google.maps.LatLng(${trajet.departLat}, ${trajet.departLng});
+
+        var options = {
+            center: latlng,
+            zoom: 19,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var carte = new google.maps.Map(document.getElementById("map"), options);
+
+        var direction = new google.maps.DirectionsRenderer({
+            map   : carte
+        });
+
+        var request = {
+            origin      : new google.maps.LatLng(${trajet.departLat}, ${trajet.departLng}),
+            destination : new google.maps.LatLng(${trajet.arriveeLat}, ${trajet.arriveeLng}),
+            travelMode  : google.maps.DirectionsTravelMode.DRIVING // Type de transport
+        };
+
+        var directionsService = new google.maps.DirectionsService(); // Service de calcul d'itinéraire
+        directionsService.route(request, function(response, status){ // Envoie de la requête pour calculer le parcours
+            if(status == google.maps.DirectionsStatus.OK){
+                direction.setDirections(response); // Trace l'itinéraire sur la carte et les différentes étapes du parcours
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        initialiser();
+        console.log("OK");
+    })
+</script>
 </body>
 </html>

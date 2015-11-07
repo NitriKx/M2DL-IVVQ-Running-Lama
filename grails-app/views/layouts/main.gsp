@@ -13,10 +13,10 @@
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
     <!-- Custom CSS -->
-    <link href="css/modern-business.css" rel="stylesheet">
+    <link href="<g:resource dir="css" file="modern-business.css" />" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="<g:resource dir="font-awesome/css/" file="font-awesome.min.css" />" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,6 +24,9 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<g:resource dir="js" file="jquery.js" />"></script>
+    <script src="<g:resource dir="js" file="bootstrap.min.js" />"></script>
 
 </head>
 
@@ -60,23 +63,17 @@
                 <a href="contact.html">Rechercher un trajet</a>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Espace membre <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><g:if test="${session.utilisateur}">${session.utilisateur.prenom} ${session.utilisateur.nom}</g:if><g:else>Espace membre</g:else> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li>
-                        <g:link controller="utilisateur" action="connexion">Connexion</g:link>
-                    </li>
-                    <li>
-                        <g:link controller="utilisateur" action="inscription">Inscription</g:link>
-                    </li>
-                    <li>
-                        <g:link controller="utilisateur" action="modifierProfil">Mon profil</g:link>
-                    </li>
-                    <li>
-                        <g:link controller="vehicule" action="index">Gérer mes véhicules</g:link>
-                    </li>
-                    <li>
-                        <g:link controller="utilisateur" action="deconnexion">Déconnexion</g:link>
-                    </li>
+                    <g:if test="${!session.utilisateur}">
+                        <li><g:link controller="utilisateur" action="connexion"><i class="fa fa-sign-in"></i> Connexion</g:link></li>
+                        <li><g:link controller="utilisateur" action="inscription"><i class="fa fa-hand-o-right"></i> Inscription</g:link></li>
+                    </g:if>
+                    <g:if test="${session.utilisateur}">
+                        <li><g:link controller="utilisateur" action="modifierProfil"><i class="fa fa-user"></i> Mon profil</g:link></li>
+                        <li><g:link controller="vehicule" action="index"><i class="fa fa-car"></i> Gérer mes véhicules</g:link></li>
+                        <li><g:link controller="utilisateur" action="deconnexion"><i class="fa fa-sign-out"></i> Déconnexion</g:link></li>
+                    </g:if>
                 </ul>
             </li>
         </ul>
@@ -95,7 +92,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Oups ! Cette partie du site est réservée aux utilisateurs connectées</h4>
+                <h4 class="modal-title" id="myModalLabel">Oups ! Cette partie du site est réservée aux utilisateurs connectés</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -117,13 +114,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
 </div>
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
 </body>
 
 </html>
