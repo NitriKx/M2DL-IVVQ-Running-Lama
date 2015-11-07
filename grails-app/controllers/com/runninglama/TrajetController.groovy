@@ -13,7 +13,6 @@ class TrajetController {
 
     def liste() {
         def lesTrajets = Trajet.list();
-        print "############ TRAJTS : "+lesTrajets
         render view:'liste', model: [lesTrajets:lesTrajets]
     }
 
@@ -46,9 +45,9 @@ class TrajetController {
         Trajet trajet = trajetService.trouverTrajet(id)
         if(trajet != null) {
             trajetService.supprimer(trajet)
-            flash.message = "Le trajet a été supprimé"
+            flash.success = "Le trajet a été supprimé"
         } else {
-            flash.message = "Impossible de supprimer le message"
+            flash.danger = "Impossible de supprimer le message"
         }
         liste()
     }
@@ -63,6 +62,7 @@ class TrajetController {
         trajet.setVehicule(Vehicule.findById(trajet.vehicule.id))
         trajet.setConducteur(session.getAttribute('utilisateur'))
         trajetService.creerOuModifier(trajet)
+        flash.success = "Le trajet a bien été crée."
         redirect(view: 'index' ,controller: 'accueil')
     }
 
@@ -71,6 +71,7 @@ class TrajetController {
         Utilisateur utilisateur = session.utilisateur
         trajet.addToParticipants(utilisateur)
         trajetService.creerOuModifier(trajet)
+        flash.success = "Vous êtes bien inscrit au trajet"
         voirTrajet(idTrajet)
     }
 }

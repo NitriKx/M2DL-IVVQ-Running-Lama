@@ -83,6 +83,70 @@
     <!-- /.container -->
 </nav>
 
+<g:if test="${isAccueil}">
+    <!-- Header Carousel -->
+    <header id="myCarousel" class="carousel slide">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <div class="fill" style="background-position: 0% 75%; background-image:url('https://pixabay.com/get/63ee2325a1b5f537043c/1446929401/california-210913_1920.jpg?direct');"></div>
+                <div class="carousel-caption">
+                    <h2>Running Lama - Réseau social de covoiturage</h2>
+                </div>
+            </div>
+            <div class="item">
+                <div class="fill" style="background-position: 0% 65%; background-image:url('https://pixabay.com/get/b5f68c705041b7be016b/1446929801/hippy-van-926290_1280.jpg?direct');"></div>
+                <div class="carousel-caption">
+                    <h2>Running Lama - Réseau social de covoiturage</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="icon-prev"></span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="icon-next"></span>
+        </a>
+    </header>
+</g:if>
+<g:if test="${flash?.size() > 0}">
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <g:if test="${flash.success}">
+                    <div class="alert alert-success">
+                        ${flash.success}
+                    </div>
+                </g:if>
+                <g:if test="${flash.warning}">
+                    <div class="alert alert-warning">
+                        ${flash.warning}
+                    </div>
+                </g:if>
+                <g:if test="${flash.danger}">
+                    <div class="alert alert-danger">
+                        ${flash.danger}
+                    </div>
+                </g:if>
+                <g:if test="${flash.info}">
+                    <div class="alert alert-info">
+                        ${flash.info}
+                    </div>
+                </g:if>
+            </div>
+        </div>
+    </div>
+</g:if>
 
 <g:layoutBody />
 

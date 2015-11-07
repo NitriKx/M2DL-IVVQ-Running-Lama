@@ -28,10 +28,12 @@ class UtilisateurController {
     def connexionPost(params) {
         Utilisateur utilisateur = new Utilisateur(params)
         Utilisateur membre = utilisateurService.verifierIdentifiants(utilisateur);
+
         if(!membre) {
             render(view: 'connexion', model: [message:"Identifiants Incorrects"])
         } else {
             this.getSession().setAttribute('utilisateur',membre)
+            flash.success = "Vous êtes bien connecté !"
             redirect(controller: 'accueil', action: 'index')
         }
     }
@@ -49,6 +51,8 @@ class UtilisateurController {
 
     def deconnexion() {
         this.getSession().invalidate()
+        Map<String, String> notification = new HashMap<>()
+        flash.success = "Vous êtes bien déconnecté. A bientôt sur Running Lama !"
         redirect(controller: 'accueil', action: 'index')
     }
 
