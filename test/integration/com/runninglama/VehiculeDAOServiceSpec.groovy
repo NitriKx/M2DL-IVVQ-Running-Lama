@@ -1,7 +1,5 @@
 package com.runninglama
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 /**
@@ -26,11 +24,12 @@ class VehiculeDAOServiceSpec extends Specification {
         vehicule = vehicule.save(flush: true)
 
         when: "on demande la suppression de ce véhicule"
+        vehicule != null
         vehiculeDAOService.delete(vehicule)
 
         then: "le véhicule n'existe plus dans la base de données"
         Vehicule.findAllById(vehicule.id).isEmpty()
-        Vehicule.count() == 0
+        Vehicule.countById(vehicule.id) == 0
     }
 
 

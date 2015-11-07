@@ -1,7 +1,5 @@
 package com.runninglama
 
-import grails.test.mixin.TestFor
-import grails.test.spock.IntegrationSpec
 import spock.lang.*
 
 /**
