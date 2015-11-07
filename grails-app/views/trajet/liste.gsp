@@ -16,6 +16,11 @@
     </div>
     <!-- /.row -->
 
+    <g:if test="${lesTrajets.size() == 0}">
+        <div class="row">
+            <div class="alert alert-warning">Malheureusement, aucun trajet ne correspond à vos critères =(      <g:link controller="accueil" action="index" class="">Retour à l'accueil</g:link></div>
+        </div>
+    </g:if>
     <!-- Blog Post Row -->
     <g:each var="trajet" in="${lesTrajets}">
         <div class="row">

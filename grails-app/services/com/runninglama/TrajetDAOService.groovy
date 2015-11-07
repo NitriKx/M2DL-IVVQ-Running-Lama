@@ -19,8 +19,8 @@ class TrajetDAOService {
             and {
                 ilike('depart', '%' + params.depart_google + '%')
                 ilike('arrivee', '%' + params.arrivee_google + '%')
-                le('prix', Float.parseFloat(params.prixMax))
-                eq('dateAller', params.dateAller)
+                if(params.prix) le('prix', Float.parseFloat(params.prixMax))
+                if(params.dateAller) eq('dateAller', params.dateAller)
 
 //                      eq('dateRetour', new Date(params.dateRetour))
             }

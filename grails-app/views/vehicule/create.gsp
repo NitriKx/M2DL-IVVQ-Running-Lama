@@ -1,26 +1,36 @@
+<%@ page import="com.runninglama.Vehicule" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'vehicule.label', default: 'Vehicule')}" />
-		<title><g:message code="default.create.label" args="[entityName]" /></title>
-	</head>
-	<body>
+<head>
+    <meta name="layout" content="main"/>
+</head>
+<body>
 
-        <g:hasErrors bean="${vehiculeInstance}">
-        <div class="alert alert-danger" role="alert">
-            <ul>
-                <g:eachError bean="${vehiculeInstance}" var="error">
-                    <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-                </g:eachError>
-            </ul>
+<!-- Page Content -->
+<div class="container" style="margin-top: 25px;">
+
+    <div class="row">
+        <h2>Gestionnaire de véhicules <small>Ajouter</small></h2>
+        <div class="col-md-6 col-md-offset-3">
+            <g:hasErrors bean="${vehiculeInstance}">
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        <g:eachError bean="${vehiculeInstance}" var="error">
+                            <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+                        </g:eachError>
+                    </ul>
+                </div>
+            </g:hasErrors>
+
+            <g:form url="[resource:vehiculeInstance, action:'save']" >
+                <g:render template="form"/>
+                <br>
+                <g:submitButton name="create" class="save btn btn-success pull-right" value="Ajouter le véhicule" />
+            </g:form>
         </div>
-        </g:hasErrors>
+    </div>
 
-        <g:form url="[resource:vehiculeInstance, action:'save']" >
-            <g:render template="form"/>
-            <g:submitButton name="create" class="save btn btn-default" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-		</g:form>
-
-	</body>
+</div>
+<!-- /.container -->
+</body>
 </html>

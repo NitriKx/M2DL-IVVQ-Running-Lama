@@ -23,6 +23,21 @@
         </div>
         <!-- Contact Details Column -->
         <div class="col-md-4">
+        <div class="row">
+            <g:if test="${trajet.conducteur.id == session?.utilisateur?.id}">
+                <g:link controller="trajet" action="supprimer" params="[id: trajet.id]" class="btn btn-danger">Supprimer</g:link>
+                <g:link controller="trajet" action="modifier" params="[id: trajet.id]" class="btn btn-primary">Modifier</g:link>
+            </g:if>
+
+            <g:if test="${!session?.utilisateur?.participe(trajet)}">
+                <g:if test="${session.utilisateur}">
+                    <g:link controller="trajet" action="ajouterParticipant" params="[idTrajet: trajet.id]" class="btn btn-success">Participer</g:link>
+                </g:if>
+                <g:else>
+                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalConnexion">Participer</a>
+                </g:else>
+            </g:if>
+        </div>
             <h3>Détails</h3>
         <ul>
             <li>Date aller : ${trajet.dateAller}</li>

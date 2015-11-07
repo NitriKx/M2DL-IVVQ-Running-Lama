@@ -17,21 +17,15 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         <div class="item active">
-            <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide One');"></div>
+            <div class="fill" style="background-position: 0% 75%; background-image:url('https://pixabay.com/get/63ee2325a1b5f537043c/1446929401/california-210913_1920.jpg?direct');"></div>
             <div class="carousel-caption">
-                <h2>Caption 1</h2>
+                <h2>Running Lama - Réseau social de covoiturage</h2>
             </div>
         </div>
         <div class="item">
-            <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide Two');"></div>
+            <div class="fill" style="background-position: 0% 65%; background-image:url('https://pixabay.com/get/b5f68c705041b7be016b/1446929801/hippy-van-926290_1280.jpg?direct');"></div>
             <div class="carousel-caption">
-                <h2>Caption 2</h2>
-            </div>
-        </div>
-        <div class="item">
-            <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Slide Three');"></div>
-            <div class="carousel-caption">
-                <h2>Caption 3</h2>
+                <h2>Running Lama - Réseau social de covoiturage</h2>
             </div>
         </div>
     </div>
@@ -55,7 +49,13 @@
                 Bienvenue sur Running Lama
             </h1>
             <p>Running Lama est un site communautaire permettant de fédérer une communauté de covoiturage. Cette application permet à ses utilisateurs de s'inscrire / se connecter afin de gérer une flotte de véhicules. Chaque utilisateur a ensuite la possibilité de créer des trajets ou de s'inscrire a des trajets proposés par des membres de la communauté. A l'issu du trajet, un participant note le conducteur. </p>
-            <center><g:link controller="utilisateur" action="inscription" class="btn btn-success">Commencer maintenant</g:link></center>
+            <center>
+                <g:if test="${session.utilisateur}">
+                    <g:link controller="trajet" action="liste" class="btn btn-success">Commencer maintenant</g:link></center>
+                </g:if>
+                <g:else>
+                    <g:link controller="utilisateur" action="inscription" class="btn btn-success">Commencer maintenant</g:link></center>
+                </g:else>
         </div>
     </div>
     <!-- /.row -->

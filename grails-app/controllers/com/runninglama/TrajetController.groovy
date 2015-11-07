@@ -34,7 +34,7 @@ class TrajetController {
 
     def rechercherTrajet() {
         def result = trajetService.rechercherTrajet(params)
-        render view: 'rechercherTrajet', model: [trajetInstanceList: result]
+        render view: 'liste', model: [lesTrajets: result, params:params]
     }
 
     def index(Integer max) {

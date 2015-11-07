@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>An Example Page</title>
+    <title>Inscription</title>
     <meta name="layout" content="main" />
 </head>
 <div class="container" style="margin-top: 45px;">
