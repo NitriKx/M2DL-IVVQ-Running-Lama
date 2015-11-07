@@ -4,64 +4,121 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
-    <title>Running Lama</title>
+    <title>Running Lama - Réseau social de covoiturage</title>
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
+    <!-- Custom CSS -->
+    <link href="<g:resource dir="css" file="modern-business.css" />" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="<g:resource dir="css" file="justified-nav.css" />" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="<g:resource dir="font-awesome/css/" file="font-awesome.min.css" />" rel="stylesheet" type="text/css">
 
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<g:resource dir="js" file="jquery.js" />"></script>
+    <script src="<g:resource dir="js" file="bootstrap.min.js" />"></script>
 
 </head>
 
 <body>
 
-<div class="container">
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <g:link class="navbar-brand" controller="accueil" action="index">Running Lama</g:link>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <g:link controller="accueil" action="index">Accueil</g:link>
+            </li>
+            <li>
+                <g:if test="${session.utilisateur}"><g:link controller="trajet" action="ajouterTrajet">Ajouter trajet</g:link></g:if>
+                <g:else><a href="#" data-toggle="modal" data-target="#modalConnexion">Ajouter trajet</a></g:else>
+            </li>
+            <li>
+                <g:link controller="trajet" action="liste">Liste des trajets</g:link>
 
-    <!-- The justified navigation menu is meant for single line per list item.
-           Multiple lines will require custom code not provided by Bootstrap. -->
-    <div class="masthead">
-        <h3 class="text-muted">Running Lama</h3>
-        <nav style="margin-bottom: 20px;">
-            <ul class="nav nav-justified">
-                <li><g:link controller="accueil" action="index">Accueil</g:link></li>
-                <li><g:link controller="trajet" action="liste">Voir les trajets</g:link></li>
-                <li><g:link controller="trajet" action="ajouterTrajet">Ajouter un trajet</g:link></li>
-                <li><g:link controller="utilisateur" action="index">Espace membre</g:link></li>
-                <g:if test="${session.utilisateur}">
-                    <li><g:link controller="utilisateur" action="deconnexion">Se déconnecter</g:link></li>
-                </g:if>
-
-
-            </ul>
-        </nav>
+            </li>
+            <li>
+                <a href="contact.html">Rechercher un trajet</a>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><g:if test="${session.utilisateur}">${session.utilisateur.prenom} ${session.utilisateur.nom}</g:if><g:else>Espace membre</g:else> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <g:if test="${!session.utilisateur}">
+                        <li><g:link controller="utilisateur" action="connexion"><i class="fa fa-sign-in"></i> Connexion</g:link></li>
+                        <li><g:link controller="utilisateur" action="inscription"><i class="fa fa-hand-o-right"></i> Inscription</g:link></li>
+                    </g:if>
+                    <g:if test="${session.utilisateur}">
+                        <li><g:link controller="utilisateur" action="modifierProfil"><i class="fa fa-user"></i> Mon profil</g:link></li>
+                        <li><g:link controller="vehicule" action="index"><i class="fa fa-car"></i> Gérer mes véhicules</g:link></li>
+                        <li><g:link controller="utilisateur" action="deconnexion"><i class="fa fa-sign-out"></i> Déconnexion</g:link></li>
+                    </g:if>
+                </ul>
+            </li>
+        </ul>
+        </div>
+        <!-- /.navbar-collapse -->
     </div>
+    <!-- /.container -->
+</nav>
 
-    <g:layoutBody/>
 
-    <!-- Site footer -->
-    <footer class="footer">
-        <p>&copy; Running Lama 2015</p>
-    </footer>
+<g:layoutBody />
 
-</div> <!-- /container -->
+<!-- Modal -->
+<div class="modal fade" id="modalConnexion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Oups ! Cette partie du site est réservée aux utilisateurs connectés</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Pour acceder à certaines fonctionnalités (ajout de trajet, inscription à un trajet, ...), vous devez être connecté.
+                            Si vous n'avez pas de compte sur Running-Lama, vous pouvez en créer un en cliquant <g:link controller="utilisateur" action="inscription">ici</g:link>.<br> </p>
+                    </div>
+                    <div class="col-md-6 col-md-offset-3">
+
+                        <g:form class="form-signin" url="[controller:'utilisateur',action:'connexionPost']">
+                            <input name="pseudo" type="text" class="form-control" value="${fieldValue(bean:utilisateur,field:'pseudo')}" placeholder="Pseudo" required autofocus>
+                            <br>
+                            <input name="motDePasse" type="password" class="form-control" value="${fieldValue(bean:utilisateur,field:'motDePasse')}" placeholder="Mot de Passe" required>
+                            <br>
+                            <button class="btn btn-lg btn-success btn-block" type="submit">
+                                Se Connecter</button>
+                        </g:form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+
 </html>
-
-

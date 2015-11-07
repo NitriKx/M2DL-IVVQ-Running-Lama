@@ -40,7 +40,7 @@ class TrajetControllerSpec extends Specification {
 
         then: "le modèle retourné est correct"
         response.status == 200
-        view == '/trajet/rechercherTrajet'
+        view == '/trajet/liste'
 
     }
 
@@ -109,7 +109,7 @@ class TrajetControllerSpec extends Specification {
     void "teste la suppression d'un trajet inexistant"() {
         when: "une demande de suppression sur un trajet qui n'existe pas"
         controller.supprimer(65)
-        then: "Le service est n'est pas appelé"
+        then: "Le service n'est pas appelé"
         0*controller.trajetService.supprimer(_)
     }
 
