@@ -70,6 +70,9 @@ grails.project.dependency.resolution = {
         // Coveralls
         compile ":coveralls:0.1"
 
+
+        compile ":gmetrics:0.3.1"
+
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.16" // or ":hibernate4:4.3.5.4"
         runtime ":database-migration:1.4.0"
