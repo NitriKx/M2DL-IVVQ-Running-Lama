@@ -285,10 +285,10 @@ class UtilisateurControllerSpec extends Specification {
         flash.message != null
     }
 
-    void "Test that the delete action deletes an instance if it exists"() {
-        when: "The delete action is called for a null instance"
+    void "Test that the supprimer action deletes an instance if it exists"() {
+        when: "The supprimer action is called for a null instance"
         request.contentType = FORM_CONTENT_TYPE
-        controller.delete(null)
+        controller.supprimer(null)
 
         then: "A 404 is returned"
         response.redirectedUrl == '/utilisateur/index'
@@ -302,8 +302,8 @@ class UtilisateurControllerSpec extends Specification {
         then: "It exists"
         Utilisateur.count() == 1
 
-        when: "The domain instance is passed to the delete action"
-        controller.delete(utilisateur)
+        when: "The domain instance is passed to the supprimer action"
+        controller.supprimer(utilisateur)
 
         then: "The instance is deleted"
         Utilisateur.count() == 0

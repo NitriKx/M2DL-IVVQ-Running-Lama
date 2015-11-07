@@ -1,6 +1,5 @@
 package com.runninglama
 
-import grails.test.GrailsMock
 import grails.test.mixin.*
 import spock.lang.*
 
@@ -71,6 +70,7 @@ class TrajetControllerSpec extends Specification {
         vehicule.save();
         Trajet trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule)
         trajet.save(flush:true)
+        controller.trajetService.trouverTrajet(_) >> trajet
         when: "une demande d'accès au récapitulatif d'un trajet"
         controller.voirTrajet(trajet.id)
         then: "l'utilisateur est redirigé sur la page"
@@ -98,18 +98,19 @@ class TrajetControllerSpec extends Specification {
         vehicule.save();
         Trajet trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule)
         trajet.save(flush:true)
+        controller.trajetService.trouverTrajet(_) >> trajet
 
         when: "une demande de suppression"
         controller.supprimer(trajet.id)
         then: "Le service est appelé"
-        1*controller.trajetService.delete(_)
+        1*controller.trajetService.supprimer(_)
     }
 
     void "teste la suppression d'un trajet inexistant"() {
         when: "une demande de suppression sur un trajet qui n'existe pas"
         controller.supprimer(65)
         then: "Le service est n'est pas appelé"
-        0*controller.trajetService.delete(_)
+        0*controller.trajetService.supprimer(_)
     }
 
     void "teste d'un ajout de trajet avec des champs corrects"() {
@@ -124,16 +125,24 @@ class TrajetControllerSpec extends Specification {
         controller.ajouterTrajetPost(trajet)
 
         then:"the trajet is created"
-        1 * controller.trajetService.ajouterTrajet(_)
+        1 * controller.trajetService.creerOuModifier(_)
         response.redirectedUrl == '/accueil'
 
     }
 
-    void "teste l'affichage d'un trajet qui n'existe pas"() {
-        when: "Un utilisateur essaye d'acceder a un trajet qui n'existe pas"
-        controller.voirTrajet(null)
-        then: "on ramène l'utilisateur sur la page d'ajout"
-        view == '/trajet/ajouter'
-        response.status == 200
-    }
+
+//    void "teste l'inscription a un trajet"() {
+//        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+//        Trajet trajet = TestsHelper.creeTrajetValide(Mock(Utilisateur), Mock(Vehicule))
+//        Utilisateur utilisateur = Mock(Utilisateur)
+//        request.session['utilisateur'] = utilisateur
+//        controller.trajetService.trouverTrajet(_ as Long) >> { it -> trajet }
+//
+//        when: "L'utilisateur veut s'inscrire au trajet"
+//        controller.ajouterParticipant(trajet.id)
+//
+//        then:"le controlleur appel le service"
+//        1 * controller.trajetService.trouverTrajet(_)
+//        1 * controller.trajetService.creerOuModifier(_)
+//    }
 }

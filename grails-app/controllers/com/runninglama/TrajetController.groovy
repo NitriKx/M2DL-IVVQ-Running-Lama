@@ -21,7 +21,7 @@ class TrajetController {
     }
 
     def voirTrajet(Long id) {
-        Trajet trajet = Trajet.findById(id);
+        Trajet trajet = trajetService.trouverTrajet(id);
         Utilisateur utilisateur = session.getAttribute('utilisateur')
         if(trajet != null) {
             render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur]
@@ -30,17 +30,6 @@ class TrajetController {
         }
     }
 
-    def ajouterTrajet() {
-        Utilisateur utilisateur = session.getAttribute('utilisateur')
-        render view:'ajouter', model: [listeVehicules:utilisateur.getVehicules()]
-    }
-
-    def ajouterTrajetPost(Trajet trajet) {
-        trajet.setVehicule(Vehicule.findById(trajet.vehicule.id))
-        trajet.setConducteur(session.getAttribute('utilisateur'))
-        trajetService.ajouterTrajet(trajet)
-        redirect(view: 'index' ,controller: 'accueil')
-    }
 
     def rechercherTrajet() {
         def result = trajetService.rechercherTrajet(params)
@@ -53,9 +42,9 @@ class TrajetController {
     }
 
     def supprimer(Long id) {
-        Trajet trajet = Trajet.findById(id)
+        Trajet trajet = trajetService.trouverTrajet(id)
         if(trajet != null) {
-            trajetService.delete(trajet)
+            trajetService.supprimer(trajet)
             flash.message = "Le trajet a été supprimé"
         } else {
             flash.message = "Impossible de supprimer le message"
@@ -63,13 +52,24 @@ class TrajetController {
         liste()
     }
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'trajet.label', default: 'Trajet'), params.id])
-                redirect controller: "accueil", action: "index", method: "GET"
-            }
-            '*' { render status: NOT_FOUND }
-        }
+
+    def ajouterTrajet() {
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
+        render view:'ajouter', model: [listeVehicules:utilisateur.getVehicules()]
+    }
+
+    def ajouterTrajetPost(Trajet trajet) {
+        trajet.setVehicule(Vehicule.findById(trajet.vehicule.id))
+        trajet.setConducteur(session.getAttribute('utilisateur'))
+        trajetService.creerOuModifier(trajet)
+        redirect(view: 'index' ,controller: 'accueil')
+    }
+
+    def ajouterParticipant(Long idTrajet) {
+        Trajet trajet = trajetService.trouverTrajet(idTrajet)
+        Utilisateur utilisateur = session.utilisateur
+        trajet.participants.add(utilisateur)
+        trajetService.creerOuModifier(trajet)
+        voirTrajet(idTrajet)
     }
 }
