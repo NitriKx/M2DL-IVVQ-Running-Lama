@@ -133,10 +133,12 @@ class TrajetControllerSpec extends Specification {
 
 //    void "teste l'inscription a un trajet"() {
 //        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
-//        Trajet trajet = TestsHelper.creeTrajetValide(Mock(Utilisateur), Mock(Vehicule))
+//        Trajet trajet = Mock(Trajet)
+//
 //        Utilisateur utilisateur = Mock(Utilisateur)
 //        request.session['utilisateur'] = utilisateur
 //        controller.trajetService.trouverTrajet(_ as Long) >> { it -> trajet }
+//        trajet.addToParticipants(_ as Utilisateur) >> true
 //
 //        when: "L'utilisateur veut s'inscrire au trajet"
 //        controller.ajouterParticipant(trajet.id)

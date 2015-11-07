@@ -68,7 +68,7 @@ class TrajetController {
     def ajouterParticipant(Long idTrajet) {
         Trajet trajet = trajetService.trouverTrajet(idTrajet)
         Utilisateur utilisateur = session.utilisateur
-        trajet.participants.add(utilisateur)
+        trajet.addToParticipants(utilisateur)
         trajetService.creerOuModifier(trajet)
         voirTrajet(idTrajet)
     }
