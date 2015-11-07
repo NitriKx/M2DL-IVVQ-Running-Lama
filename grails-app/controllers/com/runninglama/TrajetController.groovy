@@ -13,6 +13,7 @@ class TrajetController {
 
     def liste() {
         def lesTrajets = Trajet.list();
+        print "############ TRAJTS : "+lesTrajets
         render view:'liste', model: [lesTrajets:lesTrajets]
     }
 
@@ -24,7 +25,7 @@ class TrajetController {
         Trajet trajet = trajetService.trouverTrajet(id);
         Utilisateur utilisateur = session.getAttribute('utilisateur')
         if(trajet != null) {
-            render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur]
+            render view: 'voir', model: [trajet: trajet]
         } else {
             render view: 'ajouter', model: [listeVehicules: utilisateur.getVehicules()]
         }
