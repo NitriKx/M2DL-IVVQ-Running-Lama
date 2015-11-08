@@ -14,6 +14,8 @@ class Trajet {
     Date dateRetour
 
     String commentaire
+    Integer note
+
     Float prix
     Integer nombrePlace
 
@@ -22,6 +24,7 @@ class Trajet {
 
 
     static hasMany = [participants:Utilisateur]
+
 
     static constraints = {
         depart nullable: false, blank: false
@@ -39,5 +42,6 @@ class Trajet {
         prix nullable: false, blank: false
         nombrePlace nullable: false, blank: false, min:1
         commentaire nullable: true, blank: true
+        note nullable: true, blank: true
     }
 }

@@ -96,12 +96,7 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <label>Véhicule</label>
-<<<<<<< HEAD
                                 <g:select optionKey="id" name="vehicule" from="${listeVehicules}" value="${trajet?.vehicule?.id}" noSelection="['':'-Choisir un véhicule-']"/>
-=======
-                                <g:select optionKey="id" name="trajet.vehicule" from="${listeVehicules}"
-                                          value="${trajet?.vehicule?.id}" noSelection="['': '-Choisir un véhicule-']"/>
->>>>>>> dev-35-AjoutNoteCommentaie
                             </div>
 
                             <div class="form-group">

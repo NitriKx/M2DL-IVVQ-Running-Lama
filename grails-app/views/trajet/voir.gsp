@@ -57,6 +57,44 @@
                 </ul>
             </li>
         </ul>
+        nA ${notationAutorisee}
+        diff null ${trajet.listeNote != null} size0 ${trajet.listeNote?.size() != 0}
+        lN ${trajet}
+        <br/>
+        notationEffectuée : ${notationEffectuee}
+        <g:if test="${trajet.listeNote != null && trajet.listeNote?.size() != 0}">
+            <li>Note moyenne du conducteur : ${trajet.conducteur.noteMoyenne}</li>
+            ${println(trajet)}
+            <g:each var="i" in="${ (0..<trajet.listeNote.size()) }">
+                <g:each var="id" in="${trajet.participants.id}">
+                    <li>Note du trajet : ${trajet.listeNote.get(i).get(id)}</li>
+                    <li>Commentaire sur le trajet : ${trajet.listeCommentaireNote.get(i).get(id)}</li>
+                    <hr/>
+                </g:each>
+            </g:each>
+
+            </ul>
+        </g:if>
+        <g:else>
+            <g:if test="${notationAutorisee}">
+                <div> Test3</div>
+                <div id="noteTrajet">
+                    <g:form url="[resource:trajet, action:'noter']" method="PUT"  name="myForm" update="noteTrajet">
+                        <div class="form-group">
+                            <label for="commentaireNote">Votre avis sur le trajet :</label><br/><textarea id="commentaireNote" name="commentaireNote" rows="4" cols="50"></textarea>
+                            <g:select id="note"
+                                      name="note"
+                                      from="${5..0}"
+                                      value="${5}"
+                            />
+                            <fieldset class="buttons">
+                                <g:submitButton name="noter" id="${trajet.getId()}" class="btn-success form-control input-lg" action="noter" value="Evaluer le trajet"></g:submitButton>
+                            </fieldset>
+                        </div>
+                    </g:form>
+                </div>
+            </g:if>
+        </g:else>
         </div>
     </div>
     <!-- /.row -->

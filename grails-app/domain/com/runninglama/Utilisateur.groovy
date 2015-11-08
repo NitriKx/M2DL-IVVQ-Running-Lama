@@ -14,6 +14,7 @@ class Utilisateur {
     Date dateNaissance
     String email
     String telephone
+    Float noteMoyenne
 
     //List vehicules
 
@@ -26,7 +27,6 @@ class Utilisateur {
     static  mapping = {
         vehicules lazy: false
     }
-
 
     static transients = ['motDePasse','motDePasseConfirmation']
 
@@ -42,6 +42,7 @@ class Utilisateur {
         passwordSalt nullable: false, blank: false
         motDePasse bindable: true
         motDePasseConfirmation bindable: true
+        noteMoyenne nullable: true, blank: true
     }
 
     boolean participe(Trajet trajet) {

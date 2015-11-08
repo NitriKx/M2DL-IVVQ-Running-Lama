@@ -2,6 +2,8 @@ package com.runninglama
 
 import grails.transaction.Transactional
 
+import javax.servlet.http.HttpSession
+
 @Transactional
 class TrajetService {
 
@@ -23,4 +25,22 @@ class TrajetService {
     def trouverTrajet(Long id) {
         trajetDAOService.trouver(id)
     }
+
+    def noterTrajet(Trajet trajetInstance, params, HttpSession session) {
+//        trajetDAOService.noterTrajet(trajetInstance, params)
+        trajetInstance.setCommentaire(params['commentaire'])
+        trajetInstance.setNote(Integer.parseInt(params['note']))
+        params['note'] = (Integer.parseInt(params['note']) < 0) ? "0" : params['note']
+        params['note'] = (Integer.parseInt(params['note']) > 5) ? "5" : params['note']
+        trajetInstance.getConducteur().noteMoyenne = (trajetInstance.getConducteur().noteMoyenne) ? (trajetInstance.getConducteur().noteMoyenne + Float.parseFloat(params['note']))/Trajet.countByConducteur(trajetInstance.getConducteur()) : Float.parseFloat(params['note'])
+
+//        Utilisateur cur = trajetInstance.getConducteur().merge();
+//        session['utilisateur'] = cur
+//        cur.save(flush: true)
+        trajetDAOService.save(trajetInstance)
+    }
+
+//    def getAutorisationNotation(Trajet trajet, Utilisateur utilisateur) {
+//        trajetDAOService.getAutorisationNotation(trajet, utilisateur)
+//    }
 }

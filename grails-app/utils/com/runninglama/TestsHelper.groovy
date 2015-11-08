@@ -22,9 +22,10 @@ class TestsHelper {
         params["dateNaissance"] = new Date()
         params["email"] = 'julien.c@test.fr'
         params["telephone"] = '0987675434'
+        params["noteMoyenne"] = 3.5
         def utilisateurValide = new Utilisateur(email: 'email@test.fr', nom: "Custoja", prenom: "Julien", pseudo: "TheRunningLama",
                 passwordHash: 'jhdfqsfgqsdufhqsduhfqsuidfqsdf', passwordSalt: 'qsdqfqsdfsdfqgfgtryurdx', dateInscription: new Date(),
-                dateDerniereConnexion: new Date(), dateNaissance: new Date(), telephone: "0987675434", vehicules: [])
+                dateDerniereConnexion: new Date(), dateNaissance: new Date(), telephone: "0987675434", vehicules: [], noteMoyenne: 3.5)
         return utilisateurValide
     }
 
@@ -34,7 +35,7 @@ class TestsHelper {
     }
 
     static creeTrajetValide(Utilisateur conducteur, Vehicule vehiculeUtilise) {
-        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", prix: 29.99, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
+        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", note: 5, prix: 29.99, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
                     depart: "Toulouse", departLat: "43.604652", departLng: "1.444209",
                     arrivee: "Pakistan", arriveeLat: "30.375321", arriveeLng: "69.345115")
     }
@@ -47,8 +48,8 @@ class TestsHelper {
 
     static creeTrajetValide3(Utilisateur conducteur, Vehicule vehiculeUtilise) {
         new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", prix: 100, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
-                    depart: "Okinawa, Préfecture d'Okinawa, Japon", departLat: "26.212401", departLng: "127.680932",
-                    arrivee: "Osaka, Préfecture d'Osaka, Japon", arriveeLat: "135.502165")
+                    depart: "Okinawa, Prï¿½fecture d'Okinawa, Japon", departLat: "26.212401", departLng: "127.680932",
+                    arrivee: "Osaka, Prï¿½fecture d'Osaka, Japon", arriveeLat: "135.502165")
     }
 
 
