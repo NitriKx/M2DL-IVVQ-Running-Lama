@@ -6,8 +6,6 @@ import grails.transaction.Transactional
 class AccueilController {
 
     def index() {
-        def lesDerniersUtilisateurs = Utilisateur.findAll()
-        def lesTrajets = Trajet.list();
-        render view: 'index', model:[lesDerniersUtilisateurs:lesDerniersUtilisateurs, lesTrajets:lesTrajets, isAccueil: true]
+        render view: 'index', model:[lesDerniersUtilisateurs:Utilisateur.findAll(), lesTrajets:Trajet.list(), isAccueil: true]
     }
 }
