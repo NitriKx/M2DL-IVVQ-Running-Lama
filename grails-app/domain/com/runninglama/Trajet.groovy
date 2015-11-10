@@ -14,7 +14,10 @@ class Trajet {
     Date dateRetour
 
     String commentaire
-    Integer note
+
+    ArrayList<LinkedHashMap<Long, Integer>>  listeNote
+    ArrayList<LinkedHashMap<Long, String>>  listeCommentaireNote
+    ArrayList<Long> listeNoteur
 
     Float prix
     Integer nombrePlace

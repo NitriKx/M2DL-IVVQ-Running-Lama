@@ -23,11 +23,18 @@ class TrajetController {
     def voirTrajet(Long id) {
         Trajet trajet = trajetService.trouverTrajet(id);
         Utilisateur utilisateur = session.getAttribute('utilisateur')
-        def idParticipants = trajet.participants.id
-        idParticipants.add(utilisateur.id)
-        def autorisation = idParticipants.contains(utilisateur.id)
+
+        def idParticipants = trajet?.participants?.id
+
+        // Seul un particicpant du trajet peut noter le trajet
+        def autorisation = idParticipants?.contains(utilisateur.id)
+        for (HashMap<Long, Integer> noteParticipant : trajet.listeNote)
+        {
+            autorisation = autorisation && (noteParticipant.get(idParticipants) == null)
+        }
+
         if(trajet != null) {
-            render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur, notationAutorisee: autorisation]
+            render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur, notationAutorisee: autorisation, notationEffectuee: trajet.listeNoteur?.contains(utilisateur.id)]
         } else {
             render view: 'ajouter', model: [listeVehicules: utilisateur.getVehicules()]
         }
@@ -42,16 +49,22 @@ class TrajetController {
     def noter(Trajet trajetInstance) {
         def tel = params
         Utilisateur utilisateur = session.getAttribute("utilisateur")
-            trajetInstance.participants.add(utilisateur)
-        if(trajetInstance.participants.id.contains(utilisateur.id))
+//            trajetInstance.participants.add(utilisateur)
+        def idParticipants = trajetInstance.participants.id
+        def autorisation = idParticipants.contains(utilisateur.id)
+        for (HashMap<Long, Integer> noteParticipant : trajetInstance.listeNote)
         {
-            trajetService.noterTrajet(trajetInstance, params, session)
-            this.session.setAttribute('utilisateur', trajetInstance.conducteur)
-            render(template: 'notation', model: [trajet: trajetInstance])
+            autorisation = autorisation && (noteParticipant.get(idParticipants) == null)
+        }
+        if(autorisation)
+        {
+            trajetService.noterTrajet(trajetInstance, params, session, utilisateur.id)
+//            this.session.setAttribute('utilisateur', trajetInstance.conducteur)
+            render view: "voir", model: [trajet: trajetInstance, notationAutorisee: false, notationEffectuee: trajetInstance.listeNoteur?.contains(utilisateur.id)]
         }
         else
         {
-            redirect(view: "/accueil/index")
+            redirect(view: "../accueil/index")
         }
     }
 
