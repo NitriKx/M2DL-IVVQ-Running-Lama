@@ -106,6 +106,17 @@ class VehiculeControllerSpec extends Specification {
         flash.message == null
     }
 
+    void "teste que l'action save redirige bien vers la page de creation en cas d'instance invalide"() {
+        when: "The save action is executed with an invalid instance"
+        def vehicule = new Vehicule(possesseur: TestsHelper.creeUtilisateurValide(), marque: "Telsa", modele: "Model X", annee: new Date(year: 2015),
+                kilometrage: 10000, type: TypeVehicule.VOITURE);
+
+        controller.save(vehicule)
+
+        then: "A redirect is issued to the index"
+        view == 'create'
+    }
+
 
 
     //

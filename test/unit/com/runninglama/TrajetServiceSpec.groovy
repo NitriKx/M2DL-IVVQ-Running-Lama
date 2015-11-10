@@ -58,4 +58,12 @@ class TrajetServiceSpec extends Specification {
         1 * service.trajetDAOService.search(null) >> { [] }
     }
 
+    void "test la methode trouver trajet"(){
+        when: "on appelle le service pour trouver un trajet"
+        def trajet = service.trouverTrajet(8L)
+
+        then: "la bonne couche de DAO est appelée"
+        1 * service.trajetDAOService.trouver(_)
+    }
+
 }

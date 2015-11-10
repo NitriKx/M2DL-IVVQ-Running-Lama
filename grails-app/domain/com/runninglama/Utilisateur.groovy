@@ -45,7 +45,7 @@ class Utilisateur {
     }
 
     boolean participe(Trajet trajet) {
-        return trajet.participants.size() > 0 || trajet.conducteur.id == this.id
+        return trajet.getParticipants()?.size() > 0 || trajet.conducteur.id == this.id
     }
 
 

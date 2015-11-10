@@ -86,6 +86,7 @@ grails.project.dependency.resolution = {
 coverage {
     xml = true
     sourceInclusions = ['grails-app/domain', 'grails-app/services', 'grails-app/controllers']
+    exclusions = ["ControllersHelper"]
 }
 
 codenarc.reports = {

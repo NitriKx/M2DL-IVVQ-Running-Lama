@@ -27,8 +27,9 @@ class TrajetDAOServiceSpec extends Specification {
         when: "on demande l'ajout d'un trajet"
         def resultatAjout = trajetDAOService.save(trajet)
 
-        then: "le trajet existe dans la base de données"
+        then: "le trajet existe dans la base de données et le conducteur participe au trajet"
         resultatAjout != null
+        utilisateur.participe(trajet) == true
         Trajet.findAllById(resultatAjout.id).size() == 1
     }
 
@@ -76,6 +77,22 @@ class TrajetDAOServiceSpec extends Specification {
         then: "le trajet existe dans la base de données"
         resultatRecherche != null
         resultatRecherche.size() == 2
+    }
+
+    void "test la suppression d'un trajet"() {
+        given: "un trajet valide pas en base de données"
+        def utilisateur = TestsHelper.creeUtilisateurValide();
+        utilisateur = utilisateur.save(flush: true)
+        def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule = vehicule.save(flush: true)
+        def trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule);
+        trajet.save(flush: true)
+
+        when:"On supprime le trajet"
+        trajetDAOService.delete(trajet)
+
+        then:
+        Trajet.countById(trajet.id) == 0
     }
 
 
