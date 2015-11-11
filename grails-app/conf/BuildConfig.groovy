@@ -56,6 +56,15 @@ grails.project.dependency.resolution = {
         build 'org.apache.httpcomponents:httpcore:4.3.2'
         build 'org.apache.httpcomponents:httpclient:4.3.2'
         build 'org.apache.httpcomponents:httpmime:4.3.3'
+
+        // Geb pour les tests fonctionnels
+        test "org.gebish:geb-spock:0.12.2"
+        test "org.seleniumhq.selenium:selenium-support:2.45.0"
+        test "org.seleniumhq.selenium:selenium-firefox-driver:2.45.0"
+
+        test("org.seleniumhq.selenium:selenium-htmlunit-driver:2.45.0")
+        compile 'org.codehaus.groovy:groovy-backports-compat23:2.4.5'
+
     }
 
     plugins {
@@ -72,7 +81,7 @@ grails.project.dependency.resolution = {
 
         compile ":gmetrics:0.3.1"
 
-        compile ":webdriver:0.4.2"
+
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.16" // or ":hibernate4:4.3.5.4"
@@ -80,7 +89,8 @@ grails.project.dependency.resolution = {
         runtime ":jquery:1.11.1"
         runtime ":resources:1.2.8"
 
-        test ":code-coverage:2.0.3-3"
+        test ":geb:0.12.2"
+
     }
 }
 

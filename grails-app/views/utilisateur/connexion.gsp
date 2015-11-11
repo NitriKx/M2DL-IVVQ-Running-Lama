@@ -23,7 +23,7 @@
                 <br>
                 <input name="motDePasse" type="password" class="form-control" value="${fieldValue(bean:utilisateur,field:'motDePasse')}" placeholder="Mot de Passe" required>
                 <br>
-                <button class="btn btn-lg btn-success btn-block" type="submit">
+                <button class="btn btn-lg btn-success btn-block" id="btnConnexion" type="submit">
                     Se Connecter</button>
             </g:form>
         </div>
