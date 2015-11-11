@@ -1,6 +1,8 @@
 package com.runninglama
 
 import grails.test.mixin.*
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
+import org.springframework.mock.web.MockHttpSession
 import spock.lang.*
 
 @TestFor(TrajetController)
@@ -147,4 +149,24 @@ class TrajetControllerSpec extends Specification {
 //        1 * controller.trajetService.trouverTrajet(_)
 //        1 * controller.trajetService.creerOuModifier(_)
 //    }
+
+   void "teste la notation d'un trajet pour un utilisateur non inscrit"() {
+        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+        Utilisateur utilisateur = request.session['utilisateur']
+        utilisateur.save(flush:true)
+        Vehicule vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule.save();
+        Trajet trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule)
+        trajet.addToParticipants(utilisateur)
+        trajet.save(flush:true)
+
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { true }
+
+
+        when: "L'utilisateur veut s'inscrire au trajet"
+        controller.noter(trajet)
+
+        then:"le controlleur appel le service"
+        1 * controller.trajetService.noterTrajet(trajet, [:], session, utilisateur)
+    }
 }

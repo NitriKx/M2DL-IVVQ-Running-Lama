@@ -35,19 +35,19 @@ class TestsHelper {
     }
 
     static creeTrajetValide(Utilisateur conducteur, Vehicule vehiculeUtilise) {
-        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", note: 5, prix: 29.99, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
+        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, prix: 29.99, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
                     depart: "Toulouse", departLat: "43.604652", departLng: "1.444209",
                     arrivee: "Pakistan", arriveeLat: "30.375321", arriveeLng: "69.345115")
     }
 
     static creeTrajetValide2(Utilisateur conducteur, Vehicule vehiculeUtilise) {
-        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", prix: 50, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
+        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, prix: 50, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
                     depart: "okinawa", departLat: "26.212401", departLng: "127.680932",
                     arrivee: "osaka", arriveeLat: "34.693738", arriveeLng: "135.502165")
     }
 
     static creeTrajetValide3(Utilisateur conducteur, Vehicule vehiculeUtilise) {
-        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, commentaire: "", prix: 100, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
+        new Trajet(conducteur: conducteur, vehicule: vehiculeUtilise, prix: 100, nombrePlace: 3, dateAller: new Date(), dateRetour: new Date(),
                     depart: "Okinawa, Pr�fecture d'Okinawa, Japon", departLat: "26.212401", departLng: "127.680932",
                     arrivee: "Osaka, Pr�fecture d'Osaka, Japon", arriveeLat: "135.502165")
     }

@@ -60,16 +60,10 @@ cc${session?.utilisateur?.participe(trajet)}
                 </ul>
             </li>
         </ul>
-        nA ${notationAutorisee}
-        diff null ${trajet.notations != null} size0 ${trajet.notations?.size() != 0}
-        lN ${trajet}
-        <br/>
-        %{--notationEffectuée : ${notationEffectuee}--}%
         <g:if test="${trajet.notations != null && trajet.notations?.size() != 0}">
             <ul>
                 <li>Note moyenne du conducteur : ${trajet.conducteur.noteMoyenne}</li>
             </ul>
-            ${println(trajet)}
             <g:each var="notation" in="${ trajet.notations }">
                     <ul>
                         <li>Note du trajet : ${notation.note}</li>
