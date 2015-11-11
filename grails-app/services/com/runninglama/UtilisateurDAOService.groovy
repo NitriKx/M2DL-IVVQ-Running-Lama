@@ -12,4 +12,8 @@ class UtilisateurDAOService {
     def save(Utilisateur utilisateurInstance) {
         utilisateurInstance.save(flush: true)
     }
+
+    def liste(params) {
+        Utilisateur.list(params)
+    }
 }

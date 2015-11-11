@@ -23,7 +23,7 @@ before_script:
 
 script:
   - ./grailsw refresh-dependencies
-  - ./grailsw test-app -coverage -xml
+  - ./grailsw test-app -coverage -xml --stacktrace
 
 after_script:
   - ./grailsw codenarc

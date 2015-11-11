@@ -52,7 +52,7 @@
                 <g:link controller="accueil" action="index">Accueil</g:link>
             </li>
             <li>
-                <g:if test="${session.utilisateur}"><g:link controller="trajet" action="ajouterTrajet">Ajouter trajet</g:link></g:if>
+                <g:if test="${session.utilisateur}"><g:link controller="trajet" action="ajouter">Ajouter trajet</g:link></g:if>
                 <g:else><a href="#" data-toggle="modal" data-target="#modalConnexion">Ajouter trajet</a></g:else>
             </li>
             <li>

@@ -15,15 +15,16 @@ class TestsHelper {
         params["nom"] = 'Custoja'
         params["prenom"] = 'Julien'
         params["pseudo"] = 'TheRunningLama'
-        params["passwordHash"] = 'jhdfqsfgqsdufhqsduhfqsuidfqsdf'
-        params["passwordSalt"] = 'qsdqfqsdfsdfqgfgtryurdx'
+        params["passwordHash"] = '52a6ee1dd3102273196244b96c6fdc96af54eb46'
+        params["motDePasse"] = 'toto'
+        params["passwordSalt"] = 'skywalker'
         params["dateInscription"] = new Date()
         params["dateDerniereConnexion"] = new Date()
         params["dateNaissance"] = new Date()
         params["email"] = 'julien.c@test.fr'
         params["telephone"] = '0987675434'
         def utilisateurValide = new Utilisateur(email: 'email@test.fr', nom: "Custoja", prenom: "Julien", pseudo: "TheRunningLama",
-                passwordHash: 'jhdfqsfgqsdufhqsduhfqsuidfqsdf', passwordSalt: 'qsdqfqsdfsdfqgfgtryurdx', dateInscription: new Date(),
+                passwordHash: '52a6ee1dd3102273196244b96c6fdc96af54eb46', passwordSalt: 'skywalker', motDePasse: "toto", motDePasseConfirmation: "toto", dateInscription: new Date(),
                 dateDerniereConnexion: new Date(), dateNaissance: new Date(), telephone: "0987675434", vehicules: [])
         return utilisateurValide
     }

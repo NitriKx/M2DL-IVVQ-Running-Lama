@@ -71,4 +71,10 @@ class UtilisateurService {
         }
         utilisateur
     }
+
+
+    def listeUtilisateurs(params) {
+        utilisateurDAOService.liste(params)
+    }
+
 }

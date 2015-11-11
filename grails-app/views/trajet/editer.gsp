@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: julien
-  Date: 30/09/15
-  Time: 08:53
+  User: Benoît Sauvère
+  Date: 28/10/15
+  Time: 09:34
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -16,7 +16,10 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <g:form id="ajoutTrajetForm" name="formAjoutTrajet" url="[controller: 'trajet', action: 'ajouterTrajetPost']">
+            <g:form name="formAjoutTrajet" url="[controller:'trajet',action:'updateTrajet']">
+                <g:hiddenField name="id" value="${trajet?.id}" />
+                <g:hiddenField name="version" value="${trajet?.version}" />
+
                 <div class="row">
                     <g:hasErrors bean="${trajet}">
                         <div class="alert alert-danger">
@@ -30,13 +33,15 @@
                 </div>
 
                 <g:render template="form" />
-                <g:submitButton id="submitAjout" name="create" class="save btn btn-primary btn-lg pull-right" value="${message(code: 'runninglama.trajet.button.create.label', default: 'Ajouter le trajet')}" />
 
+                <g:submitButton name="create" class="save btn btn-primary btn-lg pull-right" value="${message(code: 'runninglama.trajet.button.update.label', default: 'Modifier le trajet')}" />
             </g:form>
         </div>
     </div>
 </div>
+
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 <script src="<g:resource dir="js" file="ajoutTrajetMap.js" />"></script>
+
 </body>
 </html>

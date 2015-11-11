@@ -7,8 +7,7 @@ class TrajetService {
 
     TrajetDAOService trajetDAOService
 
-    def creerOuModifier(Trajet trajet) {
-        trajet.validate()
+    def ajouterOuModifierTrajet(Trajet trajet) {
         trajetDAOService.save(trajet)
     }
 
@@ -22,5 +21,13 @@ class TrajetService {
 
     def trouverTrajet(Long id) {
         trajetDAOService.trouver(id)
+    }
+
+    def listeTrajets(params) {
+        trajetDAOService.liste(params)
+    }
+
+    def nombreTrajets() {
+        trajetDAOService.count()
     }
 }
