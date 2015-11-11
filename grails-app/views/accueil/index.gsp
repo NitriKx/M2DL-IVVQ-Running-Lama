@@ -11,7 +11,7 @@
     <!-- Marketing Icons Section -->
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">
+            <h1 id="page-header" class="page-header">
                 Bienvenue sur Running Lama
             </h1>
             <p>Running Lama est un site communautaire permettant de fédérer une communauté de covoiturage. Cette application permet à ses utilisateurs de s'inscrire / se connecter afin de gérer une flotte de véhicules. Chaque utilisateur a ensuite la possibilité de créer des trajets ou de s'inscrire a des trajets proposés par des membres de la communauté. A l'issu du trajet, un participant note le conducteur. </p>

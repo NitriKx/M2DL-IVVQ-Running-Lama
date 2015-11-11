@@ -51,7 +51,6 @@ class UtilisateurController {
 
     def deconnexion() {
         this.getSession().invalidate()
-        Map<String, String> notification = new HashMap<>()
         flash.success = "Vous êtes bien déconnecté. A bientôt sur Running Lama !"
         redirect(controller: 'accueil', action: 'index')
     }
@@ -67,6 +66,7 @@ class UtilisateurController {
             render(view: 'modifierProfil',model: [utilisateur:  utilisateur])
         } else {
             this.getSession().setAttribute('utilisateur',utilisateur)
+            flash.success = "Votre profil a été sauvegardé."
             redirect(controller: 'accueil', action: 'index')
         }
     }

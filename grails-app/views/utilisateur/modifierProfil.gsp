@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
             <g:form name="formInscription" url="[controller:'utilisateur',action:'modifierProfilPost']">
-                <h2>Profil utilisateur <small>Modification</small></h2>
+                <h2 id="page-header">Profil utilisateur <small>Modification</small></h2>
                 <hr class="colorgraph">
                 <div class="row">
                     <g:hasErrors bean="${utilisateur}">
@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-6">
                         <div class="form-group">
-                            <input type="text" title="Nom" name="nom" id="nom" class="form-control" value="${fieldValue(bean:utilisateur,field:'nom')}" placeholder="Nom" tabindex="1">
+                            <input type="text" title="Nom" name="nom"  id="nom" class="form-control" value="${fieldValue(bean:utilisateur,field:'nom')}" placeholder="Nom" tabindex="1">
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-6">
@@ -72,7 +72,7 @@
 
                 <hr class="colorgraph">
                 <div>
-                    <div class="col-xs-12 col-md-6 col-md-offset-6"><input type="submit" value="Modifier Profil" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+                    <div class="col-xs-12 col-md-6 col-md-offset-6"><input type="submit" value="Modifier Profil" class="btn btn-primary btn-block btn-lg" id="btnModifier" tabindex="7"></div>
                 </div>
             </g:form>
         </div>

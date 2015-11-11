@@ -66,13 +66,13 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><g:if test="${session.utilisateur}">${session.utilisateur.prenom} ${session.utilisateur.nom}</g:if><g:else>Espace membre</g:else> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <g:if test="${!session.utilisateur}">
-                        <li><g:link controller="utilisateur" action="connexion"><i class="fa fa-sign-in"></i> Connexion</g:link></li>
-                        <li><g:link controller="utilisateur" action="inscription"><i class="fa fa-hand-o-right"></i> Inscription</g:link></li>
+                        <li><g:link controller="utilisateur" action="connexion"  id="connexion"><i class="fa fa-sign-in"></i> Connexion</g:link></li>
+                        <li><g:link controller="utilisateur" action="inscription"  id="inscription"><i class="fa fa-hand-o-right"></i> Inscription</g:link></li>
                     </g:if>
                     <g:if test="${session.utilisateur}">
-                        <li><g:link controller="utilisateur" action="modifierProfil"><i class="fa fa-user"></i> Mon profil</g:link></li>
-                        <li><g:link controller="vehicule" action="index"><i class="fa fa-car"></i> Gérer mes véhicules</g:link></li>
-                        <li><g:link controller="utilisateur" action="deconnexion"><i class="fa fa-sign-out"></i> Déconnexion</g:link></li>
+                        <li><g:link controller="utilisateur" action="modifierProfil" id="profil"><i class="fa fa-user"></i> Mon profil</g:link></li>
+                        <li><g:link controller="vehicule" action="index" id="vehicule"><i class="fa fa-car"></i> Gérer mes véhicules</g:link></li>
+                        <li><g:link controller="utilisateur" action="deconnexion" id="deconnexion"><i class="fa fa-sign-out"></i> Déconnexion</g:link></li>
                     </g:if>
                 </ul>
             </li>
