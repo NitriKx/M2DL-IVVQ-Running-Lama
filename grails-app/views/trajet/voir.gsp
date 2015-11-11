@@ -28,15 +28,18 @@
                 <g:link controller="trajet" action="supprimer" params="[id: trajet.id]" class="btn btn-danger">Supprimer</g:link>
                 <g:link controller="trajet" action="modifier" params="[id: trajet.id]" class="btn btn-primary">Modifier</g:link>
             </g:if>
-
-            <g:if test="${!session?.utilisateur?.participe(trajet)}">
-                <g:if test="${session.utilisateur}">
-                    <g:link controller="trajet" action="ajouterParticipant" params="[idTrajet: trajet.id]" class="btn btn-success">Participer</g:link>
+            <g:else>
+cc${session?.utilisateur?.participe(trajet)}
+                <g:if test="${!session?.utilisateur?.participe(trajet)}">
+                    <g:if test="${session.utilisateur}">
+                        <g:link controller="trajet" action="ajouterParticipant" params="[idTrajet: trajet.id]" class="btn btn-success">Participer</g:link>
+                    </g:if>
+                    <g:else>
+                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalConnexion">Participer</a>
+                    </g:else>
                 </g:if>
-                <g:else>
-                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalConnexion">Participer</a>
-                </g:else>
-            </g:if>
+            </g:else>
+
         </div>
             <h3>Détails</h3>
         <ul>
@@ -49,7 +52,7 @@
 
             <li>Conducteur : ${trajet.conducteur.prenom} ${trajet.conducteur.nom}</li>
             <li>Véhicule : ${trajet.vehicule.marque} ${trajet.vehicule.modele}</li>
-            <li>Les participants :
+            <li>Les participants :${trajet.participants} ${trajet.participants.size()}
                 <ul>
                     <g:each in="${trajet.participants}" var="participant">
                         <li>${participant.nom} ${participant.prenom}</li>
@@ -58,43 +61,44 @@
             </li>
         </ul>
         nA ${notationAutorisee}
-        diff null ${trajet.listeNote != null} size0 ${trajet.listeNote?.size() != 0}
+        diff null ${trajet.notations != null} size0 ${trajet.notations?.size() != 0}
         lN ${trajet}
         <br/>
-        notationEffectuée : ${notationEffectuee}
-        <g:if test="${trajet.listeNote != null && trajet.listeNote?.size() != 0}">
-            <li>Note moyenne du conducteur : ${trajet.conducteur.noteMoyenne}</li>
+        %{--notationEffectuée : ${notationEffectuee}--}%
+        <g:if test="${trajet.notations != null && trajet.notations?.size() != 0}">
+            <ul>
+                <li>Note moyenne du conducteur : ${trajet.conducteur.noteMoyenne}</li>
+            </ul>
             ${println(trajet)}
-            <g:each var="i" in="${ (0..<trajet.listeNote.size()) }">
-                <g:each var="id" in="${trajet.participants.id}">
-                    <li>Note du trajet : ${trajet.listeNote.get(i).get(id)}</li>
-                    <li>Commentaire sur le trajet : ${trajet.listeCommentaireNote.get(i).get(id)}</li>
+            <g:each var="notation" in="${ trajet.notations }">
+                    <ul>
+                        <li>Note du trajet : ${notation.note}</li>
+                        <li>Commentaire sur le trajet : ${notation.commentaire}</li>
+                        <li>Auteur de l'avis : ${notation.participant}</li>
+                    </ul>
                     <hr/>
-                </g:each>
             </g:each>
 
-            </ul>
+
         </g:if>
-        <g:else>
-            <g:if test="${notationAutorisee}">
-                <div> Test3</div>
-                <div id="noteTrajet">
-                    <g:form url="[resource:trajet, action:'noter']" method="PUT"  name="myForm" update="noteTrajet">
-                        <div class="form-group">
-                            <label for="commentaireNote">Votre avis sur le trajet :</label><br/><textarea id="commentaireNote" name="commentaireNote" rows="4" cols="50"></textarea>
-                            <g:select id="note"
-                                      name="note"
-                                      from="${5..0}"
-                                      value="${5}"
-                            />
-                            <fieldset class="buttons">
-                                <g:submitButton name="noter" id="${trajet.getId()}" class="btn-success form-control input-lg" action="noter" value="Evaluer le trajet"></g:submitButton>
-                            </fieldset>
-                        </div>
-                    </g:form>
-                </div>
-            </g:if>
-        </g:else>
+        <g:if test="${notationAutorisee}">
+            <div> Test3</div>
+            <div id="noteTrajet">
+                <g:form url="[resource:trajet, action:'noter']" method="PUT"  name="myForm" update="noteTrajet">
+                    <div class="form-group">
+                        <label for="commentaireNote">Votre avis sur le trajet :</label><br/><textarea id="commentaireNote" name="commentaireNote" rows="4" cols="50"></textarea>
+                        <g:select id="note"
+                                  name="note"
+                                  from="${5..0}"
+                                  value="${5}"
+                        />
+                        <fieldset class="buttons">
+                            <g:submitButton name="noter" id="${trajet.getId()}" class="btn-success form-control input-lg" action="noter" value="Evaluer le trajet"></g:submitButton>
+                        </fieldset>
+                    </div>
+                </g:form>
+            </div>
+        </g:if>
         </div>
     </div>
     <!-- /.row -->

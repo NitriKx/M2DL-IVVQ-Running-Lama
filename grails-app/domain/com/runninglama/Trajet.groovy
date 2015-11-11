@@ -15,10 +15,6 @@ class Trajet {
 
     String commentaire
 
-    ArrayList<LinkedHashMap<Long, Integer>>  listeNote
-    ArrayList<LinkedHashMap<Long, String>>  listeCommentaireNote
-    ArrayList<Long> listeNoteur
-
     Float prix
     Integer nombrePlace
 
@@ -26,7 +22,7 @@ class Trajet {
     Vehicule vehicule
 
 
-    static hasMany = [participants:Utilisateur]
+    static hasMany = [participants:Utilisateur, notations:Notation]
 
 
     static constraints = {
@@ -45,6 +41,5 @@ class Trajet {
         prix nullable: false, blank: false
         nombrePlace nullable: false, blank: false, min:1
         commentaire nullable: true, blank: true
-        note nullable: true, blank: true
     }
 }

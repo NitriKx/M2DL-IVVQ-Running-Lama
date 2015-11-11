@@ -35,4 +35,8 @@ class TrajetDAOService {
     def trouver(Long id) {
         return Trajet.findById(id)
     }
+
+    def saveNotation(Notation notation) {
+        notation.save(flush: true)
+    }
 }

@@ -46,8 +46,10 @@ class Utilisateur {
     }
 
     boolean participe(Trajet trajet) {
-        return trajet.participants.size() > 0 || trajet.conducteur.id == this.id
+        return trajet.participants?.id.contains(this.id) && trajet.conducteur.id != this.id
     }
 
-
+    String toString() {
+        return this.pseudo
+    }
 }
