@@ -128,7 +128,7 @@ class TrajetController {
     def ajouterParticipant(Long idTrajet) {
         Trajet trajet = trajetService.trouverTrajet(idTrajet)
         Utilisateur utilisateur = session.utilisateur
-        if(!trajet.participants.id.contains(utilisateur.id))
+        if(!trajet.getParticipants()?.contains(utilisateur))
         {
             trajet.addToParticipants(utilisateur)
             trajetService.ajouterOuModifierTrajet(trajet)
