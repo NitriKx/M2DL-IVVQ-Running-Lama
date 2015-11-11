@@ -14,6 +14,7 @@ class Utilisateur {
     Date dateNaissance
     String email
     String telephone
+    Float noteMoyenne
 
     //List vehicules
 
@@ -42,11 +43,14 @@ class Utilisateur {
         passwordSalt nullable: false, blank: false
         motDePasse bindable: true
         motDePasseConfirmation bindable: true
+        noteMoyenne nullable: true, blank: true
     }
 
     boolean participe(Trajet trajet) {
-        return trajet.getParticipants()?.size() > 0 || trajet.conducteur.id == this.id
+        return trajet.participants?.id.contains(this.id) && trajet.conducteur.id != this.id
     }
 
-
+    String toString() {
+        return this.pseudo
+    }
 }

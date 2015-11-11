@@ -31,6 +31,23 @@ class TrajetController {
         render view: 'liste', model: [lesTrajets: result, params:params]
     }
 
+    def noter(Trajet trajetInstance) {
+        def tel = params
+        Utilisateur utilisateur = session.getAttribute("utilisateur")
+//            trajetInstance.participants.add(utilisateur)
+        def idParticipants = trajetInstance?.participants?.id
+        def autorisation = idParticipants?.contains(utilisateur.id)
+
+        // Les participants ne peuvent voter qu'une fois
+        def closure = trajetInstance?.notations?.findAll { it.participant.id == utilisateur.id }
+        autorisation = autorisation && (closure == null || closure.isEmpty())
+        if(autorisation)
+        {
+            trajetService.noterTrajet(trajetInstance, params, utilisateur)
+        }
+        voirTrajet(trajetInstance?.id)
+    }
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond trajetService.listeTrajets(params), model: [trajetInstanceCount: trajetService.nombreTrajets()]
@@ -111,9 +128,12 @@ class TrajetController {
     def ajouterParticipant(Long idTrajet) {
         Trajet trajet = trajetService.trouverTrajet(idTrajet)
         Utilisateur utilisateur = session.utilisateur
-        trajet.addToParticipants(utilisateur)
-        trajetService.ajouterOuModifierTrajet(trajet)
-        flash.success = "Vous êtes bien inscrit au trajet"
+        if(!trajet.participants.id.contains(utilisateur.id))
+        {
+            trajet.addToParticipants(utilisateur)
+            trajetService.ajouterOuModifierTrajet(trajet)
+            flash.success = "Vous êtes bien inscrit au trajet"
+        }
         voirTrajet(idTrajet)
     }
 
@@ -127,8 +147,18 @@ class TrajetController {
     protected void voirTrajet(Long id) {
         Trajet trajet = trajetService.trouverTrajet(id);
         Utilisateur utilisateur = session.getAttribute('utilisateur')
+
+        def idParticipants = trajet?.participants?.id
+
+        // Seul un particicpant du trajet peut noter le trajet
+        boolean autorisation = idParticipants?.contains(utilisateur.id)
+
+        // Les participants ne peuvent voter qu'une fois
+        def closure = trajet?.notations?.findAll { it.participant?.id == utilisateur.id }
+        autorisation = autorisation && (closure == null || closure.isEmpty())
+
         if(trajet != null) {
-            render view: 'voir', model: [trajet: trajet]
+            render view: 'voir', model: [trajet: trajet, utilisateur:utilisateur, notationAutorisee: autorisation]
         } else {
             render view: 'ajouter', model: [listeVehicules: utilisateur.getVehicules()]
         }

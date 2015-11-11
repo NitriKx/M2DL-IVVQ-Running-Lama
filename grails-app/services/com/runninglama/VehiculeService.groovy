@@ -12,7 +12,8 @@ class VehiculeService {
     }
 
     def vehiculeAppartientUtilisateur(Utilisateur possesseur, Vehicule vehicule) {
-        possesseur.vehicules.contains(vehicule)
+//        def res = possesseur.vehicules.contains(vehicule)
+        vehicule.possesseur.id == possesseur.id
     }
 
     def getNombreVehicules(Utilisateur possesseur, params) {

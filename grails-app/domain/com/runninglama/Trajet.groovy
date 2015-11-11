@@ -14,6 +14,7 @@ class Trajet {
     Date dateRetour
 
     String commentaire
+
     Float prix
     Integer nombrePlace
 
@@ -21,7 +22,10 @@ class Trajet {
     Vehicule vehicule
 
 
-    static hasMany = [participants:Utilisateur]
+    static hasMany = [participants:Utilisateur, notations:Notation]
+
+    static mapping = {notations fetch: 'join'}
+
 
     static constraints = {
         depart nullable: false, blank: false

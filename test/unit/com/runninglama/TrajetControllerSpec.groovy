@@ -2,6 +2,8 @@ package com.runninglama
 
 import grails.test.mixin.*
 import org.springframework.http.HttpStatus
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
+import org.springframework.mock.web.MockHttpSession
 import spock.lang.*
 
 @TestFor(TrajetController)
@@ -299,5 +301,91 @@ class TrajetControllerSpec extends Specification {
         then: "une erreur 404 est retournée"
         response.status == HttpStatus.NOT_FOUND.value()
         flash.message == null
+    }
+
+   void "teste la notation d'un trajet pour un utilisateur non inscrit"() {
+        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+        Utilisateur utilisateur = request.session['utilisateur']
+        Trajet trajet = Mock(Trajet)
+
+        // Pour simuler que le trajet n'est pas null
+        trajet.getId() >> { 1 }
+        controller.trajetService.trouverTrajet(_ as Long) >> { Mock(Trajet) }
+        trajet.getNotations() >> {null}
+        HashSet participants = new HashSet<>()
+        participants.add(utilisateur)
+
+        trajet.getParticipants() >> { participants }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as Utilisateur) >> { Trajet }
+
+
+        when: "L'utilisateur veut noter le trajet"
+        controller.noter(trajet)
+
+        then:"le controlleur appel le service"
+        view == '/trajet/voir'
+    }
+       void "teste la notation d'un trajet pour un participant ayant déjà votés"() {
+        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+        Utilisateur utilisateur = request.session['utilisateur']
+        Trajet trajet = Mock(Trajet)
+        Notation notation = Mock(Notation)
+        notation.getParticipant() >> { utilisateur }
+        notation.getCommentaire() >> { "UnCommentaire" }
+        notation.getNote() >> { 5 }
+
+        trajet.getNotations() >> {null}
+        HashSet participants = new HashSet<>()
+        participants.add(utilisateur)
+
+        // Pour simuler que le trajet n'est pas null
+        trajet.getId() >> { 1 }
+        controller.trajetService.trouverTrajet(_ as Long) >> { Mock(Trajet) }
+        trajet.getParticipants() >> { participants }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as Utilisateur) >> { Trajet }
+
+
+        when: "L'utilisateur veut noter le trajet"
+        controller.noter(trajet)
+
+        then:"le controlleur appel le service"
+        view == '/trajet/voir'
+        0 * controller.trajetService.noterTrajet(_)
+    }
+
+   void "teste la notation d'un trajet pour utilisateur ne participant pas"() {
+        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+        Utilisateur utilisateur = request.session['utilisateur']
+        Trajet trajet = Mock(Trajet)
+
+        // Pour simuler que le trajet n'est pas null
+        trajet.getId() >> { 1 }
+        controller.trajetService.trouverTrajet(_ as Long) >> { Mock(Trajet) }
+        trajet.getNotations() >> {null}
+
+        trajet.getParticipants() >> { null }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as Utilisateur) >> { Trajet }
+
+
+        when: "L'utilisateur veut noter le trajet"
+        controller.noter(trajet)
+
+        then:"le controlleur appel le service"
+        view == '/trajet/voir'
+        0 * controller.trajetService.noterTrajet(_)
+    }
+
+    void "teste la notation d'un trajet qui n'existe pas"() {
+        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+        Utilisateur utilisateur = request.session['utilisateur']
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as Utilisateur) >> { Trajet }
+
+
+        when: "L'utilisateur veut noter le trajet"
+        controller.noter(null)
+
+        then:"le controlleur appel le service"
+        view == '/trajet/ajouter'
+        0 * controller.trajetService.noterTrajet(_)
     }
 }

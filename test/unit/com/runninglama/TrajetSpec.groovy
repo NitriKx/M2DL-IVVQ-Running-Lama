@@ -23,10 +23,11 @@ class TrajetSpec extends Specification {
 
 
         def trajet = new Trajet(depart: aDepart, departLat: aDepartLat, departLng: aDepartLng,
-                                arrivee: aArrivee, arriveeLat: aArriveelat, arriveeLng: aArriveeLng,
-                                dateAller: aDateAller, dateRetour: aDateRetour,
-                                commentaire: aCommentaire, prix:aPrix, nombrePlace: aNombrePlace,
-                                conducteur: aConducteur, vehicule: aVehicule, participants: aParticipant)
+                arrivee: aArrivee, arriveeLat: aArriveelat, arriveeLng: aArriveeLng,
+                dateAller: aDateAller, dateRetour: aDateRetour,
+                commentaire: aCommentaire, prix: aPrix, nombrePlace: aNombrePlace,
+                conducteur: aConducteur, vehicule: aVehicule, participants: aParticipant,
+                notations: aNotation)
 
         when: "on essaye de valider un trajet"
         trajet.validate()
@@ -35,12 +36,12 @@ class TrajetSpec extends Specification {
         trajet.hasErrors() == false
 
         where:
-        aDepart    | aArrivee | aDepartLat   | aDepartLng  | aArriveelat  | aArriveeLng | aDateAller | aDateRetour | aCommentaire  | aPrix | aNombrePlace | aConducteur | aVehicule | aParticipant
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | null         | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | null        | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | null         | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | null        | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
+        aDepart    | aArrivee | aDepartLat   | aDepartLng  | aArriveelat  | aArriveeLng | aDateAller | aDateRetour | aCommentaire  | aPrix | aNombrePlace | aConducteur       | aVehicule      | aParticipant | aNotation
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | null         | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | null        | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | null         | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | null        | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
     }
 
 
@@ -53,8 +54,8 @@ class TrajetSpec extends Specification {
         def trajet = new Trajet(depart: aDepart, departLat: aDepartLat, departLng: aDepartLng,
                 arrivee: aArrivee, arriveeLat: aArriveelat, arriveeLng: aArriveeLng,
                 dateAller: aDateAller, dateRetour: aDateRetour,
-                commentaire: aCommentaire, prix:aPrix, nombrePlace: aNombrePlace,
-                conducteur: aConducteur, vehicule: aVehicule, participants: aParticipant)
+                commentaire: aCommentaire, prix: aPrix, nombrePlace: aNombrePlace,
+                conducteur: aConducteur, vehicule: aVehicule, participants: aParticipant, notations: aNotation)
 
         when: "on essaye de valider un trajet"
         trajet.validate()
@@ -63,16 +64,16 @@ class TrajetSpec extends Specification {
         trajet.hasErrors() == true
 
         where:
-        aDepart    | aArrivee | aDepartLat   | aDepartLng  | aArriveelat  | aArriveeLng | aDateAller | aDateRetour | aCommentaire  | aPrix | aNombrePlace | aConducteur       | aVehicule      | aParticipant
-        null       | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | null     | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | null       | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | null        | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | null  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | null         | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 0            | Mock(Utilisateur) | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | null              | Mock(Vehicule) | null
-        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | null           | null
+        aDepart    | aArrivee | aDepartLat   | aDepartLng  | aArriveelat  | aArriveeLng | aDateAller | aDateRetour | aCommentaire  | aPrix | aNombrePlace | aConducteur       | aVehicule      | aParticipant | aNotation
+        null       | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | null     | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | null       | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | null        | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | null  | 4            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | null         | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 0            | Mock(Utilisateur) | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | null              | Mock(Vehicule) | null         | null
+        "Toulouse" | "Muret"  | "43.6008029" | "1.3628011" | "43.4408242" | "1.2286806" | new Date() | new Date()  | "Commentaire" | 13.4  | 4            | Mock(Utilisateur) | null           | null         | null
 
 
     }
