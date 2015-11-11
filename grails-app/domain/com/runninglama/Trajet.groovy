@@ -24,6 +24,8 @@ class Trajet {
 
     static hasMany = [participants:Utilisateur, notations:Notation]
 
+    static mapping = {notations fetch: 'join'}
+
 
     static constraints = {
         depart nullable: false, blank: false

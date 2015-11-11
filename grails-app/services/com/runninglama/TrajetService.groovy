@@ -39,7 +39,7 @@ class TrajetService {
         trajetDAOService.saveNotation(notation)
         trajetInstance.addToNotations(notation)
 
-        trajetInstance.getConducteur().noteMoyenne = (trajetInstance.getConducteur().noteMoyenne) ? (trajetInstance.getConducteur().noteMoyenne + Float.parseFloat(params['note']))/trajetInstance.notations.size() : Float.parseFloat(params['note'])
+        trajetInstance.getConducteur().noteMoyenne = (trajetInstance.getConducteur().noteMoyenne) ? (trajetInstance.getConducteur().noteMoyenne * trajetInstance.notations.size() - 1 + Float.parseFloat(params['note']))/trajetInstance.notations.size() : Float.parseFloat(params['note'])
 
         trajetDAOService.save(trajetInstance)
     }

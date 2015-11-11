@@ -8,6 +8,7 @@ import spock.lang.*
 class TrajetDAOServiceSpec extends Specification {
 
     def trajetDAOService
+    def trajetService
 
     def setup() {
     }
@@ -67,29 +68,30 @@ class TrajetDAOServiceSpec extends Specification {
     void "test la notation d'un trajet"() {
         given: "un trajet a sauvegarder"
         Utilisateur conducteur = TestsHelper.creeUtilisateurValide()
+        conducteur.save(flush: true)
 
         Utilisateur utilisateur1 = TestsHelper.creeUtilisateurValide()
-        HashSet participants = new HashSet<>()
-        participants.add(utilisateur1)
+        utilisateur1.save(flush: true)
         Utilisateur utilisateur2 = TestsHelper.creeUtilisateurValide()
-        participants.add(utilisateur2)
+        utilisateur2.save(flush: true)
 
-        Notation notation1 = new Notation(note: 5, commentaire: "Super", participant: utilisateur1)
-        Notation notation2 = new Notation(note: 0, commentaire: "Nul", participant: utilisateur2)
-
-        Vehicule vehicule = TestsHelper.creeVehiculeValide()
+        Vehicule vehicule = TestsHelper.creeVehiculeValide(conducteur)
+        vehicule.save(flush: true)
 
         Trajet trajet = TestsHelper.creeTrajetValide3(conducteur, vehicule)
+        trajet.addToParticipants(utilisateur1)
+        trajet.addToParticipants(utilisateur2)
+        trajet.save(flush: true)
 
-        def params = ['note' : '3', 'commentaireNote' : 'Super trajet !']
-
-        trajetDAOService.saveNotation(notation1)
-        trajetDAOService.saveNotation(notation2)
+        def params1 = ['note' : '3', 'commentaireNote' : 'Super trajet !']
+        def params2 = ['note' : '1', 'commentaireNote' : 'Super trajet !']
 
         when:
-        trajetDAOService.save(trajet)
+        trajetService.noterTrajet(trajet,params1,utilisateur1)
+        trajetService.noterTrajet(trajet,params2,utilisateur2)
 
         then:
         trajet.notations.size() == 2
+        trajet.conducteur.noteMoyenne == 5.5
     }
 }
