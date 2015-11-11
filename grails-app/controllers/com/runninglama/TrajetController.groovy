@@ -58,11 +58,9 @@ class TrajetController {
         autorisation = autorisation && (closure == null || closure.isEmpty())
         if(autorisation)
         {
-            trajetService.noterTrajet(trajetInstance, params, session, utilisateur)
-//            this.session.setAttribute('utilisateur', trajetInstance.conducteur)
+            trajetService.noterTrajet(trajetInstance, params, utilisateur)
         }
         voirTrajet(trajetInstance?.id)
-//        redirect (action: "voirTrajet", params: [trajet: trajetInstance, notationAutorisee: false])
     }
 
     def index(Integer max) {

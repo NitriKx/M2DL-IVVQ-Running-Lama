@@ -26,8 +26,7 @@ class TrajetService {
         trajetDAOService.trouver(id)
     }
 
-    def noterTrajet(Trajet trajetInstance, params, HttpSession session, Utilisateur utilisateur) {
-//        trajetDAOService.noterTrajet(trajetInstance, params)
+    def noterTrajet(Trajet trajetInstance, params, Utilisateur utilisateur) {
 
         Notation notation = new Notation()
         notation.participant = utilisateur
@@ -42,13 +41,6 @@ class TrajetService {
 
         trajetInstance.getConducteur().noteMoyenne = (trajetInstance.getConducteur().noteMoyenne) ? (trajetInstance.getConducteur().noteMoyenne + Float.parseFloat(params['note']))/trajetInstance.notations.size() : Float.parseFloat(params['note'])
 
-//        Utilisateur cur = trajetInstance.getConducteur().merge();
-//        session['utilisateur'] = cur
-//        cur.save(flush: true)
         trajetDAOService.save(trajetInstance)
     }
-
-//    def getAutorisationNotation(Trajet trajet, Utilisateur utilisateur) {
-//        trajetDAOService.getAutorisationNotation(trajet, utilisateur)
-//    }
 }

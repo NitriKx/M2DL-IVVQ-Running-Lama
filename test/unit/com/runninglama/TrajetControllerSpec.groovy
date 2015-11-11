@@ -163,7 +163,7 @@ class TrajetControllerSpec extends Specification {
         participants.add(utilisateur)
 
         trajet.getParticipants() >> { participants }
-        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { Trajet }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as Utilisateur) >> { Trajet }
 
 
         when: "L'utilisateur veut noter le trajet"
@@ -189,7 +189,7 @@ class TrajetControllerSpec extends Specification {
         trajet.getId() >> { 1 }
         controller.trajetService.trouverTrajet(_ as Long) >> { Mock(Trajet) }
         trajet.getParticipants() >> { participants }
-        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { Trajet }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as Utilisateur) >> { Trajet }
 
 
         when: "L'utilisateur veut noter le trajet"
@@ -211,7 +211,7 @@ class TrajetControllerSpec extends Specification {
         trajet.getNotations() >> {null}
 
         trajet.getParticipants() >> { null }
-        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { Trajet }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as Utilisateur) >> { Trajet }
 
 
         when: "L'utilisateur veut noter le trajet"
@@ -225,7 +225,7 @@ class TrajetControllerSpec extends Specification {
     void "teste la notation d'un trajet qui n'existe pas"() {
         given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
         Utilisateur utilisateur = request.session['utilisateur']
-        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { Trajet }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as Utilisateur) >> { Trajet }
 
 
         when: "L'utilisateur veut noter le trajet"
