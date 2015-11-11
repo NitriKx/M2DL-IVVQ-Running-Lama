@@ -4,35 +4,35 @@
             <div class="panel-heading">Informations trajet</div>
 
             <div class="panel-body">
-                <input type="hidden" name="departLat" value="${fieldValue(bean: trajet, field: 'departLat')}" id="departLat">
-                <input type="hidden" name="departLng" value="${fieldValue(bean: trajet, field: 'departLng')}" id="departLng">
-                <input type="hidden" name="arriveeLat" value="${fieldValue(bean: trajet, field: 'arriveeLat')}" id="arriveeLat">
-                <input type="hidden" name="arriveeLng" value="${fieldValue(bean: trajet, field: 'arriveeLng')}" id="arriveeLng">
+                <input type="hidden" name="departLat" value="${trajet?.departLat}" id="departLat">
+                <input type="hidden" name="departLng" value="${trajet?.departLng}" id="departLng">
+                <input type="hidden" name="arriveeLat" value="${trajet?.arriveeLat}" id="arriveeLat">
+                <input type="hidden" name="arriveeLng" value="${trajet?.arriveeLng}" id="arriveeLng">
                 <input type="hidden" name="total" id="total">
                 <input type="hidden" name="methode" id="methode" value="perso">
 
                 <div class="form-group">
                     <label for="start">Départ</label>
                     <input class="form-control input-lg" id="start"
-                           value="${fieldValue(bean: trajet, field: 'depart')}" name="depart" type="text"
+                           value="${trajet?.depart}" name="depart" type="text"
                            placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="end">Arrivée</label>
                     <input class="form-control input-lg" id="end" name="arrivee"
-                           value="${fieldValue(bean: trajet, field: 'arrivee')}" type="text" placeholder="">
+                           value="${trajet?.arrivee}" type="text" placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label>Date aller</label>
-                    <g:datePicker name="dateAller" value="${fieldValue(bean: trajet, field: 'dateAller')}"
+                    <g:datePicker name="dateAller" value="${trajet?.dateAller}"
                                   precision="day"/>
                 </div>
 
                 <div class="form-group">
                     <label>Date retour</label>
-                    <g:datePicker name="dateRetour" value="${fieldValue(bean: trajet, field: 'dateRetour')}"
+                    <g:datePicker name="dateRetour" value="${trajet?.dateRetour}"
                                   precision="day"/>
                 </div>
 
@@ -58,14 +58,14 @@
             <div class="panel-body">
                 <div class="form-group">
                     <label>Véhicule</label>
-                    <g:select optionKey="id" name="trajet.vehicule" from="${listeVehicules}"
+                    <g:select optionKey="id" name="vehicule" from="${listeVehicules}"
                               value="${trajet?.vehicule?.id}" noSelection="['': '-Choisir un véhicule-']"/>
                 </div>
 
                 <div class="form-group">
                     <label for="nbPlaces">Nombre de place</label>
                     <input class="form-control input-lg" id="nbPlaces"
-                           value="${fieldValue(bean: trajet, field: 'nombrePlace')}" name="nombrePlace"
+                           value="${trajet?.nombrePlace}" name="nombrePlace"
                            type="number" placeholder="">
                 </div>
             </div>
@@ -80,15 +80,14 @@
                 <div class="form-group">
                     <label for="nbPlaces">Prix par place</label>
                     <input class="form-control input-lg" id="prix"
-                           value="${fieldValue(bean: trajet, field: 'prix')}" name="prix" type="number"
+                           value="${trajet?.prix}" name="prix" type="number"
                            placeholder="">
                 </div>
 
                 <div class="form-group">
                     <label for="nbPlaces">Commentaires</label>
                     <textarea class="form-control input-lg" id=""
-                              value="${fieldValue(bean: trajet, field: 'commentaire')}"
-                              name="commentaire"></textarea>
+                              name="commentaire">${trajet?.commentaire}</textarea>
                 </div>
             </div>
         </div>

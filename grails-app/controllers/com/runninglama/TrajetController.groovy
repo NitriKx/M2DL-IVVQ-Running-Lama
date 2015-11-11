@@ -11,6 +11,12 @@ class TrajetController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+
+    //
+    //  AFFICHEURS
+    //
+
+
     def liste() {
         def lesTrajets = Trajet.list();
         render view:'liste', model: [lesTrajets:lesTrajets]
@@ -41,6 +47,23 @@ class TrajetController {
         respond Trajet.list(params), model: [trajetInstanceCount: Trajet.count()]
     }
 
+    def ajouter() {
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
+        render view:'ajouter', model: [listeVehicules:utilisateur.getVehicules()]
+    }
+
+    def editer(Trajet trajetAEditer) {
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
+        render view:'editer', model: [listeVehicules:utilisateur.getVehicules(), trajet: trajetAEditer]
+    }
+
+
+
+    //
+    //  MODIFICATEURS
+    //
+
+
     def supprimer(Long id) {
         Trajet trajet = trajetService.trouverTrajet(id)
         if(trajet != null) {
@@ -52,18 +75,32 @@ class TrajetController {
         liste()
     }
 
+    def ajouterTrajetPost(Trajet trajet) {
 
-    def ajouterTrajet() {
-        Utilisateur utilisateur = session.getAttribute('utilisateur')
-        render view:'ajouter', model: [listeVehicules:utilisateur.getVehicules()]
-    }
+        if (trajet == null) {
+            notFound()
+            return
+        }
 
-    def editer(Trajet trajetAEditer) {
+        // Ajoute le conducteur dans le trajet en utilisant l'utilisateur dans la sessions
         Utilisateur utilisateur = session.getAttribute('utilisateur')
-        render view:'editer', model: [listeVehicules:utilisateur.getVehicules(), trajet: trajetAEditer]
+        trajet.conducteur = utilisateur
+        trajet.validate()
+
+        if (trajet.hasErrors()) {
+            render model: [listeVehicules:utilisateur.getVehicules(), trajet: trajet], view: 'ajouter'
+            return
+        }
+
+        trajetService.ajouterOuModifierTrajet(trajet)
+
+        flash.success = "Le trajet a bien été crée."
+        redirect(view: 'index', controller: 'accueil')
     }
 
     def updateTrajet(Trajet trajet) {
+
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
 
         if (trajet == null) {
             notFound()
@@ -71,20 +108,14 @@ class TrajetController {
         }
 
         if (trajet.hasErrors()) {
-            respond trajet.errors, view: 'editer'
+            render model: [listeVehicules:utilisateur.getVehicules(), trajet: trajet], view: 'editer'
             return
         }
 
         trajetService.ajouterOuModifierTrajet(trajet)
 
+        flash.success = "Le trajet a bien été modifié."
         redirect(view: 'index', controller: 'accueil')
-    }
-
-    def ajouterTrajetPost(Trajet trajet) {
-        trajet.setConducteur(session.getAttribute('utilisateur'))
-        trajetService.ajouterOuModifierTrajet(trajet)
-        flash.success = "Le trajet a bien été crée."
-        redirect(view: 'index' ,controller: 'accueil')
     }
 
     def ajouterParticipant(Long idTrajet) {
@@ -94,5 +125,22 @@ class TrajetController {
         trajetService.ajouterOuModifierTrajet(trajet)
         flash.success = "Vous êtes bien inscrit au trajet"
         voirTrajet(idTrajet)
+    }
+
+
+
+
+    //
+    //  RESPONSE HELPERS
+    //
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'trajet.label', default: 'Trajet'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*' { render status: NOT_FOUND }
+        }
     }
 }

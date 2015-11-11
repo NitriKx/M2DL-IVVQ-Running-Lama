@@ -30,11 +30,6 @@
                             </ul>
                         </div>
                     </g:hasErrors>
-                    <g:if test="${trajet?.hasErrors() == false}">
-                        <div class="alert alert-success">
-                            <p>Votre trajet a bien été enregistrée.</p>
-                        </div>
-                    </g:if>
                 </div>
 
                 <g:render template="form" />
