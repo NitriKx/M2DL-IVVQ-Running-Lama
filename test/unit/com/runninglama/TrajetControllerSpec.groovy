@@ -153,20 +153,86 @@ class TrajetControllerSpec extends Specification {
    void "teste la notation d'un trajet pour un utilisateur non inscrit"() {
         given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
         Utilisateur utilisateur = request.session['utilisateur']
-        utilisateur.save(flush:true)
-        Vehicule vehicule = TestsHelper.creeVehiculeValide(utilisateur);
-        vehicule.save();
-        Trajet trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule)
-        trajet.addToParticipants(utilisateur)
-        trajet.save(flush:true)
+        Trajet trajet = Mock(Trajet)
 
-        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { true }
+        // Pour simuler que le trajet n'est pas null
+        trajet.getId() >> { 1 }
+        controller.trajetService.trouverTrajet(_ as Long) >> { Mock(Trajet) }
+        trajet.getNotations() >> {null}
+        HashSet participants = new HashSet<>()
+        participants.add(utilisateur)
+
+        trajet.getParticipants() >> { participants }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { Trajet }
 
 
-        when: "L'utilisateur veut s'inscrire au trajet"
+        when: "L'utilisateur veut noter le trajet"
         controller.noter(trajet)
 
         then:"le controlleur appel le service"
-        1 * controller.trajetService.noterTrajet(trajet, [:], session, utilisateur)
+        view == '/trajet/voir'
+    }
+       void "teste la notation d'un trajet pour un participant ayant déjà votés"() {
+        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+        Utilisateur utilisateur = request.session['utilisateur']
+        Trajet trajet = Mock(Trajet)
+        Notation notation = Mock(Notation)
+        notation.getParticipant() >> { utilisateur }
+        notation.getCommentaire() >> { "UnCommentaire" }
+        notation.getNote() >> { 5 }
+
+        trajet.getNotations() >> {null}
+        HashSet participants = new HashSet<>()
+        participants.add(utilisateur)
+
+        // Pour simuler que le trajet n'est pas null
+        trajet.getId() >> { 1 }
+        controller.trajetService.trouverTrajet(_ as Long) >> { Mock(Trajet) }
+        trajet.getParticipants() >> { participants }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { Trajet }
+
+
+        when: "L'utilisateur veut noter le trajet"
+        controller.noter(trajet)
+
+        then:"le controlleur appel le service"
+        view == '/trajet/voir'
+        0 * controller.trajetService.noterTrajet(_)
+    }
+
+   void "teste la notation d'un trajet pour utilisateur ne participant pas"() {
+        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+        Utilisateur utilisateur = request.session['utilisateur']
+        Trajet trajet = Mock(Trajet)
+
+        // Pour simuler que le trajet n'est pas null
+        trajet.getId() >> { 1 }
+        controller.trajetService.trouverTrajet(_ as Long) >> { Mock(Trajet) }
+        trajet.getNotations() >> {null}
+
+        trajet.getParticipants() >> { null }
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { Trajet }
+
+
+        when: "L'utilisateur veut noter le trajet"
+        controller.noter(trajet)
+
+        then:"le controlleur appel le service"
+        view == '/trajet/voir'
+        0 * controller.trajetService.noterTrajet(_)
+    }
+
+    void "teste la notation d'un trajet qui n'existe pas"() {
+        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
+        Utilisateur utilisateur = request.session['utilisateur']
+        controller.trajetService.noterTrajet(_ as Trajet, _ as GrailsParameterMap, _ as MockHttpSession, _ as Utilisateur) >> { Trajet }
+
+
+        when: "L'utilisateur veut noter le trajet"
+        controller.noter(null)
+
+        then:"le controlleur appel le service"
+        view == '/trajet/ajouter'
+        0 * controller.trajetService.noterTrajet(_)
     }
 }

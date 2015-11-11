@@ -30,7 +30,7 @@ class TrajetController {
         boolean autorisation = idParticipants?.contains(utilisateur.id)
 
         // Les participants ne peuvent voter qu'une fois
-        def closure = trajet.notations?.findAll { it.participant?.id == utilisateur.id }
+        def closure = trajet?.notations?.findAll { it.participant?.id == utilisateur.id }
         autorisation = autorisation && (closure == null || closure.isEmpty())
 
         if(trajet != null) {
@@ -50,22 +50,19 @@ class TrajetController {
         def tel = params
         Utilisateur utilisateur = session.getAttribute("utilisateur")
 //            trajetInstance.participants.add(utilisateur)
-        def idParticipants = trajetInstance.participants.id
-        def autorisation = idParticipants.contains(utilisateur.id)
+        def idParticipants = trajetInstance?.participants?.id
+        def autorisation = idParticipants?.contains(utilisateur.id)
 
         // Les participants ne peuvent voter qu'une fois
-        def closure = trajetInstance.notations?.findAll { it.participant.id == utilisateur.id }
+        def closure = trajetInstance?.notations?.findAll { it.participant.id == utilisateur.id }
         autorisation = autorisation && (closure == null || closure.isEmpty())
         if(autorisation)
         {
             trajetService.noterTrajet(trajetInstance, params, session, utilisateur)
 //            this.session.setAttribute('utilisateur', trajetInstance.conducteur)
-            render view: "voir", model: [trajet: trajetInstance, notationAutorisee: false]
         }
-        else
-        {
-            redirect(view: "../accueil/index")
-        }
+        voirTrajet(trajetInstance?.id)
+//        redirect (action: "voirTrajet", params: [trajet: trajetInstance, notationAutorisee: false])
     }
 
     def index(Integer max) {
