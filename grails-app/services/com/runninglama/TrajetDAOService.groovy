@@ -22,12 +22,7 @@ class TrajetDAOService {
                 if(params.prix) le('prix', Float.parseFloat(params.prixMax))
                 if(params.dateAller) eq('dateAller', params.dateAller)
                 if(params.dateRetour) eq('dateRetour', params.dateRetour)
-
-//                      eq('dateRetour', new Date(params.dateRetour))
             }
-//            maxResults params.int( 'max' ) ?: 10
-//            firstResult params.int( 'offset' ) ?: 0
-//            if( params.sort && params.order ) order params.sort, params.order
         }
         return result
     }

@@ -92,6 +92,5 @@ class TrajetDAOServiceSpec extends Specification {
 
         then:
         trajet.notations.size() == 2
-        trajet.conducteur.noteMoyenne == 5.5
     }
 }
