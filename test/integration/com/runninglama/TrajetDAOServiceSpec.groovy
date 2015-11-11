@@ -64,4 +64,32 @@ class TrajetDAOServiceSpec extends Specification {
 //    }
 
 
+    void "test la notation d'un trajet"() {
+        given: "un trajet a sauvegarder"
+        Utilisateur conducteur = TestsHelper.creeUtilisateurValide()
+
+        Utilisateur utilisateur1 = TestsHelper.creeUtilisateurValide()
+        HashSet participants = new HashSet<>()
+        participants.add(utilisateur1)
+        Utilisateur utilisateur2 = TestsHelper.creeUtilisateurValide()
+        participants.add(utilisateur2)
+
+        Notation notation1 = new Notation(note: 5, commentaire: "Super", participant: utilisateur1)
+        Notation notation2 = new Notation(note: 0, commentaire: "Nul", participant: utilisateur2)
+
+        Vehicule vehicule = TestsHelper.creeVehiculeValide()
+
+        Trajet trajet = TestsHelper.creeTrajetValide3(conducteur, vehicule)
+
+        def params = ['note' : '3', 'commentaireNote' : 'Super trajet !']
+
+        trajetDAOService.saveNotation(notation1)
+        trajetDAOService.saveNotation(notation2)
+
+        when:
+        trajetDAOService.save(trajet)
+
+        then:
+        trajet.notations.size() == 2
+    }
 }
