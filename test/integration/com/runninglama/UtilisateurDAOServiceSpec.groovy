@@ -58,4 +58,15 @@ class UtilisateurDAOServiceSpec extends Specification {
         aPseudo            | aPrenom  | aNom      | aEmail               | aTelephone   | aDateDerniereConnexion | aDateInscription | aDateNaissance | aPasswordHash        | aPasswordSalt  | aMotDePasse | aMotDePasseConfirmation
         "ARunningLama"     | "Julien" | "Custoja" | "julien.c@gmail.com" | "0567543456" | new Date()             | new Date()       | new Date()     | "gfhthqsdfjgjqfjgfg" | "ssdfdsfdsfsd" | "azerty"    | "azerty"
     }
+
+    void "teste qu'après ajout d'un utilisateur, la liste des utilisateurs est bien mis à jour"() {
+        given: "une base de données avec un certain nombre d'utilisateurs"
+        def nombreUtilisateurActuel = Utilisateur.count()
+
+        when: "on ajoute un utilisateur"
+        def utilisateur = TestsHelper.creeUtilisateurValide().save(flush: true)
+
+        then: "la liste d'utilisateur contient maintenant un utilisateur"
+        utilisateurDAOService.liste().size() == nombreUtilisateurActuel + 1
+    }
 }

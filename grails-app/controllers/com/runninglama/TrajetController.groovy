@@ -18,24 +18,13 @@ class TrajetController {
 
 
     def liste() {
-        def lesTrajets = Trajet.list();
+        def lesTrajets = trajetService.listeTrajets(max: 5);
         render view:'liste', model: [lesTrajets:lesTrajets]
     }
 
     def create() {
         respond new Trajet(params)
     }
-
-    def voirTrajet(Long id) {
-        Trajet trajet = trajetService.trouverTrajet(id);
-        Utilisateur utilisateur = session.getAttribute('utilisateur')
-        if(trajet != null) {
-            render view: 'voir', model: [trajet: trajet]
-        } else {
-            render view: 'ajouter', model: [listeVehicules: utilisateur.getVehicules()]
-        }
-    }
-
 
     def rechercherTrajet() {
         def result = trajetService.rechercherTrajet(params)
@@ -44,7 +33,7 @@ class TrajetController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Trajet.list(params), model: [trajetInstanceCount: Trajet.count()]
+        respond trajetService.listeTrajets(params), model: [trajetInstanceCount: trajetService.nombreTrajets()]
     }
 
     def ajouter() {
@@ -133,6 +122,16 @@ class TrajetController {
     //
     //  RESPONSE HELPERS
     //
+
+    protected void voirTrajet(Long id) {
+        Trajet trajet = trajetService.trouverTrajet(id);
+        Utilisateur utilisateur = session.getAttribute('utilisateur')
+        if(trajet != null) {
+            render view: 'voir', model: [trajet: trajet]
+        } else {
+            render view: 'ajouter', model: [listeVehicules: utilisateur.getVehicules()]
+        }
+    }
 
     protected void notFound() {
         request.withFormat {

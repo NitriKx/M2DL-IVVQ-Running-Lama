@@ -22,4 +22,12 @@ class TrajetService {
     def trouverTrajet(Long id) {
         trajetDAOService.trouver(id)
     }
+
+    def listeTrajets(params) {
+        trajetDAOService.liste(params)
+    }
+
+    def nombreTrajets() {
+        trajetDAOService.count()
+    }
 }

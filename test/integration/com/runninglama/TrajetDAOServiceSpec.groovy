@@ -96,4 +96,36 @@ class TrajetDAOServiceSpec extends Specification {
     }
 
 
+    void "teste que la méthode count retourne bien un trajet de plus lorsqu'on en ajoute un"() {
+        given: "un trajet valide pas en base de données"
+        def utilisateur = TestsHelper.creeUtilisateurValide();
+        utilisateur = utilisateur.save(flush: true)
+        def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule = vehicule.save(flush: true)
+        def trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule);
+        def compteurAvantAjout = trajetDAOService.count();
+
+        when:"On ajoute le trajet"
+        trajetDAOService.save(trajet)
+
+        then:
+        trajetDAOService.count() == compteurAvantAjout + 1
+    }
+
+
+    void "teste que la méthode liste contient bien un trajet que l'on vient d'ajouter"() {
+        given: "un trajet valide pas en base de données"
+        def utilisateur = TestsHelper.creeUtilisateurValide();
+        utilisateur = utilisateur.save(flush: true)
+        def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule = vehicule.save(flush: true)
+        def trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule);
+
+        when:"On ajoute le trajet"
+        trajetDAOService.save(trajet)
+
+        then:
+        trajetDAOService.liste().contains(trajet)
+    }
+
 }

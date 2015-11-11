@@ -5,6 +5,10 @@ import grails.transaction.Transactional
 @Transactional
 class TrajetDAOService {
 
+    def liste(params) {
+        Trajet.list(params)
+    }
+
     def save(Trajet trajet) {
         trajet.save(flush: true)
     }
@@ -33,5 +37,9 @@ class TrajetDAOService {
 
     def trouver(Long id) {
         return Trajet.findById(id)
+    }
+
+    def count() {
+        return Trajet.count()
     }
 }

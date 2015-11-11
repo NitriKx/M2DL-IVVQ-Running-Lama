@@ -1,6 +1,7 @@
 package com.runninglama
 
 import grails.test.mixin.*
+import org.springframework.http.HttpStatus
 import spock.lang.*
 
 @TestFor(TrajetController)
@@ -14,16 +15,45 @@ class TrajetControllerSpec extends Specification {
     }
 
 
-    void "teste l'affichage du formulaire d'ajout de trajet"() {
-        given: "Un véhicule qui appartient a un utilisateur"
-        Vehicule vehicule = Mock(Vehicule)
-        vehicule.possesseur >> request.session['utilisateur']
-        when: "une demande d'accès au formulaire d'ajout par un utilisateur connecté"
-        controller.ajouterTrajet()
-        then: "l'utilisateur est redirigé sur la page"
-        view == '/trajet/ajouter'
-        response.status == 200
+    //
+    //
+    //   INDEX
+    //
+    //
+
+    void "teste que l'affichage de l'acceuil des trajet reçoit les bonnes données"() {
+
+        when: "The index action is executed"
+        controller.index()
+
+        then: "The model is correct"
+        1 * controller.trajetService.listeTrajets(_) >> []
+        1 * controller.trajetService.nombreTrajets() >> 0
+        !model.trajetInstanceList
+        model.trajetInstanceCount == 0
     }
+
+
+    //
+    //
+    //   CREATE
+    //
+    //
+
+    void "teste the create action returns the correct model"() {
+        when: "The create action is executed"
+        controller.create()
+
+        then: "The model is correctly created"
+        model.trajetInstance != null
+    }
+
+
+    //
+    //
+    //  LISTE
+    //
+    //
 
     void "teste l'affichage de la liste des trajet"() {
         when: "une demande d'accès a la liste des trajet"
@@ -33,34 +63,12 @@ class TrajetControllerSpec extends Specification {
         response.status == 200
     }
 
-    void "teste la recherche de trajet"() {
 
-        when: "on appelle l'action rechercherTrajet"
-        controller.rechercherTrajet()
-
-        then: "le modèle retourné est correct"
-        response.status == 200
-        view == '/trajet/liste'
-
-    }
-
-    void "teste the index action returns the correct model"() {
-
-        when: "The index action is executed"
-        controller.index()
-
-        then: "The model is correct"
-        !model.trajetInstanceList
-        model.trajetInstanceCount == 0
-    }
-
-    void "teste the create action returns the correct model"() {
-        when: "The create action is executed"
-        controller.create()
-
-        then: "The model is correctly created"
-        model.trajetInstance != null
-    }
+    //
+    //
+    //  VOIR TRAJET (devrait être un test d'intégration)
+    //
+    //
 
     void "teste l'affichage du recapitulatif d'un trajet"() {
         given: "un trajet sauvegarder en base de données"
@@ -90,6 +98,37 @@ class TrajetControllerSpec extends Specification {
         response.status == 200
     }
 
+
+
+
+
+    //
+    //
+    //   RECHERCHE
+    //
+    //
+
+    void "teste la recherche de trajet"() {
+
+        when: "on appelle l'action rechercherTrajet"
+        controller.rechercherTrajet()
+
+        then: "le modèle retourné est correct"
+        response.status == 200
+        view == '/trajet/liste'
+
+    }
+
+
+
+
+
+    //
+    //
+    //   SUPPRIMER
+    //
+    //
+
     void "teste la suppression d'un trajet existant"() {
         given: "un trajet sauvegarder en base de données"
         Utilisateur utilisateur = request.session['utilisateur']
@@ -103,17 +142,40 @@ class TrajetControllerSpec extends Specification {
         when: "une demande de suppression"
         controller.supprimer(trajet.id)
         then: "Le service est appelé"
-        1*controller.trajetService.supprimer(_)
+        1 * controller.trajetService.supprimer(_)
     }
 
     void "teste la suppression d'un trajet inexistant"() {
         when: "une demande de suppression sur un trajet qui n'existe pas"
         controller.supprimer(65)
         then: "Le service n'est pas appelé"
-        0*controller.trajetService.supprimer(_)
+        0 * controller.trajetService.supprimer(_)
     }
 
-    void "teste d'un ajout de trajet avec des champs corrects"() {
+
+
+
+
+    //
+    //
+    //   AJOUT TRAJET
+    //
+    //
+
+    void "teste l'affichage du formulaire d'ajout de trajet"() {
+        given: "Un trajet qui appartient a un utilisateur"
+        Vehicule vehicule = Mock(Vehicule)
+        vehicule.possesseur >> request.session['utilisateur']
+
+        when: "une demande d'accès au formulaire d'ajout par un utilisateur connecté"
+        controller.ajouter()
+
+        then: "l'utilisateur est redirigé sur la page"
+        view == '/trajet/ajouter'
+        response.status == 200
+    }
+
+    void "teste l'ajout de trajet avec des champs corrects"() {
         given: "un membre qui veut ajouter un trajet"
         Trajet trajet = Mock(Trajet)
         trajet.vehicule >> Mock(Vehicule)
@@ -127,24 +189,93 @@ class TrajetControllerSpec extends Specification {
         then:"the trajet is created"
         1 * controller.trajetService.ajouterOuModifierTrajet(_)
         response.redirectedUrl == '/accueil'
+    }
 
+    void "teste l'ajout de trajet avec une instance nulle (mode formmulaire)"() {
+        when: "il ajoute un trajet null"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.ajouterTrajetPost(null)
+
+        then: "une erreur 404 est retournée"
+        response.redirectedUrl == '/trajet/index'
+        flash.message != null
+    }
+
+    void "teste l'ajout de trajet avec une instance nulle (mode non formmulaire)"() {
+        when: "il ajoute un trajet null"
+        controller.ajouterTrajetPost(null)
+
+        then: "une erreur 404 est retournée"
+        response.status == HttpStatus.NOT_FOUND.value()
+        flash.message == null
     }
 
 
-//    void "teste l'inscription a un trajet"() {
-//        given: "Un trajet et un utilisateur qui n'est ni inscrit, ni conducteur sur le trajet"
-//        Trajet trajet = Mock(Trajet)
-//
-//        Utilisateur utilisateur = Mock(Utilisateur)
-//        request.session['utilisateur'] = utilisateur
-//        controller.trajetService.trouverTrajet(_ as Long) >> { it -> trajet }
-//        trajet.addToParticipants(_ as Utilisateur) >> true
-//
-//        when: "L'utilisateur veut s'inscrire au trajet"
-//        controller.ajouterParticipant(trajet.id)
-//
-//        then:"le controlleur appel le service"
-//        1 * controller.trajetService.trouverTrajet(_)
-//        1 * controller.trajetService.ajouterOuModifierTrajet(_)
-//    }
+
+
+
+
+    //
+    //
+    //   EDITER TRAJET
+    //
+    //
+
+    void "teste l'affichage du formulaire d'edition de trajet (avec un trajet valide)"() {
+        given: "Un trajet qui appartient a un utilisateur"
+        Utilisateur utilisateur = Mock(Utilisateur)
+        request.session['utilisateur'] = utilisateur
+        Trajet trajet = Mock(Trajet)
+
+        when: "une demande d'accès au formulaire d'edition par un utilisateur connecté"
+        controller.editer(trajet)
+
+        then: "l'utilisateur est redirigé sur la page d'edition"
+        1 * utilisateur.vehicules >> []
+        model.listeVehicules != null
+        model.trajet == trajet
+        view == '/trajet/editer'
+        response.status == 200
+    }
+
+    void "teste l'edition de trajet avec des champs corrects"() {
+        given: "un membre qui veut editer un trajet"
+        Trajet trajet = Mock(Trajet)
+        trajet.vehicule >> Mock(Vehicule)
+        trajet.vehicule.id >> null
+        def utilisateur = TestsHelper.creeUtilisateurValide()
+        request.session['utilisateur'] = utilisateur
+
+        when: "il valide le trajet"
+        controller.updateTrajet(trajet)
+
+        then:"the trajet is created"
+        1 * controller.trajetService.ajouterOuModifierTrajet(_)
+        response.redirectedUrl == '/accueil'
+    }
+
+    void "teste l'edition de trajet avec une instance nulle (mode formmulaire)"() {
+        when: "il ajoute un trajet null"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.updateTrajet(null)
+
+        then: "une erreur 404 est retournée"
+        response.redirectedUrl == '/trajet/index'
+        flash.message != null
+    }
+
+    void "teste l'edition de trajet avec une instance nulle (mode non formmulaire)"() {
+        when: "il ajoute un trajet null"
+        controller.updateTrajet(null)
+
+        then: "une erreur 404 est retournée"
+        response.status == HttpStatus.NOT_FOUND.value()
+        flash.message == null
+    }
+
+
+
+
+
+
 }
