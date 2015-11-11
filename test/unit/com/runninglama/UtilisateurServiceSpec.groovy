@@ -178,4 +178,12 @@ class UtilisateurServiceSpec extends Specification {
         membre.hasErrors() == true
         membre.errors.getFieldError('passwordHash')
     }
+
+    void "test la methode liste utilisateur"(){
+        when: "on appelle le service pour obtenir la liste des utilisateur"
+        def liste = service.listeUtilisateurs(_)
+
+        then: "la bonne couche de DAO est appelée"
+        1 * service.utilisateurDAOService.liste(_)
+    }
 }

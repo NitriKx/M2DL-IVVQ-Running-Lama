@@ -8,4 +8,8 @@ enum TypeVehicule {
     MOTO,
     BUS,
     VOITURE;
+
+    TypeVehicule() {
+        // Do nothing
+    }
 }

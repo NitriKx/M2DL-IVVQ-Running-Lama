@@ -191,6 +191,20 @@ class TrajetControllerSpec extends Specification {
         response.redirectedUrl == '/accueil'
     }
 
+    void "teste l'ajout de trajet avec des champs incorrects"() {
+        given: "un membre qui veut ajouter un trajet"
+        Trajet trajet = TestsHelper.creeTrajetValide(Mock(Utilisateur), Mock(Vehicule))
+        trajet.vehicule = null
+        request.session['utilisateur'] = TestsHelper.creeUtilisateurValide()
+
+        when: "il valide le trajet"
+        controller.ajouterTrajetPost(trajet)
+
+        then:"L'utilisateur est redirigé au formualaire d'ajout"
+        0 * controller.trajetService.ajouterOuModifierTrajet(_)
+        view == '/trajet/ajouter'
+    }
+
     void "teste l'ajout de trajet avec une instance nulle (mode formmulaire)"() {
         when: "il ajoute un trajet null"
         request.contentType = FORM_CONTENT_TYPE
@@ -254,12 +268,26 @@ class TrajetControllerSpec extends Specification {
         response.redirectedUrl == '/accueil'
     }
 
+    void "teste l'edition de trajet avec des champs incorrects"() {
+        given: "un membre qui veut editer un trajet"
+        Trajet trajet = TestsHelper.creeTrajetValide(Mock(Utilisateur), Mock(Vehicule))
+        trajet.vehicule = null
+        request.session['utilisateur'] = TestsHelper.creeUtilisateurValide()
+
+        when: "il valide le trajet"
+        controller.updateTrajet(trajet)
+
+        then:"the trajet is created"
+        0 * controller.trajetService.ajouterOuModifierTrajet(_)
+        view == '/trajet/editer'
+    }
+
     void "teste l'edition de trajet avec une instance nulle (mode formmulaire)"() {
         when: "il ajoute un trajet null"
         request.contentType = FORM_CONTENT_TYPE
         controller.updateTrajet(null)
 
-        then: "une erreur 404 est retournée"
+        then: "L'utilisateu est redirigé a l'accueil"
         response.redirectedUrl == '/trajet/index'
         flash.message != null
     }
@@ -272,10 +300,4 @@ class TrajetControllerSpec extends Specification {
         response.status == HttpStatus.NOT_FOUND.value()
         flash.message == null
     }
-
-
-
-
-
-
 }

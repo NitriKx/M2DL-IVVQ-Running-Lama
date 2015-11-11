@@ -74,10 +74,13 @@ class VehiculeSpec extends Specification {
     void "test le toString haha"() {
         given: "Un véhicule"
         Vehicule vehicule = new Vehicule(possesseur: creeUtilisateurValide(), annee: 2005, nb_place: 1, kilometrage: 1000, marque: "Peugeot", modele: "106", type: TypeVehicule.VOITURE)
+        TypeVehicule.valueOf(TypeVehicule.VOITURE.toString());
+
         when: "toString est appelé"
         String toString = vehicule.toString();
         then:
         toString == vehicule.marque+" - "+vehicule.modele+ " - "+ vehicule.kilometrage
+        TypeVehicule.valueOf(TypeVehicule.VOITURE.toString());
     }
 
 }

@@ -96,6 +96,7 @@ class TrajetController {
             return
         }
 
+        trajet.validate()
         if (trajet.hasErrors()) {
             render model: [listeVehicules:utilisateur.getVehicules(), trajet: trajet], view: 'editer'
             return

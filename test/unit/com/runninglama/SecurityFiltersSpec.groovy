@@ -11,7 +11,10 @@ import spock.lang.Specification
 @TestFor(VehiculeController)
 class SecurityFiltersSpec extends Specification {
 
+    def utilisateurController
+
     def setup() {
+        utilisateurController = new UtilisateurController();
     }
 
     def cleanup() {
@@ -53,4 +56,12 @@ class SecurityFiltersSpec extends Specification {
 
     }
 
+    void "test user is filtered and redirected to connexion index if not logged and try access connection"() {
+        when:
+        withFilters(action:"delete") {
+            utilisateurController.connexion()
+        }
+        then:
+        response.redirectedUrl == '/utilisateur/connexion'
+    }
 }
