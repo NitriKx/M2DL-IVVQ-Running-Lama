@@ -14,7 +14,7 @@ class BootStrap {
                 //              l'environnement de production
                 || Environment.currentEnvironment == Environment.PRODUCTION) {
 
-            
+
             Utilisateur utilisateur1 = new Utilisateur(email: 'email@test.fr', nom: "Custoja", prenom: "Julien", pseudo: "JulienCsj",
                     passwordHash: '49440ae7cec983ae6155b1d4d80ee77bd071b115', passwordSalt: 'abc', dateInscription: new Date(),
                     dateDerniereConnexion: new Date(), dateNaissance: new Date(), telephone: "0987675434", vehicules: []).save(flush: true)
