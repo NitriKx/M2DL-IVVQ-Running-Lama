@@ -12,9 +12,6 @@ cache:
 
 sudo: required
 
-services:
-  - docker
-
 jdk:
   - oraclejdk7
 
