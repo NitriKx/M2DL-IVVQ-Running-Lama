@@ -120,6 +120,74 @@ class UtilisateurServiceSpec extends Specification {
     }
 
     @Unroll
+    def "test qu'un visiteur veut s'inscrire avec un mot de passe null" () {
+        given: "un visiteur qui veut s'inscrire et qui remplit les champs "
+        String pseudo = "toto"
+        String motDePasse = null
+        String motDePasseConfirmation = "toto"
+        String nom = "nom"
+        String prenom = "prenom"
+        String email ="totoo@toto.toto"
+        String telephone = "0505050505"
+        String date = new Date()
+        Utilisateur utilisateur = new Utilisateur(pseudo:pseudo,motDePasse: motDePasse,motDePasseConfirmation: motDePasseConfirmation,
+                nom:nom,prenom: prenom,email: email,telephone: telephone,dateNaissance: date)
+
+        when: "le visiteur veut s'inscrire et clique sur m'inscrire"
+        def membre = service.inscrireUtilisateur(utilisateur)
+
+        then: "le visiteur est inscrit"
+        membre.hasErrors() == true
+        membre.errors.getFieldError('motDePasse')
+
+    }
+
+    @Unroll
+    def "test qu'un visiteur veut s'inscrire avec un mot de passe de confirmation null" () {
+        given: "un visiteur qui veut s'inscrire et qui remplit les champs "
+        String pseudo = "toto"
+        String motDePasse = "ffdf"
+        String motDePasseConfirmation = null
+        String nom = "nom"
+        String prenom = "prenom"
+        String email ="totoo@toto.toto"
+        String telephone = "0505050505"
+        String date = new Date()
+        Utilisateur utilisateur = new Utilisateur(pseudo:pseudo,motDePasse: motDePasse,motDePasseConfirmation: motDePasseConfirmation,
+                nom:nom,prenom: prenom,email: email,telephone: telephone,dateNaissance: date)
+
+        when: "le visiteur veut s'inscrire et clique sur m'inscrire"
+        def membre = service.inscrireUtilisateur(utilisateur)
+
+        then: "le visiteur est inscrit"
+        membre.hasErrors() == true
+        membre.errors.getFieldError('motDePasse')
+
+    }
+
+    @Unroll
+    def "test qu'un visiteur veut s'inscrire avec des mots de passe null" () {
+        given: "un visiteur qui veut s'inscrire et qui remplit les champs "
+        String pseudo = "toto"
+        String motDePasse = null
+        String motDePasseConfirmation = null
+        String nom = "nom"
+        String prenom = "prenom"
+        String email ="totoo@toto.toto"
+        String telephone = "0505050505"
+        String date = new Date()
+        Utilisateur utilisateur = new Utilisateur(pseudo:pseudo,motDePasse: motDePasse,motDePasseConfirmation: motDePasseConfirmation,
+                nom:nom,prenom: prenom,email: email,telephone: telephone,dateNaissance: date)
+
+        when: "le visiteur veut s'inscrire et clique sur m'inscrire"
+        def membre = service.inscrireUtilisateur(utilisateur)
+
+        then: "le visiteur est inscrit"
+        membre.hasErrors() == true
+
+    }
+
+    @Unroll
     def "test qu'un membre veut modifier son profil avec des champs corrects" () {
         given: "un membre qui veut modifier son profil et qui remplit les champs "
 
