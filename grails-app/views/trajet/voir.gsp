@@ -14,7 +14,7 @@
             </h1>
         </div>
     </div>
-<!-- /.row -->
+    <!-- /.row -->
     <div class="row">
         <!-- Map Column -->
         <div class="col-md-8">
@@ -23,59 +23,57 @@
         </div>
         <!-- Contact Details Column -->
         <div class="col-md-4">
-        <div class="row">
-            <g:if test="${trajet.conducteur.id == session?.utilisateur?.id}">
-                <g:link controller="trajet" action="supprimer" params="[id: trajet.id]" class="btn btn-danger">Supprimer</g:link>
-                <g:link controller="trajet" action="editer" params="[id: trajet.id]" class="btn btn-primary">Modifier</g:link>
-            </g:if>
-            <g:else>
-                <g:if test="${!session?.utilisateur?.participe(trajet)}">
-                    <g:if test="${session.utilisateur}">
-                        <g:link controller="trajet" action="ajouterParticipant" params="[idTrajet: trajet.id]" class="btn btn-success">Participer</g:link>
-                    </g:if>
-                    <g:else>
-                        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalConnexion">Participer</a>
-                    </g:else>
+            <div class="row">
+                <g:if test="${trajet.conducteur.id == session?.utilisateur?.id}">
+                    <g:link controller="trajet" action="supprimer" params="[id: trajet.id]" class="btn btn-danger">Supprimer</g:link>
+                    <g:link controller="trajet" action="editer" params="[id: trajet.id]" class="btn btn-primary">Modifier</g:link>
                 </g:if>
-            </g:else>
+                <g:else>
+                    <g:if test="${!session?.utilisateur?.participe(trajet)}">
+                        <g:if test="${session.utilisateur}">
+                            <g:link controller="trajet" action="ajouterParticipant" params="[idTrajet: trajet.id]" class="btn btn-success">Participer</g:link>
+                        </g:if>
+                        <g:else>
+                            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#modalConnexion">Participer</a>
+                        </g:else>
+                    </g:if>
+                </g:else>
 
-        </div>
+            </div>
             <h3>Détails</h3>
-        <ul>
-            <li>Date aller : ${trajet.dateAller}</li>
-            <li>Date retour : ${trajet.dateRetour}</li>
-            <li>Prix : ${trajet.prix}</li>
-            <li>Commentaire : ${trajet.commentaire}</li>
-            <li>Nombre place : ${trajet.nombrePlace}</li>
+            <ul>
+                <li>Date aller : ${trajet.dateAller}</li>
+                <li>Date retour : ${trajet.dateRetour}</li>
+                <li>Prix : ${trajet.prix}</li>
+                <li>Commentaire : ${trajet.commentaire}</li>
+                <li>Nombre place : ${trajet.nombrePlace}</li>
+                <li>Nombre place : ${trajet.nombrePlace}</li>
 
-            <li>Conducteur : ${trajet.conducteur.prenom} ${trajet.conducteur.nom}</li>
-            <li>Véhicule : ${trajet.vehicule.marque} ${trajet.vehicule.modele}</li>
-            <li>Note moyenne du conducteur : ${trajet.conducteur.noteMoyenne}</li>
-
-        </ul>
-        </div>
-    </div>
-    <div class="row" style="margin-top:20px;">
-        <div class="col-md-12">
-            <div class="well">
-                <h5>${trajet.participants.size()} participant<g:if test="${trajet.participants.size()>1}">s</g:if></h5>
+                <li>Conducteur : ${trajet.conducteur.prenom} ${trajet.conducteur.nom}</li>
+                <li>Véhicule : ${trajet.vehicule.marque} ${trajet.vehicule.modele}</li>
+                <li>Les participants :
                     <ul>
                         <g:each in="${trajet.participants}" var="participant">
                             <li>${participant.nom} ${participant.prenom}</li>
                         </g:each>
                     </ul>
                 </li>
-            </div>
-
+            </ul>
             <g:if test="${trajet.notations != null && trajet.notations?.size() != 0}">
-                <h2>Commentaires sur le trajet :</h2>
+                <ul>
+                    <li>Note moyenne du conducteur : ${trajet.conducteur.noteMoyenne}</li>
+                </ul>
+                <div><h4>Avis des participants sur le trajet :</h4></div>
                 <g:each var="notation" in="${ trajet.notations }">
-                    <div class="well">
-                        <strong>${notation.participant}</strong> a noté ce trajet. Note : ${notation.note}/5
-                        <br>Commentaire : ${notation.commentaire}</li>
-                    </dv>
+                    <ul>
+                        <li>Note du trajet : ${notation.note}</li>
+                        <li>Commentaire sur le trajet : ${notation.commentaire}</li>
+                        <li>Auteur de l'avis : ${notation.participant}</li>
+                    </ul>
                     <hr/>
                 </g:each>
+
+
             </g:if>
             <g:if test="${notationAutorisee}">
                 <div id="noteTrajet">
@@ -88,7 +86,7 @@
                                       value="${5}"
                             />
                             <fieldset class="buttons">
-                                <g:submitButton name="noter" id="${trajet.getId()}" class="btn-success form-control pull-right" action="noter" value="Evaluer le trajet"></g:submitButton>
+                                <g:submitButton name="noter" id="${trajet.getId()}" class="btn-success form-control input-lg" action="noter" value="Evaluer le trajet"></g:submitButton>
                             </fieldset>
                         </div>
                     </g:form>

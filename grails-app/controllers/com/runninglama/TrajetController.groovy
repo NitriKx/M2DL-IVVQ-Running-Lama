@@ -158,7 +158,7 @@ class TrajetController {
         }
 
         // Les participants ne peuvent voter qu'une fois
-        def closure = trajet?.notations?.findAll { it.participant?.id == utilisateur.id }
+        def closure = trajet?.notations?.findAll { it.participant?.id == utilisateur?.id }
         autorisation = autorisation && (closure == null || closure.isEmpty())
 
         if(trajet != null) {

@@ -81,4 +81,22 @@ class UtilisateurSpec extends Specification {
         "Pseudo17" | "Julien" | "Custoja" | "julien.c"           | "0567543456" | new Date()             | new Date()       | new Date()     | "gfhthqsdfjgjqfjgfg" | "ssdfdsfdsfsd" | "azerty"    | null
 
     }
+
+    def "Un utilisateur enregistré"() {
+
+        given: "Un utilisateur avec des données correctes "
+        def util = new Utilisateur(dateDerniereConnexion: aDateDerniereConnexion, telephone: aTelephone,
+                pseudo: aPseudo, dateInscription: aDateInscription, dateNaissance: aDateNaissance,
+                email: aEmail, nom: aNom, prenom: aPrenom, passwordHash: aPasswordHash, passwordSalt: aPasswordSalt, motDePasse: aMotDePasse, motDePasseConfirmation: aMotDePasseConfirmation)
+
+        when: "on veut afficher l'utilisateur"
+        def validation = util.toString()
+
+        then: "le déplacement est correctement effectué"
+        validation.equals(aPseudo)
+
+        where:
+        aPseudo        | aPrenom  | aNom      | aEmail               | aTelephone   | aDateDerniereConnexion | aDateInscription | aDateNaissance | aPasswordHash        | aPasswordSalt  | aMotDePasse | aMotDePasseConfirmation | noteMoyenne
+        "ARunningLama" | "Julien" | "Custoja" | "julien.c@gmail.com" | "0567543456" | new Date()             | new Date()       | new Date()     | "gfhthqsdfjgjqfjgfg" | "ssdfdsfdsfsd" | "azerty"    | "azerty"                | 3.5
+    }
 }
