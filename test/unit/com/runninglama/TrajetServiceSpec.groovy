@@ -82,4 +82,13 @@ class TrajetServiceSpec extends Specification {
         1 * service.trajetDAOService.count()
     }
 
+    void "test la methode countByVehicule"() {
+        when: "On appel le service"
+        Vehicule vehicule = TestsHelper.creeVehiculeValide(Mock(Utilisateur))
+        service.countbyVehicule(vehicule)
+
+        then:"La bonne couche DAO est appelée"
+        1 * service.trajetDAOService.countByVehicule(_)
+    }
+
 }
