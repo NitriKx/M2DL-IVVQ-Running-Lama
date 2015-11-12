@@ -161,6 +161,44 @@ class UtilisateurServiceSpec extends Specification {
     }
 
     @Unroll
+    def "test qu'un membre veut modifier son profil avec un mot de passe de confirmation null" () {
+        given: "un membre qui veut modifier son profil et qui remplit les champs "
+        Utilisateur utilisateur = new Utilisateur(pseudo:"toto",nom:"toto",prenom:"toto",email:"toto@toto.fr",telephone:"0505050505",passwordSalt: "abcd",passwordHash: "dee9b46e23c4b18ecb604673e72fcfc8f51fee70")
+        String pseudo = "lolo"
+        String ancienMotDePasse = "toto"
+        String motDePasse = "lalu"
+        String motDePasseConfirmation = null
+        String telephone = "0505050505"
+        Utilisateur utilisateurModifie = new Utilisateur(pseudo:pseudo,motDePasse: motDePasse,motDePasseConfirmation: motDePasseConfirmation,telephone: telephone)
+
+        when: "le membre valide"
+        Utilisateur membre = service.modifierUtilisateur(utilisateur,utilisateurModifie,ancienMotDePasse)
+
+        then: "le membre n'est pas modfié et indormé des erreurs"
+        membre.hasErrors() == true
+        membre.errors.getFieldError('motDePasse')
+    }
+
+    @Unroll
+    def "test qu'un membre veut modifier son profil avec un nouveau  mot de passe null" () {
+        given: "un membre qui veut modifier son profil et qui remplit les champs "
+        Utilisateur utilisateur = new Utilisateur(pseudo:"toto",nom:"toto",prenom:"toto",email:"toto@toto.fr",telephone:"0505050505",passwordSalt: "abcd",passwordHash: "dee9b46e23c4b18ecb604673e72fcfc8f51fee70")
+        String pseudo = "lolo"
+        String ancienMotDePasse = "toto"
+        String motDePasse = null
+        String motDePasseConfirmation = "alo"
+        String telephone = "0505050505"
+        Utilisateur utilisateurModifie = new Utilisateur(pseudo:pseudo,motDePasse: motDePasse,motDePasseConfirmation: motDePasseConfirmation,telephone: telephone)
+
+        when: "le membre valide"
+        Utilisateur membre = service.modifierUtilisateur(utilisateur,utilisateurModifie,ancienMotDePasse)
+
+        then: "le membre n'est pas modfié et indormé des erreurs"
+        membre.hasErrors() == true
+        membre.errors.getFieldError('motDePasse')
+    }
+
+    @Unroll
     def "test qu'un membre veut modifier son profil avec un ancien mot de passe incorrect" () {
         given: "un membre qui veut modifier son profil et qui remplit les champs "
         Utilisateur utilisateur = new Utilisateur(pseudo:"toto",nom:"toto",prenom:"toto",email:"toto@toto.fr",telephone:"0505050505",passwordSalt: "abcd",passwordHash: "dee9b46e23c4b18ecb604673e72fcfc8f51fee70")

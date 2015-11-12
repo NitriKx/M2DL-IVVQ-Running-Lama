@@ -396,4 +396,17 @@ class VehiculeControllerSpec extends Specification {
         response.redirectedUrl == '/vehicule/index'
     }
 
+    void"test la suppression d'un vehicule utilisée dans un trajet"() {
+        given: "un véhicule"
+        def vehicule = Mock(Vehicule)
+
+        when: "l'utilisateur sans vehicule veut supprimer le vehicule"
+        request.contentType = FORM_CONTENT_TYPE
+        controller.trajetService?.countbyVehicule(_) >> null
+        controller.delete(vehicule)
+
+        then: "l'utilisateur est redirigé sur un page d'erreur"
+        response.redirectedUrl == '/vehicule/index'
+    }
+
 }
