@@ -12,7 +12,7 @@ grails.project.fork = [
     //  compile: [maxMemory: 256, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
 
     // configure settings for the test-app JVM, uses the daemon by default
-    test: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
+    test: false, //[maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
     // configure settings for the run-app JVM
     run: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, forkReserve:false],
     // configure settings for the run-war JVM
@@ -48,36 +48,56 @@ grails.project.dependency.resolution = {
 
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
-        // runtime 'mysql:mysql-connector-java:5.1.27'
-        runtime 'postgresql:postgresql:8.4-702.jdbc3'
+        runtime 'mysql:mysql-connector-java:5.1.27'
+        // runtime 'postgresql:postgresql:8.4-702.jdbc3'
+        //runtime 'postgresql:postgresql:9.1-901.jdbc4'
         test "org.grails:grails-datastore-test-support:1.0-grails-2.3"
+
+        // Latest httpcore and httpmime for Coveralls plugin
+        build 'org.apache.httpcomponents:httpcore:4.3.2'
+        build 'org.apache.httpcomponents:httpclient:4.3.2'
+        build 'org.apache.httpcomponents:httpmime:4.3.3'
     }
 
     plugins {
         // plugins for the build system only
         build ":tomcat:7.0.54"
+        build ":codenarc:0.24.1"
 
         // plugins for the compile step
         compile ":scaffolding:2.0.3"
         compile ':cache:1.1.7'
 
+        // Coveralls
+        compile ":coveralls:0.1"
+
+
+        compile ":gmetrics:0.3.1"
+
         // plugins needed at runtime but not for compilation
         runtime ":hibernate:3.6.10.16" // or ":hibernate4:4.3.5.4"
         runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
-        runtime ":resources:1.2.8"
-        // Uncomment these (or add new ones) to enable additional resources capabilities
-        //runtime ":zipped-resources:1.0.1"
-        //runtime ":cached-resources:1.1"
-        //runtime ":yui-minify-resources:0.1.5"
+        runtime ":resources:1.2.14"
 
-        // An alternative to the default resources plugin is the asset-pipeline plugin
-        //compile ":asset-pipeline:1.6.1"
+        test ":code-coverage:2.0.3-3"
+    }
+}
 
-        // Uncomment these to enable additional asset-pipeline capabilities
-        //compile ":sass-asset-pipeline:1.5.5"
-        //compile ":less-asset-pipeline:1.5.3"
-        //compile ":coffee-asset-pipeline:1.5.0"
-        //compile ":handlebars-asset-pipeline:1.3.0.1"
+coverage {
+    xml = true
+    sourceInclusions = ['grails-app/domain', 'grails-app/services', 'grails-app/controllers']
+    exclusions = ["ControllersHelper"]
+}
+
+codenarc.reports = {
+
+    MyXmlReport('xml') {                       // The report name "MyXmlReport" is user-defined; Report type is 'xml'
+        outputFile = 'target/test-reports/codenarc/CodeNarcReport.xml'      // Set the 'outputFile' property of the (XML) Report
+        title = 'RunningLama CodeNarc report'  // Set the 'title' property of the (XML) Report
+    }
+    MyHtmlReport('html') {                     // Report type is 'html'
+        outputFile = 'target/test-reports/codenarc/CodeNarcReport.html'
+        title = 'RunningLama CodeNarc report'
     }
 }

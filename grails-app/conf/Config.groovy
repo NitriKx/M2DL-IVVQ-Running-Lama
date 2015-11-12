@@ -34,6 +34,10 @@ grails.mime.types = [ // the first one is the default format
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
 
+
+// Active la recherche de resource (requis depuis le 1.2.13)
+grails.resources.resourceLocatorEnabled = true
+
 // What URL patterns should be processed by the resources plugin
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
 grails.resources.adhoc.includes = ['/images/**', '/css/**', '/js/**', '/plugins/**']
@@ -119,3 +123,9 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+
+// Gmetric configuration
+gmetrics.outputFile = "target/test-reports/gmetrics/GmetricsReport.xml"
+gmetrics.reportType = "org.gmetrics.report.XmlReportWriter"
+gmetrics.reportTitle = "RunningLama GMetrics Report"

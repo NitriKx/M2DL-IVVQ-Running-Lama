@@ -125,3 +125,12 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+# Sonar non-encrypted secret key
+sonar-credentials.txt
+
+# Sonar temp files
+.sonar/
+
+# Cobertura artifacts
+cobertura.ser

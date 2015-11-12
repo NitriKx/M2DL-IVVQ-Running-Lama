@@ -1,14 +1,57 @@
 language: groovy
-jdk:
-- oraclejdk7
+
 branches:
   only:
   - pre-prod
-script: ./grailsw refresh-dependencies && ./grailsw "test-app unit:" && ./grailsw
-  refresh-dependencies && ./grailsw "test-app functional:"
+  - /^dev-.*$/
+  - /^tech-.*$/
+
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.grails
+
+sudo: required
+
+jdk:
+  - oraclejdk7
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 5 # give xvfb some time to start
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_4bff5548dd92_key -iv $encrypted_4bff5548dd92_iv -in sonar-credentials.txt.enc -out sonar-credentials.txt -d
+  - mv sonar-credentials.txt /home/travis/
+  - wget http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/sonar-runner-dist-2.4.zip
+  - unzip sonar-runner-dist-2.4.zip
+  - rm sonar-runner-dist-2.4.zip
+  - sudo mv sonar-runner-2.4 /opt/sonar-runner
+  - sudo rm /opt/sonar-runner/conf/sonar-runner.properties
+  - sudo mv sonar-runner.properties /opt/sonar-runner/conf/
+  - export SONAR_RUNNER_HOME=/opt/sonar-runner
+  - export PATH=$PATH:$SONAR_RUNNER_HOME/bin
+
+
+script:
+  - ./grailsw refresh-dependencies
+  - ./grailsw test-app -coverage -xml --stacktrace
+
+after_script:
+  - mkdir ${TRAVIS_BUILD_DIR}/target/test-reports/codenarc && ./grailsw codenarc
+  - mkdir ${TRAVIS_BUILD_DIR}/target/test-reports/gmetrics && ./grailsw gmetrics
+  - sed -i "s/sonar.projectName=RunningLama/sonar.projectName=RunningLama_${TRAVIS_BRANCH}/g" ${TRAVIS_BUILD_DIR}/sonar-project.properties
+  - sed -i "s/sonar.projectKey=com.runninglama.RunningLama/sonar.projectKey=com.runninglama.RunningLama_${TRAVIS_BRANCH}/g" ${TRAVIS_BUILD_DIR}/sonar-project.properties
+  - sed -i 's/line number="0"/line number="1"/g' ${TRAVIS_BUILD_DIR}/target/test-reports/cobertura/coverage.xml
+  - sonar-runner -e -X
+
+after_success:
+  - ./grailsw coveralls
+
 deploy:
   provider: heroku
   api_key:
     secure: EbHFclzNLvwZ6BaoBmWTn0V3WgCd8pbz5caf7cFqTOcU/WtjoAJ+/21ZaoqLBZLMtHOibKDSBqa6bFoEEWzB9/9rGHs2MEfvcc4ihhP9b37Cv5W8ul0ZMNjcfrLEZlt2yFp49V7OxnX+V7rxi41TjUbW+6pTSohw/4VYyGEsma+menYXAN8gq+ksQndBWoesX3hIYMhzBpcJVbSei57NlCFKHOQupKlFW2AR7KvbZIFjNRyCGH6kQDfClB/OZiMbOI04JLH3JdBUutXfM3+zH/iMrRxQwINqJrgReYdhCgpBzmWhHDMllTWWZa1cIx/QPw14OxxjQdoeeJg254T8I2N4B51BSCu3VZxB4CH9G9Nt12gxva4x2K+zXs2s3soHIPRs1Qll4iTa5C/TkJor7K6ygAtLDALKcKuinbdhfZIY45td+923JvhWX7q20DlrxsJSLYdTBPJQqQIRv/U/AqLSOX90U+huZDe1of4SU7WBkT0JZRBxtAKYlebYAyeS1lPVV6VphcAxK2TZ8yFO5Mz/zkR9Ojsqx438dEkeNTgpGgXhkODR3SxEI5IFJMwQY6QQCIaBRamOrF5Vay/Y50esivBzhAkjHCSCQKmTv++ik0bzFAI7tJU9G2tgNYQNcHaaM68JTLZzcMi7DByBYOdPVbEjyHNSfqEIzkPFREQ=
   app:
-    master: m2dl-ivvq-running-lama
+    pre-prod: m2dl-ivvq-running-lama
