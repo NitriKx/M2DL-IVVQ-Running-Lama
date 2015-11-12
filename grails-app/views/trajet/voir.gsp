@@ -29,7 +29,6 @@
                 <g:link controller="trajet" action="editer" params="[id: trajet.id]" class="btn btn-primary">Modifier</g:link>
             </g:if>
             <g:else>
-cc${session?.utilisateur?.participe(trajet)}
                 <g:if test="${!session?.utilisateur?.participe(trajet)}">
                     <g:if test="${session.utilisateur}">
                         <g:link controller="trajet" action="ajouterParticipant" params="[idTrajet: trajet.id]" class="btn btn-success">Participer</g:link>
@@ -76,7 +75,6 @@ cc${session?.utilisateur?.participe(trajet)}
 
         </g:if>
         <g:if test="${notationAutorisee}">
-            <div> Test3</div>
             <div id="noteTrajet">
                 <g:form url="[resource:trajet, action:'noter']" method="PUT"  name="myForm" update="noteTrajet">
                     <div class="form-group">

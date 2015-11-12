@@ -10,6 +10,7 @@ class VehiculeController {
     static allowedMethods = [ save: "POST", update: "PUT", delete: "DELETE" ]
 
     VehiculeService vehiculeService
+    TrajetService trajetService
 
     def index(Integer max) {
         def utilisateur = session.getAttribute('utilisateur')
@@ -99,6 +100,12 @@ class VehiculeController {
 
         if (vehiculeInstance == null) {
             notFound()
+            return
+        }
+
+        if(trajetService?.countbyVehicule(vehiculeInstance) > 0) {
+            flash.message = "Ce véhicule est impliqué dans un trajet, impossible de le supprimer."
+            redirect(action: 'index')
             return
         }
 

@@ -48,4 +48,8 @@ class TrajetService {
 
         trajetDAOService.save(trajetInstance)
     }
+
+    def countbyVehicule(Vehicule vehicule) {
+        trajetDAOService.countByVehicule(vehicule)
+    }
 }

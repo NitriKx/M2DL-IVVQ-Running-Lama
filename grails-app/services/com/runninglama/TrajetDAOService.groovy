@@ -42,4 +42,8 @@ class TrajetDAOService {
     def saveNotation(Notation notation) {
         notation.save(flush: true)
     }
+
+    def countByVehicule(Vehicule vehicule) {
+        Trajet.countByVehicule(vehicule)
+    }
 }

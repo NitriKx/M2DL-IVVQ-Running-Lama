@@ -11,9 +11,6 @@ class Vehicule {
 
     Utilisateur possesseur
 
-    static belongsTo = [
-            possesseur: Utilisateur
-    ]
 
     // Variables gérées par GORM
     Date dateCreated

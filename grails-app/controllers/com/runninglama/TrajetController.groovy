@@ -32,9 +32,11 @@ class TrajetController {
     }
 
     def noter(Trajet trajetInstance) {
-        def tel = params
+        if(!trajetInstance) {
+            liste()
+        }
+
         Utilisateur utilisateur = session.getAttribute("utilisateur")
-//            trajetInstance.participants.add(utilisateur)
         def idParticipants = trajetInstance?.participants?.id
         def autorisation = idParticipants?.contains(utilisateur.id)
 
@@ -144,14 +146,16 @@ class TrajetController {
     //  RESPONSE HELPERS
     //
 
-    protected void voirTrajet(Long id) {
+    def voirTrajet(Long id) {
         Trajet trajet = trajetService.trouverTrajet(id);
         Utilisateur utilisateur = session.getAttribute('utilisateur')
 
-        def idParticipants = trajet?.participants?.id
+        boolean autorisation = false
 
         // Seul un particicpant du trajet peut noter le trajet
-        boolean autorisation = idParticipants?.contains(utilisateur.id)
+        if(utilisateur != null) {
+            autorisation = utilisateur?.participe(trajet)
+        }
 
         // Les participants ne peuvent voter qu'une fois
         def closure = trajet?.notations?.findAll { it.participant?.id == utilisateur.id }

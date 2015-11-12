@@ -10,6 +10,8 @@ class VehiculeDAOService {
     }
 
     def delete(Vehicule vehiculeInstance) {
+        vehiculeInstance.possesseur.getVehicules().remove(vehiculeInstance)
+        vehiculeInstance.possesseur.save(flush: true)
         vehiculeInstance.delete(flush: true);
     }
 
