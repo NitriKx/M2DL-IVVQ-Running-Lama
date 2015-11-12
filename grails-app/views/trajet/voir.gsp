@@ -72,8 +72,8 @@
                 <g:each var="notation" in="${ trajet.notations }">
                     <div class="well">
                         <strong>${notation.participant}</strong> a noté ce trajet. Note : ${notation.note}/5
-                    <br>Commentaire : ${notation.commentaire}</li>
-                    </dv>
+                        <br>Commentaire : ${notation.commentaire}</li>
+                    </div>
                     <hr/>
                 </g:each>
             </g:if>
