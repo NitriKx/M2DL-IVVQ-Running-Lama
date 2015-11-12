@@ -9,10 +9,7 @@ class BootStrap {
     def init = { servletContext ->
 
         // On insère les utilisateurs uniquement dans l'environnement de développement
-        if (Environment.currentEnvironment == Environment.DEVELOPMENT
-                // TEMPORAIRE - Le temps qu'on arrive à faire marcher la base de données sur
-                //              l'environnement de production
-                || Environment.currentEnvironment == Environment.PRODUCTION) {
+        if (Environment.currentEnvironment == Environment.DEVELOPMENT) {
 
 
             Utilisateur utilisateur1 = new Utilisateur(email: 'email@test.fr', nom: "Custoja", prenom: "Julien", pseudo: "JulienCsj",
