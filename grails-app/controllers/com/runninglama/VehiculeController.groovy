@@ -103,7 +103,7 @@ class VehiculeController {
             return
         }
 
-        if(trajetService?.countbyVehicule(vehiculeInstance) > 0) {
+        if(trajetService.countbyVehicule(vehiculeInstance) > 0) {
             flash.message = "Ce véhicule est impliqué dans un trajet, impossible de le supprimer."
             redirect(action: 'index')
             return

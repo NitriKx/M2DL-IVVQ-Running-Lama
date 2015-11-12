@@ -16,6 +16,7 @@ class VehiculeControllerSpec extends Specification {
 
     def setup() {
         controller.vehiculeService = Mock(VehiculeService)
+        controller.trajetService = Mock(TrajetService)
 
         // On force l'utilisateur dans la session car le filtre de sécurité fait le controle en intégration
         utilisateur = TestsHelper.creeUtilisateurValide()
@@ -346,6 +347,7 @@ class VehiculeControllerSpec extends Specification {
         def vehicule = TestsHelper.creeVehiculeValide(utilisateur).save(flush: true)
 
         when: "l'instance est passée à supprimer"
+        controller.trajetService.countbyVehicule(_) >> 0
         controller.delete(vehicule)
 
         then: "l'instance est supprimée"
@@ -362,6 +364,7 @@ class VehiculeControllerSpec extends Specification {
         def vehicule = Mock(Vehicule)
 
         when: "l'utilisateur sans vehicule veut supprimer le vehicule de l'autre utilisateur"
+        controller.trajetService.countbyVehicule(_) >> 0
         controller.delete(vehicule)
 
         then: "l'utilisateur est redirigé sur un page d'erreur"
@@ -375,6 +378,7 @@ class VehiculeControllerSpec extends Specification {
 
         when: "l'utilisateur sans vehicule veut supprimer le vehicule de l'autre utilisateur"
         request.contentType = FORM_CONTENT_TYPE
+        controller.trajetService.countbyVehicule(_) >> 0
         controller.delete(vehicule)
 
         then: "l'utilisateur est redirigé sur un page d'erreur"
@@ -389,7 +393,7 @@ class VehiculeControllerSpec extends Specification {
 
         when: "l'utilisateur sans vehicule veut supprimer le vehicule"
         request.contentType = FORM_CONTENT_TYPE
-        controller.trajetService?.countbyVehicule(_) >> 1
+        controller.trajetService.countbyVehicule(_) >> 1
         controller.delete(vehicule)
 
         then: "l'utilisateur est redirigé sur un page d'erreur"
@@ -402,7 +406,7 @@ class VehiculeControllerSpec extends Specification {
 
         when: "l'utilisateur sans vehicule veut supprimer le vehicule"
         request.contentType = FORM_CONTENT_TYPE
-        controller.trajetService?.countbyVehicule(_) >> null
+        controller.trajetService.countbyVehicule(_) >> null
         controller.delete(vehicule)
 
         then: "l'utilisateur est redirigé sur un page d'erreur"

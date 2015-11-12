@@ -158,6 +158,35 @@ class TrajetDAOServiceSpec extends Specification {
         trajet.notations.size() == 2
     }
 
+    void "test la notation d'un trajet avec des notes supèrieures ou infèrieures"() {
+        given: "un trajet a sauvegarder"
+        Utilisateur conducteur = TestsHelper.creeUtilisateurValide()
+        conducteur.save(flush: true)
+
+        Utilisateur utilisateur1 = TestsHelper.creeUtilisateurValide()
+        utilisateur1.save(flush: true)
+        Utilisateur utilisateur2 = TestsHelper.creeUtilisateurValide()
+        utilisateur2.save(flush: true)
+
+        Vehicule vehicule = TestsHelper.creeVehiculeValide(conducteur)
+        vehicule.save(flush: true)
+
+        Trajet trajet = TestsHelper.creeTrajetValide3(conducteur, vehicule)
+        trajet.addToParticipants(utilisateur1)
+        trajet.addToParticipants(utilisateur2)
+        trajet.save(flush: true)
+
+        def params1 = ['note' : '-1', 'commentaireNote' : null]
+        def params2 = ['note' : '6', 'commentaireNote' : 'Super trajet !']
+
+        when:
+        trajetService.noterTrajet(trajet,params1,utilisateur1)
+        trajetService.noterTrajet(trajet,params2,utilisateur2)
+
+        then:
+        trajet.notations.size() == 2
+    }
+
     void "test le comptage des trajet en fonction des véhicule utilisés"() {
         given: "un trajet valide pas en base de données"
         def utilisateur = TestsHelper.creeUtilisateurValide();
