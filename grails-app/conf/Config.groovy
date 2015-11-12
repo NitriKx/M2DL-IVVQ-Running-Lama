@@ -123,3 +123,9 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+
+// Gmetric configuration
+gmetrics.outputFile = "target/test-reports/gmetrics/GmetricsReport.xml"
+gmetrics.reportType = "org.gmetrics.report.XmlReportWriter"
+gmetrics.reportTitle = "RunningLama GMetrics Report"
