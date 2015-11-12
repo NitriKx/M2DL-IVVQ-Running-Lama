@@ -46,7 +46,7 @@ after_script:
   - sed -i "s/sonar.projectName=RunningLama/sonar.projectName=RunningLama_${TRAVIS_BRANCH}/g" ${TRAVIS_BUILD_DIR}/sonar-project.properties
   - sed -i "s/sonar.projectKey=com.runninglama.RunningLama/sonar.projectKey=com.runninglama.RunningLama_${TRAVIS_BRANCH}/g" ${TRAVIS_BUILD_DIR}/sonar-project.properties
   - sed -i 's/line number="0"/line number="1"/g' ${TRAVIS_BUILD_DIR}/target/test-reports/cobertura/coverage.xml
-  - sonnar-runner
+  - sonar-runner
 
 after_success:
   - ./grailsw coveralls
