@@ -38,6 +38,18 @@ environments {
             url = "jdbc:postgresql://" + uri.host + ":" + uri.port + uri.path
             username = uri.userInfo.split(":")[0]
             password = uri.userInfo.split(":")[1]
+
+            // Résout des problèmes liés à PostgreSQL sur Heroku
+            // @see http://stackoverflow.com/questions/31881250/heroku-postgres-this-connection-has-been-closed
+            pooled = true
+            maxActive = -1
+            minEvictableIdleTimeMillis=1800000
+            timeBetweenEvictionRunsMillis=1800000
+            numTestsPerEvictionRun=3
+            testOnBorrow=true
+            testWhileIdle=true
+            testOnReturn=true
+            validationQuery="SELECT 1"
         }
     }
 }
