@@ -93,13 +93,13 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
             <div class="item active">
-                <div class="fill" style="background-position: 0% 75%; background-image:url('https://pixabay.com/get/63ee2325a1b5f537043c/1446929401/california-210913_1920.jpg?direct');"></div>
+                <div class="fill" style="background-position: 0% 75%; background-image:url('<g:resource dir="images" file="ban1.jpg" />');"></div>
                 <div class="carousel-caption">
                     <h2>Running Lama - Réseau social de covoiturage</h2>
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-position: 0% 65%; background-image:url('https://pixabay.com/get/b5f68c705041b7be016b/1446929801/hippy-van-926290_1280.jpg?direct');"></div>
+                <div class="fill" style="background-position: 0% 65%; background-image:url('<g:resource dir="images" file="ban2.jpg" />');"></div>
                 <div class="carousel-caption">
                     <h2>Running Lama - Réseau social de covoiturage</h2>
                 </div>
