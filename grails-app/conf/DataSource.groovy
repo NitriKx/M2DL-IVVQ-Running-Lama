@@ -29,38 +29,11 @@ environments {
     }
     production {
         dataSource {
-
-            /*
-
-            Comme il est difficile de faire marcher la base de données PostgreSQL, pour le moment on va
-            remettre la base de données locale H2.
-
             dbCreate = "update"
-            driverClassName = "org.postgresql.Driver"
-            dialect = org.hibernate.dialect.PostgreSQLDialect
-
-            uri = new URI(System.env.DATABASE_URL?:"postgres://test:test@localhost/test")
-
-            url = "jdbc:postgresql://" + uri.host + ":" + uri.port + uri.path
-            username = uri.userInfo.split(":")[0]
-            password = uri.userInfo.split(":")[1]
-
-            // Résout des problèmes liés à PostgreSQL sur Heroku
-            // @see http://stackoverflow.com/questions/31881250/heroku-postgres-this-connection-has-been-closed
-            pooled = true
-            maxActive = -1
-            minEvictableIdleTimeMillis=1800000
-            timeBetweenEvictionRunsMillis=1800000
-            numTestsPerEvictionRun=3
-            testOnBorrow=true
-            testWhileIdle=true
-            testOnReturn=true
-            validationQuery="SELECT 1"
-            */
-
-            // TEMPORAIRE
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+            dbUri = new URI(System.getenv("CLEARDB_DATABASE_URL"));
+            username = dbUri.getUserInfo().split(":")[0];
+            password = dbUri.getUserInfo().split(":")[1];
+            dbUrl = "jdbc:mysql://" + dbUri.getHost() + dbUri.getPath();
         }
     }
 }
