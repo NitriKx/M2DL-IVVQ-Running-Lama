@@ -157,4 +157,19 @@ class TrajetDAOServiceSpec extends Specification {
         then:
         trajet.notations.size() == 2
     }
+
+    void "test le comptage des trajet en fonction des véhicule utilisés"() {
+        given: "un trajet valide pas en base de données"
+        def utilisateur = TestsHelper.creeUtilisateurValide();
+        utilisateur = utilisateur.save(flush: true)
+        def vehicule = TestsHelper.creeVehiculeValide(utilisateur);
+        vehicule = vehicule.save(flush: true)
+        def trajet = TestsHelper.creeTrajetValide(utilisateur, vehicule);
+
+        when:"On ajoute le trajet"
+        trajetDAOService.save(trajet)
+
+        then:
+        trajetDAOService.countByVehicule(vehicule) == 1
+    }
 }
