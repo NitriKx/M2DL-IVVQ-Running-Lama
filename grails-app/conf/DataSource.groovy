@@ -29,6 +29,12 @@ environments {
     }
     production {
         dataSource {
+
+            /*
+
+            Comme il est difficile de faire marcher la base de données PostgreSQL, pour le moment on va
+            remettre la base de données locale H2.
+
             dbCreate = "update"
             driverClassName = "org.postgresql.Driver"
             dialect = org.hibernate.dialect.PostgreSQLDialect
@@ -50,6 +56,11 @@ environments {
             testWhileIdle=true
             testOnReturn=true
             validationQuery="SELECT 1"
+            */
+
+            // TEMPORAIRE
+            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+            url = "jdbc:h2:mem:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
         }
     }
 }
