@@ -35,10 +35,14 @@ class TrajetService {
 
         Notation notation = new Notation()
         notation.participant = utilisateur
-        notation.commentaire = params['commentaireNote']
+        notation.setCommentaire(params['commentaireNote'])
 
-        params['note'] = (Integer.parseInt(params['note']) < 0) ? "0" : params['note']
-        params['note'] = (Integer.parseInt(params['note']) > 5) ? "5" : params['note']
+        if(Integer.parseInt(params['note']) < 0){
+            params['note'] = "0"
+        } else if(Integer.parseInt(params['note']) > 5){
+            params['note'] = "5"
+        }
+
         notation.note = Integer.parseInt(params['note'])
 
         trajetDAOService.saveNotation(notation)
