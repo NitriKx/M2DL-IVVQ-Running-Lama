@@ -13,7 +13,7 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container" style="margin-top:35px;">
     <div class="row">
         <div class="col-xs-12">
             <g:form id="ajoutTrajetForm" name="formAjoutTrajet" url="[controller: 'trajet', action: 'ajouterTrajetPost']">

@@ -47,50 +47,53 @@
             <li>Prix : ${trajet.prix}</li>
             <li>Commentaire : ${trajet.commentaire}</li>
             <li>Nombre place : ${trajet.nombrePlace}</li>
-            <li>Nombre place : ${trajet.nombrePlace}</li>
 
             <li>Conducteur : ${trajet.conducteur.prenom} ${trajet.conducteur.nom}</li>
             <li>Véhicule : ${trajet.vehicule.marque} ${trajet.vehicule.modele}</li>
-            <li>Les participants :${trajet.participants} ${trajet.participants.size()}
-                <ul>
-                    <g:each in="${trajet.participants}" var="participant">
-                        <li>${participant.nom} ${participant.prenom}</li>
-                    </g:each>
-                </ul>
-            </li>
+            <li>Note moyenne du conducteur : ${trajet.conducteur.noteMoyenne}</li>
+
         </ul>
-        <g:if test="${trajet.notations != null && trajet.notations?.size() != 0}">
-            <ul>
-                <li>Note moyenne du conducteur : ${trajet.conducteur.noteMoyenne}</li>
-            </ul>
-            <g:each var="notation" in="${ trajet.notations }">
+        </div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-12">
+            <div class="well">
+                <h5>${trajet.participants.size()} participant<g:if test="${trajet.participants.size()>1}">s</g:if></h5>
                     <ul>
-                        <li>Note du trajet : ${notation.note}</li>
-                        <li>Commentaire sur le trajet : ${notation.commentaire}</li>
-                        <li>Auteur de l'avis : ${notation.participant}</li>
+                        <g:each in="${trajet.participants}" var="participant">
+                            <li>${participant.nom} ${participant.prenom}</li>
+                        </g:each>
                     </ul>
-                    <hr/>
-            </g:each>
-
-
-        </g:if>
-        <g:if test="${notationAutorisee}">
-            <div id="noteTrajet">
-                <g:form url="[resource:trajet, action:'noter']" method="PUT"  name="myForm" update="noteTrajet">
-                    <div class="form-group">
-                        <label for="commentaireNote">Votre avis sur le trajet :</label><br/><textarea id="commentaireNote" name="commentaireNote" rows="4" cols="50"></textarea>
-                        <g:select id="note"
-                                  name="note"
-                                  from="${5..0}"
-                                  value="${5}"
-                        />
-                        <fieldset class="buttons">
-                            <g:submitButton name="noter" id="${trajet.getId()}" class="btn-success form-control input-lg" action="noter" value="Evaluer le trajet"></g:submitButton>
-                        </fieldset>
-                    </div>
-                </g:form>
+                </li>
             </div>
-        </g:if>
+
+            <g:if test="${trajet.notations != null && trajet.notations?.size() != 0}">
+                <h2>Commentaires sur le trajet :</h2>
+                <g:each var="notation" in="${ trajet.notations }">
+                    <div class="well">
+                        <strong>${notation.participant}</strong> a noté ce trajet. Note : ${notation.note}/5
+                        <br>Commentaire : ${notation.commentaire}</li>
+                    </dv>
+                    <hr/>
+                </g:each>
+            </g:if>
+            <g:if test="${notationAutorisee}">
+                <div id="noteTrajet">
+                    <g:form url="[resource:trajet, action:'noter']" method="PUT"  name="myForm" update="noteTrajet">
+                        <div class="form-group">
+                            <label for="commentaireNote">Votre avis sur le trajet :</label><br/><textarea id="commentaireNote" name="commentaireNote" rows="4" cols="50"></textarea>
+                            <g:select id="note"
+                                      name="note"
+                                      from="${5..0}"
+                                      value="${5}"
+                            />
+                            <fieldset class="buttons">
+                                <g:submitButton name="noter" id="${trajet.getId()}" class="btn-success form-control pull-right" action="noter" value="Evaluer le trajet"></g:submitButton>
+                            </fieldset>
+                        </div>
+                    </g:form>
+                </div>
+            </g:if>
         </div>
     </div>
     <!-- /.row -->

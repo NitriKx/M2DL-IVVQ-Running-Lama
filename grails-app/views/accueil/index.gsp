@@ -44,18 +44,6 @@
     </div>
     <!-- /.row -->
 
-    <!-- Call to Action Section -->
-    <div class="well">
-        <div class="row">
-            <div class="col-md-8">
-                <p>Vous avez la possibilité d'accéder à un formulaire de recherche complet (prix, dates aller et retour, note moyenne du conducteur, etc...)</p>
-            </div>
-            <div class="col-md-4">
-                <a class="btn btn-lg btn-default btn-block" href="#">Effectuer une recherche complexe</a>
-            </div>
-        </div>
-    </div>
-
     <hr>
 
     <div class="row">

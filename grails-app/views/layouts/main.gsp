@@ -59,9 +59,6 @@
                 <g:link controller="trajet" action="liste">Liste des trajets</g:link>
 
             </li>
-            <li>
-                <a href="contact.html">Rechercher un trajet</a>
-            </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><g:if test="${session.utilisateur}">${session.utilisateur.prenom} ${session.utilisateur.nom}</g:if><g:else>Espace membre</g:else> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
