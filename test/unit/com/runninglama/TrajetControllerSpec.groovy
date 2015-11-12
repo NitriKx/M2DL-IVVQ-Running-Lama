@@ -25,14 +25,24 @@ class TrajetControllerSpec extends Specification {
 
     void "teste que l'affichage de l'acceuil des trajet reçoit les bonnes données"() {
 
-        when: "The index action is executed"
+        when: "l'action index est appelée sans paramètres"
         controller.index()
 
-        then: "The model is correct"
+        then: "le modèle est correct"
         1 * controller.trajetService.listeTrajets(_) >> []
         1 * controller.trajetService.nombreTrajets() >> 0
         !model.trajetInstanceList
         model.trajetInstanceCount == 0
+
+        when: "l'action index est appelée avec un paramètre"
+        controller.index(20)
+
+        then: "le modèle est correct"
+        1 * controller.trajetService.listeTrajets(_) >> []
+        1 * controller.trajetService.nombreTrajets() >> 0
+        !model.trajetInstanceList
+        model.trajetInstanceCount == 0
+
     }
 
 

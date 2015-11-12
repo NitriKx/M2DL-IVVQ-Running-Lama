@@ -45,6 +45,15 @@ class VehiculeControllerSpec extends Specification {
         !model.vehiculeInstanceList
         1 * controller.vehiculeService.getNombreVehicules(_ as Utilisateur, []) >> 0
         model.vehiculeInstanceCount == 0
+
+        when: "on appelle l'action index avec une limite de résultats"
+        controller.index(20)
+
+        then: "le modèle retourné est correct"
+        1 * controller.vehiculeService.recupererListVehicule(_ as Utilisateur, [max: 20]) >> []
+        !model.vehiculeInstanceList
+        1 * controller.vehiculeService.getNombreVehicules(_ as Utilisateur, []) >> 0
+        model.vehiculeInstanceCount == 0
     }
 
 
@@ -412,5 +421,37 @@ class VehiculeControllerSpec extends Specification {
         then: "l'utilisateur est redirigé sur un page d'erreur"
         response.redirectedUrl == '/vehicule/index'
     }
+
+
+
+    //
+    //  ERROR TESTING (quand le logiciel part en c******)
+    //
+
+    void "teste ce qu'il se passe lorsqu'on appelle des méthodes avec des services null"() {
+        given: "un contexte ou le vehiculeService n'est pas injecté dans le code"
+        controller.vehiculeService = null
+
+        when: "on appelle show"
+        controller.show(Mock(Vehicule))
+        then: "une NPE est levée"
+        thrown NullPointerException
+
+        when: "on appelle edit"
+        controller.edit(Mock(Vehicule))
+        then: "une NPE est levée"
+        thrown NullPointerException
+
+        when: "on appelle update"
+        controller.update(Mock(Vehicule))
+        then: "une NPE est levée"
+        thrown NullPointerException
+
+        when: "on appelle delete"
+        controller.delete(Mock(Vehicule))
+        then: "une NPE est levée"
+        thrown NullPointerException
+    }
+
 
 }

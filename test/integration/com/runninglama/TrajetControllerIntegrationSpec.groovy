@@ -6,7 +6,7 @@ import spock.lang.*
 /**
  *
  */
-class TrajetControllerSpec extends Specification {
+class TrajetControllerIntegrationSpec extends Specification {
 
     def trajetController = new TrajetController()
 
